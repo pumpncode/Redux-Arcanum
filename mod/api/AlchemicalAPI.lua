@@ -1,107 +1,74 @@
-------------------------------------
--- ALCHEMICALS API
-------------------------------------
+-- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+--      ALCHEMICAL CLASSES
+-- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
-CodexArcanum.Alchemicals = {}
-CodexArcanum.Alchemical = {
-    name = "",
-    slug = "",
-    cost = 3,
-    config = {},
-    pos = {},
-    loc_txt = {},
-	unlocked = true,
-    discovered = false, 
-    consumeable = true,
-	unlock_condition = {}
+SMODS.ConsumableType {
+    key = 'Alchemical',
+    primary_colour = HEX('FFFFFF'),
+    secondary_colour = HEX('C09D75'),
+    loc_txt = {
+        name = 'Alchemical',
+        collection = 'Alchemical Cards',
+        text = {
+            "Can only be used",
+            "during a {C:attention}blind{}"
+        },
+        undiscovered = {
+            name = 'Not Discovered',
+            text = {
+                [1] = 'Purchase or use',
+                [2] = 'this card in an',
+                [3] = 'unseeded run to',
+                [4] = 'learn what it does'
+            }
+        }
+    },
+    collection_rows = { 4, 4 },
+    shop_rate = 0
 }
 
-function CodexArcanum.Alchemical:new(name, slug, config, pos, loc_txt, cost, discovered, unlocked, unlock_condition, atlas)
-  o = {}
-  setmetatable(o, self)
-  self.__index = self
+SMODS.UndiscoveredSprite {
+    key = 'Alchemical',
+    atlas = 'arcanum_alchemical_undiscovered',
+    pos = { x = 0, y = 0 }
+}
 
-  o.loc_txt = loc_txt
-  o.name = name
-  o.slug = "c_alchemy_" .. slug
-  o.config = config or {}
-  o.pos = pos or {
-      x = 0,
-      y = 0
-  }
-  o.cost = cost
-  o.discovered = discovered or false
-  o.unlocked = unlocked
-  o.consumeable = true
-  o.unlock_condition = unlock_condition or {}
-  o.atlas = atlas or "alchemical_atlas"
-  return o
-end
-
-function CodexArcanum.Alchemical:register()
-	CodexArcanum.Alchemicals[self.slug] = self
-	local minId = table_length(G.P_CENTER_POOLS['Alchemical']) + 1
-	local id = 0
-	local i = 0
-	i = i + 1
-
-  	id = i + minId
-
-	local alchemical_obj = {
-		discovered = self.discovered,
-		unlocked = self.unlocked,
-		consumeable = true,
-		name = self.name,
-		set = "Alchemical",
-		order = id,
-		key = self.slug,
-		pos = self.pos,
-    	cost = self.cost,
-		config = self.config,
-		unlock_condition = self.unlock_condition,
-		atlas = self.atlas
-	}
-
-	for _i, sprite in ipairs(SMODS.Sprites) do
-		if sprite.name == alchemical_obj.key then
-			alchemical_obj.atlas = sprite.name
-		end
-	end
-
- 	G.P_CENTERS[self.slug] = alchemical_obj
-	table.insert(G.P_CENTER_POOLS['Alchemical'], alchemical_obj)
-
-  	G.localization.descriptions["Alchemical"][self.slug] = self.loc_txt
-
-  	for g_k, group in pairs(G.localization) do
-		if g_k == 'descriptions' then
-			for _, set in pairs(group) do
-				for _, center in pairs(set) do
-					center.text_parsed = {}
-					for _, line in ipairs(center.text) do
-						center.text_parsed[#center.text_parsed + 1] = loc_parse_string(line)
-					end
-					center.name_parsed = {}
-					for _, line in ipairs(type(center.name) == 'table' and center.name or {center.name}) do
-						center.name_parsed[#center.name_parsed + 1] = loc_parse_string(line)
-					end
-					if center.unlock then
-						center.unlock_parsed = {}
-						for _, line in ipairs(center.unlock) do
-							center.unlock_parsed[#center.unlock_parsed + 1] = loc_parse_string(line)
-						end
-					end
-				end
-			end
-		end
-	end
-
-	sendDebugMessage("The Alchemical named " .. self.name .. " with the slug " .. self.slug ..
-						 " have been registered at the id " .. id .. ".")
-end
-
-------------------------------------
-
-function CodexArcanum.INIT.AlchemicalAPI()
+-- Standard function used to define when an alchemy card can be used
+-- (Typically, during a blind or in a booster pack)
+function alchemical_can_use(self, card)
     
+    -- Two different use cases here:
+    -- 1) If the alchemy card is owned by the player, it should only be useable during a blind.
+    -- 2) If the alchemy card is part of a booster pack, it should be useable if there is an empty consumable slot.
+    -- Secnario 2 has been ported over to overriden functions at the bottom of this file
+
+    -- Secret third scenario: debuffed alchemical cards (via new boss blind) should not be useable either
+
+    if G.STATE == G.STATES.SELECTING_HAND and not card.debuff then
+        return true
+    else
+        return false
+    end
+end
+
+function alchemical_use(func)
+    return function(self, card)
+        G.deck.config.played_alchemicals = G.deck.config.played_alchemicals or {}
+        table.insert(G.deck.config.played_alchemicals, {self, card})
+        check_for_unlock({ type = 'used_alchemical' })
+        func(self, card)
+    end
+end
+
+function ra_reset_played_alchemicals()
+    sendDebugMessage("Resetting played alchemicals", "ReduxArcanumDebugLogger")
+    if G.deck.config.played_alchemicals then
+        for _, alchemical in ipairs(G.deck.config.played_alchemicals) do
+            sendDebugMessage(alchemical[1].key, "ReduxArcanumDebugLogger")
+            if alchemical[1].end_blind then
+                alchemical[1].end_blind(alchemical[1], alchemical[2])
+            end
+        end
+        G.deck.config.played_alchemicals = {}
+    end
 end

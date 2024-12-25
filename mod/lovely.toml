@@ -1,0 +1,138 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 1 # Go after steammodded
+
+## Patch to add Alchemical tab to stats screen
+# G.UIDEF.usage_tabs()
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''{
+          label = localize('b_stat_spectrals'),
+          tab_definition_function = create_UIBox_usage,
+          tab_definition_function_args = {'consumeable_usage', 'Spectral'},
+        },'''
+position = 'after'
+match_indent = true
+times = 1
+payload = '''
+{
+  label = "Alchemicals",
+  tab_definition_function = create_UIBox_usage,
+  tab_definition_function_args = {'consumeable_usage', 'Alchemical'},
+},
+'''
+
+## Patch to add philo stone to score calculation - part 1
+## This adds the start of the loop
+# G.FUNCS.evaluate_play()
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''if modded then update_hand_text({sound = 'chips2', modded = modded}, {chips = hand_chips, mult = mult}) end'''
+position = 'after'
+match_indent = true
+times = 1
+payload = '''
+for ra_philo_stone_repeats=0, ((G.deck.config.ra_philo_stone or 0)) do
+'''
+
+## Patch to add philo stone to score calculation - part 2
+## This adds the end of the loop, and handling the between-loops
+# G.FUNCS.evaluate_play()
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''local nu_chip, nu_mult = G.GAME.selected_back:trigger_effect{context = 'final_scoring_step', chips = hand_chips, mult = mult}'''
+position = 'before'
+match_indent = true
+# line_prepend = ''
+times = 1
+payload = '''
+-- Do a "fake out" unhighlight
+if ra_philo_stone_repeats < (G.deck.config.ra_philo_stone or 0) then
+  for i=1, #scoring_hand do
+    highlight_card(scoring_hand[i],(i-0.999)/(#scoring_hand-0.998),'down')
+  end
+  G.E_MANAGER:add_event(Event({
+    func = (function()
+      play_sound('gong', 0.94, 0.3)
+        play_sound('gong', 0.94*1.5, 0.2)
+        play_sound('tarot1', 1.5)
+        attention_text({
+          text = "Again!",
+          scale = 1.0, 
+          hold = 1.4,
+          major = G.play,
+          backdrop_colour = G.C.SECONDARY_SET.Spectral,
+          align = 'cm',
+          offset = {x = 0, y = -3.2},
+          silent = true
+          })
+      return true
+    end)
+  }))
+  delay(0.7)
+  for i=1, #scoring_hand do
+      --Highlight all the cards used in scoring and play a sound indicating highlight
+      highlight_card(scoring_hand[i],(i-0.999)/5,'up')
+  end
+end
+end
+G.deck.config.ra_philo_stone = 0
+'''
+
+## Patch to reset all used alchemicals at end of blind
+## Made sure to add function call before stuff like idol and ancient joker
+# G.FUNCS.evaluate_play()
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''reset_idol_card()'''
+position = 'before'
+match_indent = true
+times = 1
+payload = '''
+ra_reset_played_alchemicals()
+'''
+
+## Patch for Alchemical Tycoon unlock
+# G.FUNCS.buy_from_shop()
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = '''elseif c1.config.center.set == 'Tarot' then'''
+position = 'before'
+match_indent = true
+times = 1
+payload = '''
+elseif c1.config.center.set == 'Alchemical' then
+  inc_career_stat('c_ReduxArcanum_alchemicals_bought', 1)
+'''
+
+## Patch for Catalyst unlock
+# CardArea:emplace()
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = '''if self == G.deck then check_for_unlock({type = 'modify_deck', deck = self}) end'''
+position = 'after'
+match_indent = true
+times = 2
+payload = '''
+check_for_unlock({ type = 'ReduxArcanum_modify_cards', location = location })
+'''
+
+## Patch to prevent debuffed consumables from being used
+# Card:can_use_consumeable()
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''function Card:can_use_consumeable(any_state, skip_check)'''
+position = 'after'
+match_indent = true
+times = 2
+payload = '''
+    if self.debuff then return false end
+'''
