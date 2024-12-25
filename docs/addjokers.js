@@ -2,7 +2,7 @@ let alchemicals = [
   {
     name: "Ignis",
     text: [
-      "Gain {C:attention}+1{} discard"
+      "Gain {C:attention}+1{} discard for this blind"
     ],
     image_url: "img/alchemical_atlas.png",
     image_pos: {
@@ -14,7 +14,7 @@ let alchemicals = [
   {
     name: "Aqua",
     text: [
-      "Gain {C:attention}+1{} hand"
+      "Gain {C:attention}+1{} hand for this blind"
     ],
     image_url: "img/alchemical_atlas.png",
     image_pos: {
@@ -118,8 +118,8 @@ let alchemicals = [
     name: "Cobalt",
     text: [
       "Upgrade currently",
-      "selected {C:legendary,E:1}poker hand",
-      "by {C:attention}2{} levels"
+      "selected {C:attention}poker hand",
+      "by {C:attention}2{} levels for one blind"
     ],
     image_url: "img/alchemical_atlas.png",
     image_pos: {
@@ -131,8 +131,8 @@ let alchemicals = [
   {
     name: "Arsenic",
     text: [
-      "{C:attention}Swap{} your hands",
-      "and your discards"
+      "{C:attention}Swap{} your current",
+      "hands and discards"
     ],
     image_url: "img/alchemical_atlas.png",
     image_pos: {
@@ -144,7 +144,7 @@ let alchemicals = [
   {
     name: "Antimony",
     text: [
-      "Create a {C:dark_edition}Negative{} {C:eternal}eternal{} {C:attention}copy{} of a random joker for one blind"
+      "Create a {C:dark_edition}Negative{}","{C:eternal}0-cost{} {C:attention}copy{} of a random joker for one blind"
     ],
     image_url: "img/alchemical_atlas.png",
     image_pos: {
@@ -216,7 +216,9 @@ let alchemicals = [
       "Enhances up to",
       "{C:attention}4{} selected cards",
       "into {C:attention}Glass Cards",
-      "for one blind"
+      "for one blind",
+	  "{C:inactive}Destroyed glass cards",
+	  "{C:inactive}will not return"
     ],
     image_url: "img/alchemical_atlas.png",
     image_pos: {
@@ -272,7 +274,7 @@ let alchemicals = [
   {
     name: "Oil",
     text: [
-      "Removes {C:attention}debuffs{} of all cards in hand"
+      "Removes {C:attention}debuffs{} of all cards in hand for this blind"
     ],
     image_url: "img/alchemical_atlas.png",
     image_pos: {
@@ -309,7 +311,7 @@ let alchemicals = [
     name: "Uranium",
     text: [
       "Copy the selected card's {C:attention}enhancement{}, {C:attention}seal{}, and {C:attention}edition",
-      "to {C:attention}3{} unenhanced cards for one blind"
+      "to {C:attention}3{} random unenhanced cards for one blind"
     ],
     image_url: "img/alchemical_atlas.png",
     image_pos: {
@@ -324,9 +326,7 @@ let jokers = [
   {
     name: "Studious Joker",
     text: [
-      "{C:mult}+4{} Mult. Sell this",
-      "joker to get one",
-      "{C:alchemical} Alchemical{} card"
+      "{C:mult}+4{} Mult. Sell this joker to get one {C:alchemical} Alchemical{} card"
     ],
     image_url: "img/ca_joker_atlas.png",
     image_pos: {
@@ -350,8 +350,7 @@ let jokers = [
   {
     name: "Mutated Joker",
     text: [
-      "{C:chips}+10{} Chips for each",
-      "unique {C:alchemical}Alchemical{} card used this run",
+      "{C:chips}+10{} Chips for each unique {C:alchemical}Alchemical{} card used this run",
     ],
     image_url: "img/ca_joker_atlas.png",
     image_pos: {
@@ -375,8 +374,7 @@ let jokers = [
   {
     name: "Essence of Comedy",
     text: [
-      "Gains {X:mult,C:white}X0.1{} Mult",
-      "per {C:alchemical}Alchemical{} card used"
+      "Gains {X:mult,C:white}X0.1{} Mult per {C:alchemical}Alchemical{} card used"
     ],
     image_url: "img/ca_joker_atlas.png",
     image_pos: {
@@ -388,9 +386,7 @@ let jokers = [
   {
     name: "Shock Humor",
     text: [
-      "{C:green}1 in 5{} chance to",
-      "get an {C:alchemical}Alchemical{} card when you discard a {C:attention}Gold{},",
-      "{C:attention}Steel{} or {C:attention}Stone{} card"
+      "{C:green}1 in 5{} chance to create an {C:alchemical}Alchemical{} card when you discard a {C:attention}Gold{}, {C:attention}Steel{} or {C:attention}Stone{} card"
     ],
     image_url: "img/ca_joker_atlas.png",
     image_pos: {
@@ -418,8 +414,7 @@ let jokers = [
     name: "Catalyst Joker",
     text: [
       "{C:attention}+1{} consumable slots.",
-      "Gains {X:mult,C:white} X0.5{} Mult for",
-      "every {C:attention}Consumable Card{} held"
+      "Gains {X:mult,C:white} X0.5{} Mult for every {C:attention}Consumable Card{} held"
     ],
     image_url: "img/ca_joker_atlas.png",
     image_pos: {
@@ -431,12 +426,13 @@ let jokers = [
 ]
 
 // works the same. 
-let consumables = [
+let consumables_tarot = [
   {
     name: "The Seeker",
     text: [
       "Creates up to {C:attention}2",
       "random {C:alchemical}Alchemical{} cards",
+      "{C:inactive}(Must have room)",
     ],
     image_url: "img/ca_others_atlas.png",
     image_pos: {
@@ -445,10 +441,12 @@ let consumables = [
     },
     rarity: "Tarot"
   },
+]
+let consumables_spectral = [
   {
-    name: "Philosopher's Stone",
+    name: "",
     text: [
-      "{C:attention}Retrigger{} all played cards for one blind"
+        "{C:dark_edition}???{}"
     ],
     image_url: "img/ca_others_atlas.png",
     image_pos: {
@@ -488,6 +486,19 @@ let card_modifications = [
 
 let decks = [
   {
+    name: "Herbalist's Deck",
+    text: [
+      "Start run with the",
+      "{C:tarot,T:v_mortar_and_pestle}Mortar and Pestle{} voucher,", "Gain an {C:alchemical}Alchemical{} card before each boss blind"
+    ],
+    image_url: "img/ca_decks_atlas.png",
+    image_pos: {
+      x: 1,
+      y: 0
+    },
+    rarity: "Deck"
+  },
+  {
     name: "Philosopher's Deck",
     text: [
       "Start run with the",
@@ -500,18 +511,28 @@ let decks = [
     },
     rarity: "Deck"
   },
+]
+
+let sleeves = [
   {
-    name: "Herbalist's Deck",
-    text: [
-      "Start run with the",
-      "{C:tarot,T:v_mortar_and_pestle}Mortar and Pestle{} voucher. Gain an {C:alchemical}Alchemical{} card before each boss blind"
-    ],
-    image_url: "img/ca_decks_atlas.png",
+    name: "Herbalist's Sleeve",
+    text: [],
+    image_url: "img/ra_sleeves_atlas.png",
     image_pos: {
       x: 1,
       y: 0
     },
-    rarity: "Deck"
+    rarity: "Sleeve"
+  },
+  {
+    name: "Philosopher's Sleeves",
+    text: [],
+    image_url: "img/ra_sleeves_atlas.png",
+    image_pos: {
+      x: 0,
+      y: 0
+    },
+    rarity: "Sleeve"
   },
 ]
 
@@ -527,16 +548,12 @@ let stickers = [
 ]
 
 let blinds = [
-  // {
-  //   name: "The Wall",
-  //   text: [
-  //     "Extra large blind",
-  //     "{C:inactive}({C:red}4x{C:inactive} Base for {C:attention}$$$$${C:inactive})",
-  //     "{C:inactive}(Appears from Ante 2)"
-  //   ],
-  //   image_url: "img/the_wall.png",
-  //   rarity: "Boss Blind"
-  // },
+  {
+    name: "The Hex",
+    text: [ 'All Consumables', 'are debuffed' ],
+    image_url: "img/ra_blind_atlas.png",
+    rarity: "Boss Blind"
+  },
   // {
   //   name: "Violet Vessel",
   //   text: [
@@ -565,7 +582,8 @@ let shop_items = [
   {
     name: "Cauldron",
     text: [
-      "Some {C:alchemical}Alchemical{} cards may become Negative"
+	  "{C:alchemical}Alchemical{} cards may come with",
+	  "the {C:dark_edition}Negative{} Edition"
     ],
     image_url: "img/ca_others_atlas.png",
     image_pos: {
@@ -577,7 +595,7 @@ let shop_items = [
   {
     name: "Alchemical Merchant",
     text: [
-      "{C:alchemical}Alchemical{} cards appear in the shop"
+      "{C:alchemical}Alchemical{} cards can appear in the {C:attention}shop",
     ],
     image_url: "img/ca_others_atlas.png",
     image_pos: {
@@ -660,6 +678,7 @@ let rarities = {
   "Edition": "#4ca893",
   "Seal": "#4584fa",
   "Deck": "#9bb6bd",
+  "Sleeve": "#9bb6bd",
   "Sticker": "#5d5dff",
   "Boss Blind": "#5d5dff",
   "Showdown": "#4584fa",
@@ -667,7 +686,7 @@ let rarities = {
 
 regex = /{([^}]+)}/g;
 
-let add_cards_to_div = (jokers, jokers_div) => {
+let add_cards_to_div = (jokers, jokers_div, card_width, card_height) => {
   for (let joker of jokers) {
     console.log("adding joker", joker.name);
   
@@ -713,8 +732,10 @@ let add_cards_to_div = (jokers, jokers_div) => {
       `;
     } else {
       let image_str = `<img src="${joker.image_url}" alt="${joker.name}"/>`
+      card_width = card_width ?? 142
+      card_height = card_height ?? 190
       if (joker.image_pos) {
-        image_str = `<p src="${joker.image_url}" alt="${joker.name}" width="1" height="1" style="width: 142px; height: 190px; background: url(${joker.image_url}) -${joker.image_pos.x * 142}px -${joker.image_pos.y * 190}px;"/>`
+        image_str = `<p src="${joker.image_url}" alt="${joker.name}" width="1" height="1" style="width: ${card_width}px; height: ${card_height}px; background: url(${joker.image_url}) -${joker.image_pos.x * card_width}px -${joker.image_pos.y * card_height}px;"/>`
       }
 
       joker_div.innerHTML = `
@@ -729,11 +750,11 @@ let add_cards_to_div = (jokers, jokers_div) => {
   }
 }
 
-if (consumables.length === 0) {
+if (consumables_spectral.length === 0) {
   document.querySelector(".consumablesfull").style.display = "none"
 } else {
   let consumables_div = document.querySelector(".consumables");
-  add_cards_to_div(consumables, consumables_div);
+  add_cards_to_div(consumables_spectral, consumables_div);
 }
 
 if (alchemicals.length === 0) {
@@ -750,12 +771,12 @@ if (jokers.length === 0) {
   add_cards_to_div(jokers, jokers_div);
 }
 
-if (card_modifications.length === 0) {
-  document.querySelector(".cardmodsfull").style.display = "none"
-} else {
-  let cardmods_div = document.querySelector(".cardmods");
-  add_cards_to_div(card_modifications, cardmods_div);
-}
+// if (card_modifications.length === 0) {
+//   document.querySelector(".cardmodsfull").style.display = "none"
+// } else {
+//   let cardmods_div = document.querySelector(".cardmods");
+//   add_cards_to_div(card_modifications, cardmods_div);
+// }
 
 if (decks.length === 0) {
   document.querySelector(".decksfull").style.display = "none"
@@ -764,12 +785,19 @@ if (decks.length === 0) {
   add_cards_to_div(decks, decks_div);
 }
 
-if (stickers.length === 0) {
-  document.querySelector(".stickersfull").style.display = "none"
+if (sleeves.length === 0) {
+  document.querySelector(".sleevesfull").style.display = "none"
 } else {
-  let stickers_div = document.querySelector(".stickers");
-  add_cards_to_div(stickers, stickers_div);
+  let sleeves_div = document.querySelector(".sleeves");
+  add_cards_to_div(sleeves, sleeves_div, 146);
 }
+
+// if (stickers.length === 0) {
+//   document.querySelector(".stickersfull").style.display = "none"
+// } else {
+//   let stickers_div = document.querySelector(".stickers");
+//   add_cards_to_div(stickers, stickers_div);
+// }
 
 if (blinds.length === 0) {
   document.querySelector(".blindsfull").style.display = "none"
@@ -782,5 +810,5 @@ if (shop_items.length === 0) {
   document.querySelector(".shopitemsfull").style.display = "none"
 } else {
   let shopitems_div = document.querySelector(".shopitems");
-  add_cards_to_div(shop_items, shopitems_div);
+  add_cards_to_div(shop_items.concat(consumables_tarot), shopitems_div);
 }
