@@ -295,18 +295,38 @@ SMODS.Consumable { -- Salt
             trigger = 'after',
             delay = 0.1,
             func = function()
-                if G.FORCE_TAG then return G.FORCE_TAG end
-                local _pool, _pool_key = get_current_pool('Tag', nil, nil, nil)
-                local _tag_name = pseudorandom_element(_pool, pseudoseed(_pool_key))
-                local it = 1
-                while _tag_name == 'UNAVAILABLE' or _tag_name == "tag_double" or _tag_name == "tag_orbital" do
-                    it = it + 1
-                    _tag_name = pseudorandom_element(_pool, pseudoseed(_pool_key .. '_resample' .. it))
+                local _tag_name
+                if G.FORCE_TAG then 
+                    _tag_name = G.FORCE_TAG 
+                else 
+                    local _pool, _pool_key = get_current_pool('Tag', nil, nil, nil)
+                    _tag_name = pseudorandom_element(_pool, pseudoseed(_pool_key))
+                    local it = 1
+                    while _tag_name == 'UNAVAILABLE' or _tag_name == "tag_double" or _tag_name == "tag_orbital" do
+                        it = it + 1
+                        _tag_name = pseudorandom_element(_pool, pseudoseed(_pool_key .. '_resample' .. it))
+                    end
                 end
 
                 G.GAME.round_resets.blind_tags = G.GAME.round_resets.blind_tags or {}
                 local _tag = Tag(_tag_name, nil, G.GAME.blind)
                 add_tag(_tag)
+                -- Trigger immediate tags and booster tags
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'immediate',
+                    func = function()
+                        for i = 1, #G.GAME.tags do
+                            G.GAME.tags[i]:apply_to_run({ type = 'immediate' })
+                        end
+                        for i = 1, #G.GAME.tags do
+                          if G.GAME.tags[i].key == "tag_boss" then
+                          else
+                            if G.GAME.tags[i]:apply_to_run({type = 'new_blind_choice'}) then break end
+                          end
+                        end
+                        return true
+                    end
+                }))
                 return true
             end
         }))
@@ -1221,33 +1241,33 @@ SMODS.Consumable { -- Oil
             end
         }))
 
-    --     -- This will keep oiled cards non-debuffed.
-    --     -- There is a "condition" trigger I found, but it doesn't seem to do anything special. Simply returning false has the same effect
-    --     G.E_MANAGER:add_event(Event({
-    --         blocking = false,
-    --         func = function()
-    --             if G.STATE == G.STATES.SELECTING_HAND or G.STATE == G.STATES.HAND_PLAYED then
-    --                 for k, card in ipairs(G.hand.cards) do
-    --                     if card.config.ra_oil then
-    --                         card:set_debuff(false)
-    --                         if card.facing == 'back' then
-    --                             card:flip()
-    --                         end
-    --                     end
-    --                 end
-    --                 return false
-    --             elseif G.STATE == G.STATES.ROUND_EVAL then
-    --                 for k, card in ipairs(G.playing_cards) do
-    --                     if card.config.ra_oil then
-    --                         card.config.ra_oil = false
-    --                     end
-    --                 end
-    --                 return true
-    --             else
-    --                 return false
-    --             end
-    --         end
-    --     }))
+        --     -- This will keep oiled cards non-debuffed.
+        --     -- There is a "condition" trigger I found, but it doesn't seem to do anything special. Simply returning false has the same effect
+        --     G.E_MANAGER:add_event(Event({
+        --         blocking = false,
+        --         func = function()
+        --             if G.STATE == G.STATES.SELECTING_HAND or G.STATE == G.STATES.HAND_PLAYED then
+        --                 for k, card in ipairs(G.hand.cards) do
+        --                     if card.config.ra_oil then
+        --                         card:set_debuff(false)
+        --                         if card.facing == 'back' then
+        --                             card:flip()
+        --                         end
+        --                     end
+        --                 end
+        --                 return false
+        --             elseif G.STATE == G.STATES.ROUND_EVAL then
+        --                 for k, card in ipairs(G.playing_cards) do
+        --                     if card.config.ra_oil then
+        --                         card.config.ra_oil = false
+        --                     end
+        --                 end
+        --                 return true
+        --             else
+        --                 return false
+        --             end
+        --         end
+        --     }))
     end),
 
     end_blind = function(self, card)

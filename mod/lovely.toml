@@ -136,3 +136,37 @@ times = 2
 payload = '''
     if self.debuff then return false end
 '''
+
+## Vanilla functionality causes booster tags created mid-blind by salt to be very funky
+## This mod tried to fix this by letting booster tags trigger immediately, which requires some patching below
+
+## Patch to prevent cards being returned during a blind
+# G.FUNCS.end_consumeable()
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = '''G.FUNCS.draw_from_hand_to_deck()'''
+position = 'at'
+match_indent = true
+times = 1
+payload = '''
+if G.GAME.PACK_INTERRUPT ~= G.STATES.SELECTING_HAND then G.FUNCS.draw_from_hand_to_deck() end
+'''
+
+## Following two patches will cause the hand cardarea to be lifted when a standard or buffoon pack is opened mid-blind (otherwise they will cover the buttons to add cards to the deck)
+# CardArea:align_cards()
+[[patches]]
+[patches.pattern]
+target = "cardarea.lua"
+pattern = "if self.config.type == 'hand' and (G.STATE == G.STATES.TAROT_PACK or G.STATE == G.STATES.SPECTRAL_PACK or G.STATE == G.STATES.PLANET_PACK or G.STATE == G.STATES.SMODS_BOOSTER_OPENED) then"
+position = "at"
+payload = "if self.config.type == 'hand' and (G.STATE == G.STATES.TAROT_PACK or G.STATE == G.STATES.SPECTRAL_PACK or G.STATE == G.STATES.PLANET_PACK or G.STATE == G.STATES.SMODS_BOOSTER_OPENED or G.STATE == G.STATES.STANDARD_PACK or G.STATE == G.STATES.BUFFOON_PACK) then"
+match_indent = true
+# CardArea:align_cards()
+[[patches]]
+[patches.pattern]
+target = "cardarea.lua"
+pattern = "if self.config.type == 'hand' and not (G.STATE == G.STATES.TAROT_PACK or G.STATE == G.STATES.SPECTRAL_PACK or G.STATE == G.STATES.PLANET_PACK or G.STATE == G.STATES.SMODS_BOOSTER_OPENED) then"
+position = "at"
+payload = "if self.config.type == 'hand' and not (G.STATE == G.STATES.TAROT_PACK or G.STATE == G.STATES.SPECTRAL_PACK or G.STATE == G.STATES.PLANET_PACK or G.STATE == G.STATES.SMODS_BOOSTER_OPENED or G.STATE == G.STATES.STANDARD_PACK or G.STATE == G.STATES.BUFFOON_PACK) then"
+match_indent = true

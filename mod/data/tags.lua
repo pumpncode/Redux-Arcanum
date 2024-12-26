@@ -38,3 +38,29 @@ SMODS.Tag { -- Elemental
     pos = { x = 0, y = 0 },
     atlas = 'ca_tag_elemental'
 }
+
+--  Bunco makes its own change to the boss tag, which this patch would break.
+if (not SMODS.Mods["Bunco"] or not SMODS.Mods["Bunco"].can_load) then
+    SMODS.Tag:take_ownership('boss', {
+        config = {},
+        apply = function(self, tag, context)
+            if context.type == 'new_blind_choice' and G.STATE == G.STATES.BLIND_SELECT then
+                -- local lock = self.ID
+                -- G.CONTROLLER.locks[lock] = true
+                tag:yep('+', G.C.GREEN,function() 
+                    G.from_boss_tag = true
+                    G.FUNCS.reroll_boss()
+                    
+                    -- G.E_MANAGER:add_event(Event({func = function()
+                    --     G.E_MANAGER:add_event(Event({func = function()
+                    --         G.CONTROLLER.locks[lock] = nil
+                    --     return true; end}))
+                    -- return true; end}))
+
+                    return true
+                end)
+                self.triggered = true
+            end
+        end
+    })
+end
