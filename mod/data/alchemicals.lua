@@ -302,7 +302,11 @@ SMODS.Consumable { -- Salt
                     local _pool, _pool_key = get_current_pool('Tag', nil, nil, nil)
                     _tag_name = pseudorandom_element(_pool, pseudoseed(_pool_key))
                     local it = 1
-                    while _tag_name == 'UNAVAILABLE' or _tag_name == "tag_double" or _tag_name == "tag_orbital" do
+                    while _tag_name == 'UNAVAILABLE' or
+                        _tag_name == "tag_double" or
+                        _tag_name == "tag_orbital" or
+                        _tag_name == "tag_bunc_arcade" -- Bunco compat for now, otherwise draws entire deck
+                    do
                         it = it + 1
                         _tag_name = pseudorandom_element(_pool, pseudoseed(_pool_key .. '_resample' .. it))
                     end
