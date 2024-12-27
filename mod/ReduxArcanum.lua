@@ -148,9 +148,8 @@ NFS.load(ReduxArcanumMod.path .. "/data/jokers.lua")()
 
 local alias__G_UIDEF_use_and_sell_buttons = G.UIDEF.use_and_sell_buttons;
 function G.UIDEF.use_and_sell_buttons(card)
-    local ret = alias__G_UIDEF_use_and_sell_buttons(card)
 
-    if (card.ability.set == "Alchemical" or card.ability.name == "Philosopher's Stone") and G.STATE == G.STATES.SMODS_BOOSTER_OPENED and (card.area == G.pack_cards and G.pack_cards) then
+    if (card.ability.set == "Alchemical" or card.ability.name == "c_ReduxArcanum_philosopher_stone") and G.STATE == G.STATES.SMODS_BOOSTER_OPENED and (card.area == G.pack_cards and G.pack_cards) then
         return {
             n = G.UIT.ROOT,
             config = { padding = 0, colour = G.C.CLEAR },
@@ -167,6 +166,7 @@ function G.UIDEF.use_and_sell_buttons(card)
         }
     end
 
+    local ret = alias__G_UIDEF_use_and_sell_buttons(card)
     return ret
 end
 
@@ -223,7 +223,7 @@ G.FUNCS.select_alchemical = function(e, mute, nosave)
 
     if card.area then card.area:remove_card(card) end
 
-    if card.ability.set == 'Alchemical' or card.ability.name == "Philosopher's Stone" then
+    if (card.ability.set == "Alchemical" or card.ability.name == "c_ReduxArcanum_philosopher_stone") then
         card:add_to_deck()
         G.consumeables:emplace(card)
         play_sound('card1', 0.8, 0.6)
