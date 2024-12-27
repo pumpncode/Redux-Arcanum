@@ -77,7 +77,7 @@ NFS.load(ReduxArcanumMod.path .. "/api/alchemicalAPI.lua")()
 -- Use this function to apply cauldron effect
 function create_alchemical(...)
     local card = create_card("Alchemical", ...)
-    if G.GAME.used_vouchers.v_ReduxArcanum_cauldron and pseudorandom('cauldron') > 0.25 then
+    if G.GAME.used_vouchers.v_ReduxArcanum_cauldron and pseudorandom('cauldron') > 0.75 then
         card:set_edition({ negative = true }, true)
     end
     return card
