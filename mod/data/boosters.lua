@@ -2,45 +2,6 @@
 --      ALCHEMICAL BOOSTER
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
-SMODS.Booster.update_pack = function(self, dt)
-    if G.buttons then G.buttons:remove(); G.buttons = nil end
-    if G.shop then G.shop.alignment.offset.y = G.ROOM.T.y+11 end
-
-    if not G.STATE_COMPLETE then
-        G.STATE_COMPLETE = true
-        G.CONTROLLER.interrupt.focus = true
-        G.E_MANAGER:add_event(Event({
-            trigger = 'immediate',
-            func = function()
-                if self.particles and type(self.particles) == "function" then self:particles() end
-                G.booster_pack = UIBox{
-                    definition = self:create_UIBox(),
-                    config = {align="tmi", offset = {x=0,y=G.ROOM.T.y + 9}, major = G.hand, bond = 'Weak'}
-                }
-                G.booster_pack.alignment.offset.y = -2.2
-                G.ROOM.jiggle = G.ROOM.jiggle + 3
-                self:ease_background_colour()
-                G.E_MANAGER:add_event(Event({
-                    trigger = 'immediate',
-                    func = function()
-                        if self.draw_hand == true then G.FUNCS.draw_from_deck_to_hand() end
-
-                        G.E_MANAGER:add_event(Event({
-                            trigger = 'after',
-                            delay = 0.5,
-                            func = function()
-                                G.CONTROLLER:recall_cardarea_focus('pack_cards')
-                                return true
-                            end}))
-                        return true
-                    end
-                }))  
-                return true
-            end
-        }))  
-    end
-end
-
 function add_booster(booster)
     SMODS.Booster {
         key = booster.key,
