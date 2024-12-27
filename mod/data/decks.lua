@@ -71,7 +71,8 @@ SMODS.Back {
             "and a copy of {C:tarot,T:c_ReduxArcanum_seeker}The Seeker{}"
         },
         unlock = {
-            'Discover all spectral cards'
+            'Discover all',
+            'spectral cards'
         },
     },
 

@@ -106,9 +106,10 @@ SMODS.Consumable {
     atlas = "arcanum_others",
     key = "philosopher_stone",
     loc_txt = {
-        name = 'The Philosopher\'s Stone',
+        name = "The Philosopher's Stone",
         text = {
-            "{C:attention}Retrigger{} the next played hand"
+            "{C:attention}Retrigger{} the",
+            "next played hand"
         }
     },
     loc_vars = function(self, info_queue, center)
@@ -126,7 +127,7 @@ SMODS.Consumable {
 
     can_use = alchemical_can_use,
 
-    use = alchemical_use(function(self, card)
+    use = function(self, card)
         sendDebugMessage("Philod", "ReduxArcanumDebugLogger")
 
         G.deck.config.ra_philo_stone = G.deck.config.ra_philo_stone or 0
@@ -167,5 +168,5 @@ SMODS.Consumable {
                 end
             end
         }))
-    end),
+    end,
 }
