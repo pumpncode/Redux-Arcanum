@@ -32,9 +32,10 @@ end
 SMODS.current_mod.config_tab = function()
     local scale = 5 / 6
     local current_overlapping = ReduxArcanumMod.config.overlapping_cards or 1
+    local current_new_content = ReduxArcanumMod.config.new_content or false
     return {
         n = G.UIT.ROOT,
-        config = { align = "cm", minh = G.ROOM.T.h * 0.25, padding = 0.0, r = 0.1, colour = G.C.GREY },
+        config = { align = "cm", minh = G.ROOM.T.h * 0.25, padding = 0.2, r = 0.1, colour = G.C.GREY },
         nodes = {
             create_option_cycle {
                 label = "Conflicting Cards",
@@ -53,6 +54,20 @@ SMODS.current_mod.config_tab = function()
                 scale = scale,
                 ref_table = ReduxArcanumMod.config,
                 ref_value = "overlapping_cards",
+                opt_callback = 'cycle_options',
+            },
+            create_toggle {
+                label = "New Content",
+                info = {
+                    "Include new content and balance changes",
+                    "(Requires restart)"
+                },
+                current_option = current_new_content,
+                w = 4.5,
+                text_scale = 0.4,
+                scale = scale,
+                ref_table = ReduxArcanumMod.config,
+                ref_value = "new_content",
                 opt_callback = 'cycle_options',
             }
         }
