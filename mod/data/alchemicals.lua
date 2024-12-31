@@ -94,12 +94,14 @@ SMODS.Consumable { -- Ignis
     loc_txt = {
         name = 'Ignis',
         text = {
-            "Gain {C:attention}+#1#{} discard",
+            "Gain {C:attention}+#1#{} discard#2#",
             "for this blind"
         }
     },
     loc_vars = function(self, info_queue, center)
-        return { vars = { center.ability.extra } }
+        local ret = alchemical_loc_vars(self, info_queue, center)
+        local extra = math.ceil(center.ability.extra * alchemical_get_x_mult(center))
+        return { vars = { ret.vars[1], (extra == 1 and "") or "s" } }
     end,
     unlocked = true,
     discovered = false,
@@ -128,12 +130,14 @@ SMODS.Consumable { -- Aqua
     loc_txt = {
         name = 'Aqua',
         text = {
-            "Gain {C:attention}+#1#{} hand",
+            "Gain {C:attention}+#1#{} hand#2#",
             "for this blind"
         }
     },
     loc_vars = function(self, info_queue, center)
-        return { vars = { center.ability.extra } }
+        local ret = alchemical_loc_vars(self, info_queue, center)
+        local extra = math.ceil(center.ability.extra * alchemical_get_x_mult(center))
+        return { vars = { ret.vars[1], (extra == 1 and "") or "s" } }
     end,
     unlocked = true,
     discovered = false,
@@ -163,9 +167,7 @@ terra = { -- Terra
         name = 'Terra',
         text = { "Reduce blind by {C:attention}#1#%{}" }
     },
-    loc_vars = function(self, info_queue, center)
-        return { vars = { center.ability.extra } }
-    end,
+    loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
     config = { extra = 15 },
@@ -206,9 +208,7 @@ SMODS.Consumable { -- Aero
         name = 'Aero',
         text = { "Draw {C:attention}#1#{} cards" }
     },
-    loc_vars = function(self, info_queue, center)
-        return { vars = { center.ability.extra } }
-    end,
+    loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
     config = { extra = 4 },
@@ -240,9 +240,7 @@ SMODS.Consumable { -- Quicksilver
             "for this blind"
         }
     },
-    loc_vars = function(self, info_queue, center)
-        return { vars = { center.ability.extra } }
-    end,
+    loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
     config = { extra = 2 },
@@ -281,10 +279,12 @@ salt = { -- Salt
     key = "salt",
     loc_txt = {
         name = 'Salt',
-        text = { "Gain {C:attention}#1#{} tag" }
+        text = { "Gain {C:attention}#1#{} tag#2#" }
     },
     loc_vars = function(self, info_queue, center)
-        return { vars = { center.ability.extra } }
+        local ret = alchemical_loc_vars(self, info_queue, center)
+        local extra = math.ceil(center.ability.extra * alchemical_get_x_mult(center))
+        return { vars = { ret.vars[1], (extra == 1 and "") or "s" } }
     end,
     unlocked = true,
     discovered = false,
@@ -318,26 +318,28 @@ salt = { -- Salt
             trigger = 'after',
             delay = 0.1,
             func = function()
-                local _tag_name
-                if G.FORCE_TAG then 
-                    _tag_name = G.FORCE_TAG 
-                else 
-                    local _pool, _pool_key = get_current_pool('Tag', nil, nil, nil)
-                    _tag_name = pseudorandom_element(_pool, pseudoseed(_pool_key))
-                    local it = 1
-                    while _tag_name == 'UNAVAILABLE' or
-                        _tag_name == "tag_double" or
-                        _tag_name == "tag_orbital" or
-                        _tag_name == "tag_bunc_arcade" -- Bunco compat for now, otherwise draws entire deck
-                    do
-                        it = it + 1
-                        _tag_name = pseudorandom_element(_pool, pseudoseed(_pool_key .. '_resample' .. it))
+                for _ = 1, card.ability.extra do
+                    local _tag_name
+                    if G.FORCE_TAG then
+                        _tag_name = G.FORCE_TAG
+                    else
+                        local _pool, _pool_key = get_current_pool('Tag', nil, nil, nil)
+                        _tag_name = pseudorandom_element(_pool, pseudoseed(_pool_key))
+                        local it = 1
+                        while _tag_name == 'UNAVAILABLE' or
+                            _tag_name == "tag_double" or
+                            _tag_name == "tag_orbital" or
+                            _tag_name == "tag_bunc_arcade" -- Bunco compat for now, otherwise draws entire deck
+                        do
+                            it = it + 1
+                            _tag_name = pseudorandom_element(_pool, pseudoseed(_pool_key .. '_resample' .. it))
+                        end
                     end
-                end
 
-                G.GAME.round_resets.blind_tags = G.GAME.round_resets.blind_tags or {}
-                local _tag = Tag(_tag_name, nil, G.GAME.blind)
-                add_tag(_tag)
+                    G.GAME.round_resets.blind_tags = G.GAME.round_resets.blind_tags or {}
+                    local _tag = Tag(_tag_name, nil, G.GAME.blind)
+                    add_tag(_tag)
+                end
                 -- Trigger immediate tags and booster tags
                 G.E_MANAGER:add_event(Event({
                     trigger = 'immediate',
@@ -360,7 +362,7 @@ salt = { -- Salt
     end),
 }
 if ReduxArcanumMod.config.new_content then
-    salt.loc_txt.text = { "Increase blind by 10%", "to gain {C:attention}#1#{} tag" }
+    salt.loc_txt.text = { "Increase blind by 10%", "to gain {C:attention}#1#{} tag#2#" }
 end
 SMODS.Consumable(salt)
 
@@ -376,9 +378,7 @@ SMODS.Consumable { -- Sulfur
             "hand removed"
         }
     },
-    loc_vars = function(self, info_queue, center)
-        return { vars = { center.ability.extra } }
-    end,
+    loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
     config = { extra = 4 },
@@ -414,12 +414,10 @@ SMODS.Consumable { -- Phosphorus
             "cards to deck"
         }
     },
-    loc_vars = function(self, info_queue, center)
-        return { vars = {} }
-    end,
+    loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
-    config = { extra = 4 },
+    config = { },
     cost = 3,
     pos = { x = 1, y = 1 },
 
@@ -463,12 +461,10 @@ bismuth = { -- Bismuth
             "for one blind"
         }
     },
-    loc_vars = function(self, info_queue, center)
-        return { vars = { center.ability.extra } }
-    end,
+    loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
-    config = { extra = 2 },
+    config = { extra = 2, select = true },
     cost = 3,
     pos = { x = 2, y = 1 },
 
@@ -578,9 +574,7 @@ SMODS.Consumable { -- Cobalt
             "by {C:attention}#1#{} levels for one blind"
         }
     },
-    loc_vars = function(self, info_queue, center)
-        return { vars = { center.ability.extra } }
-    end,
+    loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
     config = { extra = 2 },
@@ -657,9 +651,7 @@ SMODS.Consumable { -- Arsenic
             "hands and discards"
         }
     },
-    loc_vars = function(self, info_queue, center)
-        return { vars = {} }
-    end,
+    loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
     config = { },
@@ -700,17 +692,19 @@ SMODS.Consumable { -- Antimony
     loc_txt = {
         name = 'Antimony',
         text = {
-            "Create a {C:dark_edition}Negative{} {C:eternal}0-cost{}",
-            "{C:attention}copy{} of a random",
+            "Create #1# {C:dark_edition}Negative{} {C:eternal}0-cost{}",
+            "{C:attention}#2#{} of a random",
             "joker for one blind"
         }
     },
     loc_vars = function(self, info_queue, center)
-        return { vars = {} }
+        local ret = alchemical_loc_vars(self, info_queue, center)
+        local extra = math.ceil(center.ability.extra * alchemical_get_x_mult(center))
+        return { vars = { (extra == 1 and "a") or ret.vars[1], (extra == 1 and "copy") or "copies"  } }
     end,
     unlocked = true,
     discovered = false,
-    config = { extra = 2 },
+    config = { extra = 1 },
     cost = 3,
     pos = { x = 5, y = 1 },
 
@@ -724,16 +718,18 @@ SMODS.Consumable { -- Antimony
             func = function()
                 if #G.jokers.cards > 0 then
                     local chosen_joker = pseudorandom_element(G.jokers.cards, pseudoseed('invisible'))
-                    local card = copy_card(chosen_joker, nil, nil, nil,
-                        chosen_joker.edition and chosen_joker.edition.negative)
-                    card:set_edition({ negative = true }, true)
-                    card.cost = 0
-                    card.sell_cost = 0
-                    -- card:set_eternal(true)
-                    if card.ability.invis_rounds then card.ability.invis_rounds = 0 end
-                    card:add_to_deck()
-                    G.jokers:emplace(card)
-                    table.insert(G.jokers.config.antimony, card.unique_val)
+                    for _ = 1, card.ability.extra do
+                        local card = copy_card(chosen_joker, nil, nil, nil,
+                            chosen_joker.edition and chosen_joker.edition.negative)
+                        card:set_edition({ negative = true }, true)
+                        card.cost = 0
+                        card.sell_cost = 0
+                        -- card:set_eternal(true)
+                        if card.ability.invis_rounds then card.ability.invis_rounds = 0 end
+                        card:add_to_deck()
+                        G.jokers:emplace(card)
+                        table.insert(G.jokers.config.antimony, card.unique_val)
+                    end
                     return true
                 end
             end
@@ -788,9 +784,7 @@ SMODS.Consumable { -- Soap
             "cards from your deck"
         }
     },
-    loc_vars = function(self, info_queue, center)
-        return { vars = { center.ability.extra } }
-    end,
+    loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
     config = { extra = 3 },
@@ -844,12 +838,10 @@ SMODS.Consumable { -- Manganese
             "for one blind"
         }
     },
-    loc_vars = function(self, info_queue, center)
-        return { vars = { center.ability.extra } }
-    end,
+    loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
-    config = { extra = 4 },
+    config = { extra = 4, select = true },
     cost = 3,
     pos = { x = 1, y = 2 },
 
@@ -909,12 +901,10 @@ SMODS.Consumable { -- Wax
             "{C:inactive}(Does not trigger jokers){}"
         }
     },
-    loc_vars = function(self, info_queue, center)
-        return { vars = { center.ability.extra } }
-    end,
+    loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
-    config = { extra = 2 },
+    config = { extra = 2, select = true },
     cost = 3,
     pos = { x = 2, y = 2 },
 
@@ -981,11 +971,12 @@ SMODS.Consumable { -- Borax
     },
     loc_vars = function(self, info_queue, center)
         local top_suit = get_most_common_suit()
-        return { vars = { center.ability.extra, top_suit, colours = { G.C.SUITS[top_suit] } } }
+        local ret = alchemical_loc_vars(self, info_queue, center)
+        return { vars = { ret.vars[1], top_suit, colours = { G.C.SUITS[top_suit] } } }
     end,
     unlocked = true,
     discovered = false,
-    config = { extra = 4 },
+    config = { extra = 4, select = true },
     cost = 3,
     pos = { x = 3, y = 2 },
 
@@ -1051,9 +1042,7 @@ glass = { -- Glass
             "{C:inactive}will not return"
         }
     },
-    loc_vars = function(self, info_queue, center)
-        return { vars = { center.ability.extra } }
-    end,
+    loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
     config = { extra = 4 },
@@ -1119,9 +1108,7 @@ SMODS.Consumable { -- Magnet
             "as the selected card"
         }
     },
-    loc_vars = function(self, info_queue, center)
-        return { vars = { center.ability.extra } }
-    end,
+    loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
     config = { extra = 2 },
@@ -1169,12 +1156,10 @@ gold = { -- Gold
             "for one blind"
         }
     },
-    loc_vars = function(self, info_queue, center)
-        return { vars = { center.ability.extra } }
-    end,
+    loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
-    config = { extra = 4 },
+    config = { extra = 4, select = true },
     cost = 3,
     pos = { x = 0, y = 3 },
 
@@ -1280,12 +1265,10 @@ SMODS.Consumable { -- Silver
             "for one blind"
         }
     },
-    loc_vars = function(self, info_queue, center)
-        return { vars = { center.ability.extra } }
-    end,
+    loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
-    config = { extra = 4 },
+    config = { extra = 4, select = true },
     cost = 3,
     pos = { x = 1, y = 3 },
 
@@ -1344,9 +1327,7 @@ SMODS.Consumable { -- Oil
             "hand for this blind"
         }
     },
-    loc_vars = function(self, info_queue, center)
-        return { vars = {} }
-    end,
+    loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
     config = {},
@@ -1430,9 +1411,7 @@ acid = { -- Acid
             "after this blind"
         }
     },
-    loc_vars = function(self, info_queue, center)
-        return { vars = {} }
-    end,
+    loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
     config = {},
@@ -1515,9 +1494,7 @@ SMODS.Consumable { -- Brimstone
             "for one blind"
         }
     },
-    loc_vars = function(self, info_queue, center)
-        return { vars = { center.ability.extra } }
-    end,
+    loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
     config = { extra = 2 },
@@ -1559,9 +1536,7 @@ SMODS.Consumable { -- Uranium
             "in hand for one blind"
         }
     },
-    loc_vars = function(self, info_queue, center)
-        return { vars = { center.ability.extra } }
-    end,
+    loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
     config = { extra = 3 },

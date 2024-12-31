@@ -79,6 +79,16 @@ end
 -- Registers the mod icon
 SMODS.Atlas { key = 'modicon', px = 32, py = 32, path = 'modicon.png' }
 
+
+-- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+--           LOCALIZATION
+-- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+function SMODS.current_mod.process_loc_text()
+    -- will crash the game if removed
+    G.localization.descriptions.Alchemical = G.localization.descriptions.Alchemical or {}
+end
+
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 --     ALCHEMICAL INTERFACE
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
@@ -89,12 +99,22 @@ NFS.load(ReduxArcanumMod.path .. "/api/alchemicalAPI.lua")()
 --      ALCHEMICAL UTILS
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
+function poll_alchemical_edition(_key, _mod, _no_poly)
+    _mod = _mod or 1
+    local edition_poll = pseudorandom(pseudoseed(_key or 'edition_generic'))
+    if edition_poll > 1 - 0.03*_mod*(G.GAME.used_vouchers.v_ReduxArcanum_cauldron and 10 or 1) then
+        return {negative = true}
+    elseif edition_poll > 1 - 0.06*G.GAME.edition_rate*_mod and not _no_poly then
+        return {polychrome = true}
+    end
+    return nil
+end
+
 -- Use this function to apply cauldron effect
 function create_alchemical(...)
     local card = create_card("Alchemical", ...)
-    if G.GAME.used_vouchers.v_ReduxArcanum_cauldron and pseudorandom('cauldron') > 0.75 then
-        card:set_edition({ negative = true }, true)
-    end
+    local edition = poll_alchemical_edition("random_alchemical", 1, not (card.ability.extra and card.ability.extra > 0))
+    card:set_edition(edition)
     return card
 end
 

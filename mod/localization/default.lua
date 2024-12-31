@@ -1,5 +1,15 @@
 return {
     descriptions = {
+        Edition = {
+            e_polychrome_alchemical = {
+                name = "Polychrome",
+                text = {
+                    "Multiply positive",
+                    "effects by {C:attention}x#1#{}",
+                    "{C:inactive}(Rounded up){}"
+                },
+            },
+        },
         Sleeve = {
             sleeve_ReduxArcanum_herbalist = {
                 name = "Herbalist's Sleeve",
@@ -35,6 +45,26 @@ return {
                     "options to choose from",
                 }
             }
-        }
+        },
+        -- Tarot = {
+        --     tarot_ReduxArcanum_seeker = {
+        --         name = 'The Seeker',
+        --         text = {
+        --             "Creates up to {C:attention}#1#",
+        --             "random {C:alchemical}Alchemical{} cards",
+        --             "{C:inactive}(Must have room)",
+        --         }
+        --     }
+        -- },
+        -- Spectral = {
+        --     tarot_ReduxArcanum_seeker = {
+        --         name = 'The Seeker',
+        --         text = {
+        --             "Creates up to {C:attention}#1#",
+        --             "random {C:alchemical}Alchemical{} cards",
+        --             "{C:inactive}(Must have room)",
+        --         }
+        --     }
+        -- }
     }
 }

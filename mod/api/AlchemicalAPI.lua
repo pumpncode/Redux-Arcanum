@@ -56,6 +56,9 @@ function alchemical_use(func)
         G.deck.config.played_alchemicals = G.deck.config.played_alchemicals or {}
         table.insert(G.deck.config.played_alchemicals, {self, card})
         check_for_unlock({ type = 'used_alchemical' })
+        if card.edition and card.edition.polychrome and card.ability.extra then
+            card.ability.extra = math.ceil(card.ability.extra * card.edition.x_mult)
+        end
         func(self, card)
     end
 end
@@ -70,5 +73,21 @@ function ra_reset_played_alchemicals()
             end
         end
         G.deck.config.played_alchemicals = {}
+    end
+end
+
+function alchemical_get_x_mult(card)
+    if card.edition and card.edition.polychrome and card.ability.extra then
+        return card.edition.x_mult
+    else
+        return 1
+    end
+end
+
+function alchemical_loc_vars(self, info_queue, center)
+    if center.edition and center.edition.polychrome and center.ability.extra then
+        return { vars = { math.ceil(center.ability.extra * center.edition.x_mult) } }
+    else
+        return { vars = { center.ability.extra } }
     end
 end

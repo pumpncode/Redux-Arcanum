@@ -24,6 +24,20 @@ payload = '''
 },
 '''
 
+## Patch to skip polychrome alchemicals in scoring
+## This adds the start of the loop
+# G.FUNCS.evaluate_play()
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''if edition_effects.jokers.x_mult_mod then'''
+position = 'at'
+match_indent = true
+times = 1
+payload = '''
+if edition_effects.jokers.x_mult_mod and _card.ability.set ~= "Alchemical" then
+'''
+
 ## Patch to add philo stone to score calculation - part 1
 ## This adds the start of the loop
 # G.FUNCS.evaluate_play()
@@ -169,4 +183,40 @@ target = "cardarea.lua"
 pattern = "if self.config.type == 'hand' and not (G.STATE == G.STATES.TAROT_PACK or G.STATE == G.STATES.SPECTRAL_PACK or G.STATE == G.STATES.PLANET_PACK or G.STATE == G.STATES.SMODS_BOOSTER_OPENED) then"
 position = "at"
 payload = "if self.config.type == 'hand' and not (G.STATE == G.STATES.TAROT_PACK or G.STATE == G.STATES.SPECTRAL_PACK or G.STATE == G.STATES.PLANET_PACK or G.STATE == G.STATES.SMODS_BOOSTER_OPENED or G.STATE == G.STATES.STANDARD_PACK or G.STATE == G.STATES.BUFFOON_PACK) then"
+match_indent = true
+
+## Patches for polychrome alchemicals
+
+# G.UIDEF.card_h_popup()
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''badges[#badges + 1] = create_badge(localize(v, "labels"), get_badge_colour(v))'''
+position = 'before'
+match_indent = true
+times = 1
+payload = '''
+if v == 'polychrome_alchemical' then v = 'polychrome' end
+'''
+
+# generate_card_ui()
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''v = (v == 'holographic' and 'holo' or v)'''
+position = 'after'
+match_indent = true
+times = 1
+payload = '''
+if v == 'polychrome_alchemical' then info_queue[#info_queue+1] = {key = 'e_polychrome_alchemical', set = 'Edition', config = {extra = 1.5}} end
+'''
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "badges[#badges + 1] = 'negative_consumable'"
+position = "after"
+payload = """
+elseif self.edition.type == 'polychrome' and (self.ability.set == 'Alchemical') then
+    badges[#badges + 1] = 'polychrome_alchemical'"""
 match_indent = true
