@@ -27,7 +27,7 @@ SMODS.Voucher {
     atlas = 'arcanum_others'
 }
 
-SMODS.Voucher {
+cauldron = {
     key = 'cauldron',
     loc_txt = {
         name = "Cauldron",
@@ -62,6 +62,13 @@ SMODS.Voucher {
     pos = { x = 0, y = 3 },
     atlas = 'arcanum_others'
 }
+if ReduxArcanumMod.config.new_content then
+    cauldron.loc_txt.text = {
+        "{C:dark_edition}Negative{} {C:alchemical}Alchemical{} cards",
+        "appear much more often"
+    }
+end
+SMODS.Voucher(cauldron)
 
 SMODS.Voucher {
     key = 'alchemical_merchant',

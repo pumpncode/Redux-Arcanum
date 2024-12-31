@@ -2,51 +2,55 @@
 --            JOKERS
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
-SMODS.Joker { -- Studious Joker
-    key = "studious_joker",
-    loc_txt = {
-        name = "Studious Joker",
-        text = {
-            "{C:mult}+#1#{} Mult. Sell this",
-            "joker to get one",
-            "{C:alchemical} Alchemical{} card"
+studious_joker = { -- Studious Joker
+key = "studious_joker",
+loc_txt = {
+    name = "Studious Joker",
+    text = {
+        "{C:mult}+#1#{} Mult. Sell this",
+        "joker to get one",
+        "{C:alchemical} Alchemical{} card"
+    }
+},
+loc_vars = function(self, info_queue, center)
+    return { vars = { center.ability.mult } }
+end,
+unlocked = true,
+discovered = false,
+blueprint_compat = true,
+perishable_compat = true,
+eternal_compat = false,
+rarity = 1,
+cost = 5,
+effect = "",
+config = {
+    mult = 4
+},
+atlas = "arcanum_joker_atlas",
+pos = { x = 0, y = 0 },
+
+calculate = function(self, card, context)
+    if context.selling_self then -- and not context.blueprint then
+        add_random_alchemical(card)
+        card_eval_status_text(card, 'extra', nil, nil, nil,
+            { message = "Graduated!", colour = G.C.SECONDARY_SET.Alchemy })
+        return {
+            card = card
         }
-    },
-    loc_vars = function(self, info_queue, center)
-        return { vars = { center.ability.mult } }
-    end,
-    unlocked = true,
-    discovered = false,
-    blueprint_compat = true,
-    perishable_compat = true,
-    eternal_compat = false,
-    rarity = 1,
-    cost = 5,
-    effect = "",
-    config = {
-        mult = 4
-    },
-    atlas = "arcanum_joker_atlas",
-    pos = { x = 0, y = 0 },
-
-    calculate = function(self, card, context)
-        if context.selling_self then -- and not context.blueprint then
-            add_random_alchemical(card)
-            card_eval_status_text(card, 'extra', nil, nil, nil,
-                { message = "Graduated!", colour = G.C.SECONDARY_SET.Alchemy })
-            return {
-                card = card
-            }
-        end
-
-        if context.joker_main then
-            return {
-                message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.mult } },
-                mult_mod = card.ability.mult
-            }
-        end
     end
+
+    if context.joker_main then
+        return {
+            message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.mult } },
+            mult_mod = card.ability.mult
+        }
+    end
+end
 }
+if ReduxArcanumMod.config.new_content then
+    studious_joker.config.mult = 3
+end
+SMODS.Joker(studious_joker)
 
 SMODS.Joker { -- Bottled Buffoon
     key = "bottled_buffoon",
@@ -190,7 +194,7 @@ SMODS.Joker { -- Mutated Jokmer
             for k, v in pairs(G.GAME.consumeable_usage) do
                 if v.set == 'Alchemical' then alchemical_tally = alchemical_tally + 1 end
             end
-    
+
             local expected_total_chips = alchemical_tally * card.ability.extra.chips
 
             return {
@@ -204,7 +208,7 @@ SMODS.Joker { -- Mutated Jokmer
 -- This joker overlaps with Doodle in Bunco, so leave it out if Bunco is present
 if (not SMODS.Mods["Bunco"] or not SMODS.Mods["Bunco"].can_load) or
     ReduxArcanumMod.config.overlapping_cards ~= 1 then
-    SMODS.Joker { -- Chain Reaction
+    chain_reaction = { -- Chain Reaction
         key = "chain_reaction",
         loc_txt = {
             name = "Chain Reaction",
@@ -240,7 +244,9 @@ if (not SMODS.Mods["Bunco"] or not SMODS.Mods["Bunco"].can_load) or
                     G.E_MANAGER:add_event(Event({
                         func = function()
                             local _card = copy_card(context.consumeable, nil, nil, nil)
-                            _card:set_edition({ negative = true }, true)
+                            if ReduxArcanumMod.config.new_content then
+                                _card:set_edition({ negative = true }, true)
+                            end
                             _card:add_to_deck()
                             G.consumeables:emplace(_card)
 
@@ -273,6 +279,14 @@ if (not SMODS.Mods["Bunco"] or not SMODS.Mods["Bunco"].can_load) or
             end
         end
     }
+    if ReduxArcanumMod.config.new_content then
+        chain_reaction.loc_txt.text = {
+            "Create a {C:attention}Copy{} of",
+            "the first {C:alchemical}Alchemical{} card",
+            "used each blind"
+        }
+    end
+    SMODS.Joker(chain_reaction)
 end
 
 SMODS.Joker { -- Essence of Comedy

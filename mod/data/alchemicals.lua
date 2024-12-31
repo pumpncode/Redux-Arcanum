@@ -155,7 +155,7 @@ SMODS.Consumable { -- Aqua
     end),
 }
 
-SMODS.Consumable { -- Terra
+terra = { -- Terra
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "terra",
@@ -193,6 +193,10 @@ SMODS.Consumable { -- Terra
         }))
     end),
 }
+if ReduxArcanumMod.config.new_content then
+    terra.config.extra = 20
+end
+SMODS.Consumable(terra)
 
 SMODS.Consumable { -- Aero
     set = "Alchemical",
@@ -271,7 +275,7 @@ SMODS.Consumable { -- Quicksilver
 
 }
 
-SMODS.Consumable { -- Salt
+salt = { -- Salt
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "salt",
@@ -284,13 +288,32 @@ SMODS.Consumable { -- Salt
     end,
     unlocked = true,
     discovered = false,
-    config = { extra = 1 },
+    config = { extra = 1, loss = 10 },
     cost = 3,
     pos = { x = 5, y = 0 },
 
     can_use = alchemical_can_use,
 
     use = alchemical_use(function(self, card)
+        if ReduxArcanumMod.config.new_content then
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.2,
+                func = function()
+                    G.GAME.blind.chips = math.floor(G.GAME.blind.chips * (1 + card.ability.loss / 100))
+                    G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+
+                    local chips_UI = G.hand_text_area.blind_chips
+                    G.FUNCS.blind_chip_UI_scale(G.hand_text_area.blind_chips)
+                    G.HUD_blind:recalculate()
+                    chips_UI:juice_up()
+
+                    if not silent then play_sound('chips2') end
+                    return true
+                end
+            }))
+        end
+
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.1,
@@ -323,10 +346,10 @@ SMODS.Consumable { -- Salt
                             G.GAME.tags[i]:apply_to_run({ type = 'immediate' })
                         end
                         for i = 1, #G.GAME.tags do
-                          if G.GAME.tags[i].key == "tag_boss" then
-                          else
-                            if G.GAME.tags[i]:apply_to_run({type = 'new_blind_choice'}) then break end
-                          end
+                            if G.GAME.tags[i].key == "tag_boss" then
+                            else
+                                if G.GAME.tags[i]:apply_to_run({ type = 'new_blind_choice' }) then break end
+                            end
                         end
                         return true
                     end
@@ -336,6 +359,10 @@ SMODS.Consumable { -- Salt
         }))
     end),
 }
+if ReduxArcanumMod.config.new_content then
+    salt.loc_txt.text = { "Increase blind by 10%", "to gain {C:attention}#1#{} tag" }
+end
+SMODS.Consumable(salt)
 
 SMODS.Consumable { -- Sulfur
     set = "Alchemical",
@@ -423,7 +450,7 @@ SMODS.Consumable { -- Phosphorus
     end),
 }
 
-SMODS.Consumable { -- Bismuth
+bismuth = { -- Bismuth
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "bismuth",
@@ -463,6 +490,7 @@ SMODS.Consumable { -- Bismuth
                 for k, card in ipairs(G.hand.highlighted) do
                     local prev_edition = check_alchemical_prev_edition(card)
                     card:set_edition({ polychrome = true }, true, true)
+                    card:juice_up(0.3, 0.5)
                     used_card:juice_up(0.3, 0.5)
                     table.insert(G.deck.config.ra_bismuth, { card_id = card.unique_val, prev_edition = prev_edition })
                 end
@@ -485,6 +513,58 @@ SMODS.Consumable { -- Bismuth
         return true
     end,
 }
+if ReduxArcanumMod.config.new_content then
+    bismuth.loc_txt.text = {
+        "Converts the #1#",
+        "#2# to {C:dark_edition}Polychrome",
+        "for one blind"
+    }
+    bismuth.config = { extra = 1 }
+    bismuth.loc_vars = function(self, info_queue, center)
+        local ret = alchemical_loc_vars(self, info_queue, center)
+        local extra = math.ceil(center.ability.extra * alchemical_get_x_mult(center))
+        return { vars = { (extra == 1 and "rightmost") or (ret.vars[1] .. " rightmost"), (extra == 1 and "joker") or "jokers" } }
+    end
+    bismuth.can_use = alchemical_can_use
+    bismuth.use = alchemical_use(function(self, used_card)
+        G.deck.config.ra_bismuth = G.deck.config.ra_bismuth or {}
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.1,
+            func = function()
+                play_sound('polychrome1', 1.2, 0.7)
+
+                for i = #G.jokers.cards, math.max(#G.jokers.cards - used_card.ability.extra + 1, 1), -1 do
+                    local right_joker = G.jokers.cards[i]
+
+                    local prev_edition = right_joker.edition
+                    right_joker:set_edition({ polychrome = true }, true, true)
+                    right_joker:juice_up(0.3, 0.5)
+                    used_card:juice_up(0.3, 0.5)
+                    table.insert(G.deck.config.ra_bismuth, { card_id = right_joker.unique_val, prev_edition = prev_edition })
+                end
+
+                return true
+            end
+        }))
+    end)
+    bismuth.end_blind = function(self, card)
+        if G.deck.config.ra_bismuth then
+            play_sound('tarot1')
+            for _, bismuthed_joker in ipairs(G.deck.config.ra_bismuth) do
+                for k, joker in ipairs(G.jokers.cards) do
+                    if joker.unique_val == bismuthed_joker.card_id and joker.edition and joker.edition.polychrome then
+                        joker:juice_up(0.3, 0.4)
+                        joker:set_edition(bismuthed_joker.prev_edition, true, true)
+                    end
+                end
+            end
+            G.deck.config.ra_bismuth = {}
+        end
+        return true
+    end
+end
+SMODS.Consumable(bismuth)
 
 SMODS.Consumable { -- Cobalt
     set = "Alchemical",
@@ -582,7 +662,7 @@ SMODS.Consumable { -- Arsenic
     end,
     unlocked = true,
     discovered = false,
-    config = { extra = 2 },
+    config = { },
     cost = 3,
     pos = { x = 4, y = 1 },
 
@@ -704,8 +784,8 @@ SMODS.Consumable { -- Soap
         name = 'Soap',
         text = {
             "Replace up to {C:attention}#1#{}",
-            "selected cards with cards",
-            "from your deck"
+            "selected cards with",
+            "cards from your deck"
         }
     },
     loc_vars = function(self, info_queue, center)
@@ -824,8 +904,9 @@ SMODS.Consumable { -- Wax
         name = 'Wax',
         text = {
             "Create {C:attention}#1#{} temporary",
-            "copies of the selected card",
-            "for one blind"
+            "copies of the selected",
+            "card for one blind",
+            "{C:inactive}(Does not trigger jokers){}"
         }
     },
     loc_vars = function(self, info_queue, center)
@@ -893,8 +974,8 @@ SMODS.Consumable { -- Borax
         text = {
             "Converts up to",
             "{C:attention}#1#{} selected cards",
-            "into most common {C:attention}suit",
-            "for one blind",
+            "into the most common",
+            "{C:attention}suit for one blind",
             "{C:inactive}Current suit: {V:1}#2#{}"
         }
     },
@@ -955,7 +1036,7 @@ SMODS.Consumable { -- Borax
     end,
 }
 
-SMODS.Consumable { -- Glass
+glass = { -- Glass
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "glass",
@@ -1021,6 +1102,10 @@ SMODS.Consumable { -- Glass
         return true
     end,
 }
+if ReduxArcanumMod.config.new_content then
+    glass.config.extra = 2
+end
+SMODS.Consumable(glass)
 
 SMODS.Consumable { -- Magnet
     set = "Alchemical",
@@ -1071,7 +1156,7 @@ SMODS.Consumable { -- Magnet
     end),
 }
 
-SMODS.Consumable { -- Gold
+gold = { -- Gold
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "gold",
@@ -1135,6 +1220,52 @@ SMODS.Consumable { -- Gold
         return true
     end,
 }
+if ReduxArcanumMod.config.new_content then
+    gold.loc_txt.text = {
+        "{C:attention}#1#{} the value of",
+        "all {C:attention}gold cards{} currently",
+        "in hand for one blind"
+    }
+    gold.config = {extra = 2}
+    gold.loc_vars = function(self, info_queue, center)
+        local ret = alchemical_loc_vars(self, info_queue, center)
+        local extra = math.ceil(center.ability.extra * alchemical_get_x_mult(center))
+        return { vars = { (extra == 2 and "Double") or (ret.vars[1].."x") } }
+    end
+    gold.can_use = alchemical_can_use
+    gold.use = alchemical_use(function(self, used_card)
+        G.deck.config.ra_gold = G.deck.config.ra_gold or {}
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.1,
+            func = function()
+                play_sound('tarot1')
+                for k, card in ipairs(G.hand.cards) do
+                    if card.config.center == G.P_CENTERS.m_gold then
+                        card:juice_up(1, 0.5)
+                        table.insert(G.deck.config.ra_gold, { card_id = card.unique_val, original_value = card.ability.h_dollars })
+                        card.ability.h_dollars = card.ability.h_dollars * used_card.ability.extra
+                    end
+                end
+                return true
+            end
+        }))
+    end)
+    gold.end_blind = function(self, card)
+        if G.deck.config.ra_gold then
+            for _, golded_card in ipairs(G.deck.config.ra_gold) do
+                for k, card in ipairs(G.playing_cards) do
+                    if card.unique_val == golded_card.card_id and card.config.center == G.P_CENTERS.m_gold then
+                        card.ability.h_dollars = golded_card.original_value
+                    end
+                end
+            end
+            G.deck.config.ra_gold = {}
+        end
+        return true
+    end
+end
+SMODS.Consumable(gold)
 
 SMODS.Consumable { -- Silver
     set = "Alchemical",
@@ -1286,7 +1417,7 @@ SMODS.Consumable { -- Oil
     end,
 }
 
-SMODS.Consumable { -- Acid
+acid = { -- Acid
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "acid",
@@ -1323,7 +1454,7 @@ SMODS.Consumable { -- Acid
             delay = 0.1,
             func = function()
                 for k, v in ipairs(G.playing_cards) do
-                    if v:get_id() == G.hand.highlighted[1]:get_id() then
+                    if v:get_id() == G.hand.highlighted[1]:get_id() or (v.base.suit == G.hand.highlighted[1].base.suit and ReduxArcanumMod.config.new_content) then
                         table.insert(G.deck.config.ra_acid, v)
                         if v.ability.name == 'Glass Card' then
                             v:shatter()
@@ -1332,9 +1463,11 @@ SMODS.Consumable { -- Acid
                         end
                     end
                 end
-                for j = 1, #G.jokers.cards do
-                    eval_card(G.jokers.cards[j],
-                        { cardarea = G.jokers, remove_playing_cards = true, removed = G.deck.config.ra_acid })
+                if not ReduxArcanumMod.config.new_content then
+                    for j = 1, #G.jokers.cards do
+                        eval_card(G.jokers.cards[j],
+                            { cardarea = G.jokers, remove_playing_cards = true, removed = G.deck.config.ra_acid })
+                    end
                 end
                 return true
             end
@@ -1349,13 +1482,25 @@ SMODS.Consumable { -- Acid
                 G.deck:emplace(_card)
                 G.deck.config.card_limit = G.deck.config.card_limit + 1
                 table.insert(G.playing_cards, _card)
-                playing_card_joker_effects({ true })
+                if not ReduxArcanumMod.config.new_content then
+                    playing_card_joker_effects({ true })
+                end
             end
             G.deck.config.ra_acid = {}
         end
         return true
     end,
 }
+if ReduxArcanumMod.config.new_content then
+    acid.loc_txt.text = {
+        "{C:attention}Destroy{} all cards of the ",
+        "same rank or suit as selected",
+        "card. All cards {C:attention}returned",
+        "after this blind",
+        "{C:inactive}(Does not trigger jokers){}"
+    }
+end
+SMODS.Consumable(acid)
 
 SMODS.Consumable { -- Brimstone
     set = "Alchemical",
@@ -1454,21 +1599,19 @@ SMODS.Consumable { -- Uranium
 
                                 conv_card:juice_up(1, 0.5)
 
-                                if i == 1 then
-                                    local copied_edition = G.hand.highlighted[1].edition
-                                    if copied_edition then
-                                        if copied_edition.holo then
-                                            play_sound('holo1', 1.2 * 1.58, 0.4)
-                                        elseif copied_edition.polychrome then
-                                            play_sound('polychrome1', 1.2, 0.7)
-                                        elseif copied_edition.negative then
-                                            play_sound('negative', 1.5, 0.4)
-                                        else
-                                            play_sound('foil1', 1.2, 0.4)
-                                        end
+                                local copied_edition = G.hand.highlighted[1].edition
+                                if copied_edition then
+                                    if copied_edition.holo then
+                                        play_sound('holo1', 1.2 * 1.58, 0.4)
+                                    elseif copied_edition.polychrome then
+                                        play_sound('polychrome1', 1.2, 0.7)
+                                    elseif copied_edition.negative then
+                                        play_sound('negative', 1.5, 0.4)
                                     else
-                                        play_sound('tarot1')
+                                        play_sound('foil1', 1.2, 0.4)
                                     end
+                                else
+                                    play_sound('tarot1')
                                 end
 
                                 local prev_enhancement = check_alchemical_prev_enhancement(conv_card)
