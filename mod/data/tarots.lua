@@ -109,7 +109,7 @@ SMODS.Consumable {
         name = "The Philosopher's Stone",
         text = {
             "{C:attention}Retrigger{} the",
-            "next played hand"
+            "next {C:legendary,E:1}played hand{}"
         }
     },
     loc_vars = function(self, info_queue, center)
