@@ -20,7 +20,7 @@ SMODS.Back {
         },
     },
 
-    config = { vouchers = { 'v_ReduxArcanum_mortar_and_pestle' } },
+    config = { vouchers = { 'v_ReduxArcanum_mortar_and_pestle' }, used = false },
 
     unlocked = false,
     check_for_unlock = function(self, args)
@@ -30,31 +30,27 @@ SMODS.Back {
     end,
 
     apply = function(self)
-        self.add_alchemical_trigger()
     end,
     trigger_effect = function(self, args)
         -- Reapply the alchemy card event once the boss blind is defeated
         if args.context == 'eval' and G.GAME.last_blind and G.GAME.last_blind.boss then
-            self.add_alchemical_trigger(self)
-        end
-    end,
-    add_alchemical_trigger = function(self)
-        G.E_MANAGER:add_event(Event({
-            blocking = false,
-            func = function()
-                if G.GAME.blind:get_type() == 'Boss' then
-                    if G.consumeables.config.card_limit > #G.consumeables.cards then
+            self.config.used = false
+        elseif not self.config.used and G.GAME.blind:get_type() == 'Boss' then
+            G.E_MANAGER:add_event(Event({
+                func = function()
+                    if not self.config.used and G.consumeables.config.card_limit > #G.consumeables.cards then
                         play_sound('timpani')
                         local card = create_alchemical(G.deck)
                         card:add_to_deck()
                         G.consumeables:emplace(card)
+
+                        self.config.used = true
                     end
+
                     return true
                 end
-
-                return false
-            end
-        }))
+            }))
+        end
     end,
 
     pos = { x = 1, y = 0 },
@@ -112,26 +108,24 @@ if (SMODS.Mods["CardSleeves"] and SMODS.Mods["CardSleeves"].can_load) and CardSl
             if self.get_current_deck_key() ~= "b_ReduxArcanum_herbalist" then
                 sendDebugMessage("Setting mortar and pestle", "ReduxArcanumDebugLogger")
                 key = self.key
-                self.config = { vouchers = { "v_ReduxArcanum_mortar_and_pestle" } }
+                self.config = { vouchers = { "v_ReduxArcanum_mortar_and_pestle" }, used = false }
             else
                 sendDebugMessage("Setting cauldron", "ReduxArcanumDebugLogger")
                 key = self.key .. "_alt"
-                self.config = { vouchers = { "v_ReduxArcanum_cauldron" } }
+                self.config = { vouchers = { "v_ReduxArcanum_cauldron" }, used = false }
             end
             return { key = key, vars = {} }
         end,
 
         apply = function(self, args)
             if self.get_current_deck_key() ~= "b_ReduxArcanum_herbalist" then
-                self.config = { vouchers = { "v_ReduxArcanum_mortar_and_pestle" } }
+                self.config = { vouchers = { "v_ReduxArcanum_mortar_and_pestle" }, used = false }
             else
-                self.config = { vouchers = { "v_ReduxArcanum_cauldron" } }
+                self.config = { vouchers = { "v_ReduxArcanum_cauldron" }, used = false }
             end
-            SMODS.Back.obj_table["b_ReduxArcanum_herbalist"].apply(self)
             CardSleeves.Sleeve.apply(self)
         end,
         trigger_effect = SMODS.Back.obj_table["b_ReduxArcanum_herbalist"].trigger_effect,
-        add_alchemical_trigger = SMODS.Back.obj_table["b_ReduxArcanum_herbalist"].add_alchemical_trigger
     }
     CardSleeves.Sleeve {
         key = "philosopher",
