@@ -3,49 +3,49 @@
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
 studious_joker = { -- Studious Joker
-key = "studious_joker",
-loc_txt = {
-    name = "Studious Joker",
-    text = {
-        "{C:mult}+#1#{} Mult. Sell this",
-        "joker to get one",
-        "{C:alchemical} Alchemical{} card"
-    }
-},
-loc_vars = function(self, info_queue, center)
-    return { vars = { center.ability.mult } }
-end,
-unlocked = true,
-discovered = false,
-blueprint_compat = true,
-perishable_compat = true,
-eternal_compat = false,
-rarity = 1,
-cost = 5,
-effect = "",
-config = {
-    mult = 4
-},
-atlas = "arcanum_joker_atlas",
-pos = { x = 0, y = 0 },
-
-calculate = function(self, card, context)
-    if context.selling_self then -- and not context.blueprint then
-        add_random_alchemical(card)
-        card_eval_status_text(card, 'extra', nil, nil, nil,
-            { message = "Graduated!", colour = G.C.SECONDARY_SET.Alchemy })
-        return {
-            card = card
+    key = "studious_joker",
+    loc_txt = {
+        name = "Studious Joker",
+        text = {
+            "{C:mult}+#1#{} Mult. Sell this",
+            "joker to get one",
+            "{C:alchemical} Alchemical{} card"
         }
-    end
+    },
+    loc_vars = function(self, info_queue, center)
+        return { vars = { center.ability.mult } }
+    end,
+    unlocked = true,
+    discovered = false,
+    blueprint_compat = true,
+    perishable_compat = true,
+    eternal_compat = false,
+    rarity = 1,
+    cost = 5,
+    effect = "",
+    config = {
+        mult = 4
+    },
+    atlas = "arcanum_joker_atlas",
+    pos = { x = 0, y = 0 },
 
-    if context.joker_main then
-        return {
-            message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.mult } },
-            mult_mod = card.ability.mult
-        }
+    calculate = function(self, card, context)
+        if context.selling_self then -- and not context.blueprint then
+            add_random_alchemical(card)
+            card_eval_status_text(card, 'extra', nil, nil, nil,
+                { message = "Graduated!", colour = G.C.SECONDARY_SET.Alchemy })
+            return {
+                card = card
+            }
+        end
+
+        if context.joker_main then
+            return {
+                message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.mult } },
+                mult_mod = card.ability.mult
+            }
+        end
     end
-end
 }
 if ReduxArcanumMod.config.new_content then
     studious_joker.config.mult = 3
@@ -289,8 +289,10 @@ if (not SMODS.Mods["Bunco"] or not SMODS.Mods["Bunco"].can_load) or
         chain_reaction.loc_txt.text = {
             "Create a {C:attention}Copy{} of",
             "the first {C:alchemical}Alchemical{} card",
-            "used each blind"
+            "used each blind",
+            "{C:inactive}(Must have room){}"
         }
+        chain_reaction.rarity = 3
     end
     SMODS.Joker(chain_reaction)
 end
@@ -378,7 +380,7 @@ SMODS.Joker { -- Shock Humor
                 if pseudorandom('shock_humor') < G.GAME.probabilities.normal / card.ability.extra.odds then
                     add_random_alchemical(card)
                     card_eval_status_text(card, 'extra', nil, nil, nil,
-                        { message = "Transmogrified", colour = G.C.SECONDARY_SET.Alchemy })
+                        { message = "+1 Alchemical", colour = G.C.SECONDARY_SET.Alchemy })
                 end
             end
         end
@@ -413,7 +415,7 @@ SMODS.Joker { -- Breaking Bozo
     blueprint_compat = true,
     perishable_compat = true,
     eternal_compat = true,
-    rarity = 3,
+    rarity = 2,
     cost = 7,
     effect = "",
     config = {},
