@@ -38,6 +38,25 @@ payload = '''
 if edition_effects.jokers.x_mult_mod and _card.ability.set ~= "Alchemical" then
 '''
 
+## Patch for classic Philo stone
+# eval_card()
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''if context.repetition_only then'''
+position = 'after'
+match_indent = true
+times = 1
+payload = '''
+if G.deck.config.ra_philo_stone_classic and G.deck.config.ra_philo_stone_classic > 0 then 
+    ret.ra_philo_stone = {
+      message = localize('k_again_ex'),
+      repetitions = G.deck.config.ra_philo_stone_classic,
+      card = card
+    }
+end
+'''
+
 ## Patch to add philo stone to score calculation - part 1
 ## This adds the start of the loop
 # G.FUNCS.evaluate_play()

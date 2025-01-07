@@ -101,7 +101,7 @@ function hue_to_rgb(hue)
     return r, g, b
   end
 
-SMODS.Consumable {
+philosopher_stone = {
     set = "Spectral",
     atlas = "arcanum_others",
     key = "philosopher_stone",
@@ -130,8 +130,15 @@ SMODS.Consumable {
     use = function(self, card)
         sendDebugMessage("Philod", "ReduxArcanumDebugLogger")
 
+        G.deck.config.played_alchemicals = G.deck.config.played_alchemicals or {}
+        table.insert(G.deck.config.played_alchemicals, {self, card})
         G.deck.config.ra_philo_stone = G.deck.config.ra_philo_stone or 0
-        G.deck.config.ra_philo_stone = G.deck.config.ra_philo_stone + 1
+        G.deck.config.ra_philo_stone_classic = G.deck.config.ra_philo_stone_classic or 0
+        if ReduxArcanumMod.config.new_content then
+            G.deck.config.ra_philo_stone = G.deck.config.ra_philo_stone + 1
+        else
+            G.deck.config.ra_philo_stone_classic = G.deck.config.ra_philo_stone_classic + 1
+        end
 
         -- G.GAME.blind:change_colour(G.C.RAINBOW_EDITION)
         -- ease_background_colour{new_colour = G.C.RAINBOW_EDITION, contrast = 1}
@@ -147,7 +154,7 @@ SMODS.Consumable {
         G.E_MANAGER:add_event(Event({
             blocking = false,
             func = function()
-                if G.deck.config.ra_philo_stone > 0 then
+                if G.deck.config.ra_philo_stone > 0 or G.deck.config.ra_philo_stone_classic > 0 then
                     ease_background_colour{new_colour = G.C.ORANGE, special_colour = G.C.BLUE, tertiary_colour = darken(G.C.BLACK, 0.4), contrast = 3}
 
                     -- G.C.RAINBOW_EDITION_HUE = (G.C.RAINBOW_EDITION_HUE + 0.25) % 360
@@ -169,4 +176,14 @@ SMODS.Consumable {
             end
         }))
     end,
+    end_blind = function(self, card)
+        G.deck.config.ra_philo_stone_classic = 0
+    end
 }
+if not ReduxArcanumMod.config.new_content then
+    philosopher_stone.loc_txt.text = {
+        "{C:attention}Retrigger{} all played",
+        "cards this blind."
+    }
+end
+SMODS.Consumable (philosopher_stone)
