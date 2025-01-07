@@ -20,7 +20,7 @@ SMODS.Back {
         },
     },
 
-    config = { vouchers = { 'v_ReduxArcanum_mortar_and_pestle' }, used = false },
+    config = { vouchers = { 'v_ReduxArcanum_mortar_and_pestle' } },
 
     unlocked = false,
     check_for_unlock = function(self, args)
@@ -31,11 +31,9 @@ SMODS.Back {
 
     apply = function(self)
     end,
-    trigger_effect = function(self, args)
+    trigger_effect = function(self, context)
         -- Reapply the alchemy card event once the boss blind is defeated
-        if args.context == 'eval' and G.GAME.last_blind and G.GAME.last_blind.boss then
-            self.config.used = false
-        elseif not self.config.used and G.GAME.blind:get_type() == 'Boss' then
+        if context.setting_blind and context.blind.boss then
             G.E_MANAGER:add_event(Event({
                 func = function()
                     if not self.config.used and G.consumeables.config.card_limit > #G.consumeables.cards then
@@ -43,14 +41,12 @@ SMODS.Back {
                         local card = create_alchemical(G.deck)
                         card:add_to_deck()
                         G.consumeables:emplace(card)
-
-                        self.config.used = true
                     end
-
                     return true
                 end
             }))
         end
+		-- sendDebugMessage(tprint(G.GAME.last_blind), "ReduxArcanumDebugLogger")
     end,
 
     pos = { x = 1, y = 0 },
@@ -108,20 +104,20 @@ if (SMODS.Mods["CardSleeves"] and SMODS.Mods["CardSleeves"].can_load) and CardSl
             if self.get_current_deck_key() ~= "b_ReduxArcanum_herbalist" then
                 sendDebugMessage("Setting mortar and pestle", "ReduxArcanumDebugLogger")
                 key = self.key
-                self.config = { vouchers = { "v_ReduxArcanum_mortar_and_pestle" }, used = false }
+                self.config = { vouchers = { "v_ReduxArcanum_mortar_and_pestle" } }
             else
                 sendDebugMessage("Setting cauldron", "ReduxArcanumDebugLogger")
                 key = self.key .. "_alt"
-                self.config = { vouchers = { "v_ReduxArcanum_cauldron" }, used = false }
+                self.config = { vouchers = { "v_ReduxArcanum_cauldron" } }
             end
             return { key = key, vars = {} }
         end,
 
         apply = function(self, args)
             if self.get_current_deck_key() ~= "b_ReduxArcanum_herbalist" then
-                self.config = { vouchers = { "v_ReduxArcanum_mortar_and_pestle" }, used = false }
+                self.config = { vouchers = { "v_ReduxArcanum_mortar_and_pestle" } }
             else
-                self.config = { vouchers = { "v_ReduxArcanum_cauldron" }, used = false }
+                self.config = { vouchers = { "v_ReduxArcanum_cauldron" } }
             end
             CardSleeves.Sleeve.apply(self)
         end,
