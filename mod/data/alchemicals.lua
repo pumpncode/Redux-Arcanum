@@ -512,7 +512,7 @@ bismuth = { -- Bismuth
 if ReduxArcanumMod.config.new_content then
     bismuth.loc_txt.text = {
         "Converts the #1#",
-        "#2# to {C:dark_edition}Polychrome",
+        "#2# to {C:dark_edition}Polychrome{}",
         "for one blind"
     }
     bismuth.config = { extra = 1 }
@@ -725,7 +725,7 @@ SMODS.Consumable { -- Antimony
                         card.cost = 0
                         card.sell_cost = 0
                         -- card:set_eternal(true)
-                        if card.ability.invis_rounds then card.ability.invis_rounds = 0 end
+                        -- if card.ability.invis_rounds then card.ability.invis_rounds = 0 end
                         card:add_to_deck()
                         G.jokers:emplace(card)
                         table.insert(G.jokers.config.antimony, card.unique_val)
@@ -922,7 +922,7 @@ SMODS.Consumable { -- Wax
             trigger = 'after',
             delay = 0.1,
             func = function()
-                for i = 1, 2 do
+                for i = 1, used_card.ability.extra do
                     G.playing_card = (G.playing_card and G.playing_card + 1) or 1
                     local _card = copy_card(G.hand.highlighted[1], nil, nil, G.playing_card)
                     _card:add_to_deck()
