@@ -241,21 +241,27 @@ if (not SMODS.Mods["Bunco"] or not SMODS.Mods["Bunco"].can_load) or
 
             if context.using_consumeable and context.consumeable.ability.set == 'Alchemical' then
                 if not card.ability.extra.used then
-                    G.E_MANAGER:add_event(Event({
-                        func = function()
-                            local _card = copy_card(context.consumeable, nil, nil, nil)
-                            if ReduxArcanumMod.config.new_content then
-                                _card:set_edition({ negative = true }, true)
+                    if (not ReduxArcanumMod.config.new_content) or (#G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit) then
+                        G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                        G.E_MANAGER:add_event(Event({
+                            func = function()
+                                local _card = copy_card(context.consumeable, nil, nil, nil)
+                                if not ReduxArcanumMod.config.new_content then
+                                    _card:set_edition({ negative = true }, true)
+                                end
+                                _card:set_ability(context.consumeable.config.center) -- To handle polychrome
+                                _card:add_to_deck()
+                                G.consumeables:emplace(_card)
+                                G.GAME.consumeable_buffer = 0
+                                return true
                             end
-                            _card:add_to_deck()
-                            G.consumeables:emplace(_card)
-
-                            return true
-                        end
-                    }))
-                    card_eval_status_text(card, 'extra', nil, nil, nil,
-                        { message = "Copied", colour = G.C.SECONDARY_SET.Alchemy })
-                    card.ability.extra.used = true
+                        }))
+                        card_eval_status_text(card, 'extra', nil, nil, nil,
+                            { message = "Copied", colour = G.C.SECONDARY_SET.Alchemy })
+                    end
+                    if not context.blueprint then
+                        card.ability.extra.used = true
+                    end
                     return
                 end
             end
