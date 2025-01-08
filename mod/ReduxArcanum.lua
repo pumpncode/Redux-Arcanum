@@ -1,15 +1,4 @@
 ReduxArcanumMod = SMODS.current_mod
--- local filesystem = NFS or love.filesystem
-
--- local loc = filesystem.load(REDUXARCANUMMOD.content.path..'localization.lua')()
-
--- -- Dictionary wrapper
-
--- function REDUXARCANUMMOD.content.process_loc_text()
---     SMODS.process_loc_text(G.localization.misc.dictionary, 'redux_arcanum', loc.dictionary)
-
---     loc.dictionary = G.localization.misc.dictionary.redux_arcanum
--- end
 
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 --        SMOD CONFIG
@@ -357,3 +346,22 @@ NFS.load(ReduxArcanumMod.path .. "/data/decks.lua")()
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
 NFS.load(ReduxArcanumMod.path .. "/data/blind.lua")()
+
+-- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+--          EDITIONS
+-- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+-- Alchemical Polychromes
+
+SMODS.Edition:take_ownership('polychrome', {
+    calculate = function(self, card, context)
+        if card.ability.set == "Alchemical" then
+            return
+        end
+        if context.post_joker or (context.main_scoring and context.cardarea == G.play) then
+            return {
+                x_mult = card.edition.x_mult
+            }     
+        end
+    end
+}, true)
