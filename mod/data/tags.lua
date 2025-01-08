@@ -62,5 +62,5 @@ if (not SMODS.Mods["Bunco"] or not SMODS.Mods["Bunco"].can_load) then
                 self.triggered = true
             end
         end
-    })
+    }, true)
 end
