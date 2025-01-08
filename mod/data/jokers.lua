@@ -118,7 +118,7 @@ SMODS.Joker { -- Bottled Buffoon
     end
 }
 
-SMODS.Joker { -- Mutated Jokmer
+SMODS.Joker { -- Mutated Joker
     key = "mutated_joker",
     loc_txt = {
         name = "Mutated Joker",
@@ -204,98 +204,6 @@ SMODS.Joker { -- Mutated Jokmer
         end
     end
 }
-
--- This joker overlaps with Doodle in Bunco, so leave it out if Bunco is present
-if (not SMODS.Mods["Bunco"] or not SMODS.Mods["Bunco"].can_load) or
-    ReduxArcanumMod.config.overlapping_cards ~= 1 then
-    chain_reaction = { -- Chain Reaction
-        key = "chain_reaction",
-        loc_txt = {
-            name = "Chain Reaction",
-            text = {
-                "Create a {C:dark_edition}Negative{} {C:attention}Copy{}",
-                "of the first {C:alchemical}Alchemical{} ",
-                "card used each blind"
-            }
-        },
-        unlocked = true,
-        discovered = false,
-        blueprint_compat = true,
-        perishable_compat = true,
-        eternal_compat = true,
-        rarity = 2,
-        cost = 5,
-        effect = "",
-        config = {
-            extra = {
-                used = false
-            }
-        },
-        atlas = "arcanum_joker_atlas",
-        pos = { x = 2, y = 0 },
-
-        calculate = function(self, card, context)
-            -- if not card.ability.extra.used then
-            --     card.ability.extra.used = false
-            -- end
-
-            if context.using_consumeable and context.consumeable.ability.set == 'Alchemical' then
-                if not card.ability.extra.used then
-                    if (not ReduxArcanumMod.config.new_content) or (#G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit) then
-                        G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
-                        G.E_MANAGER:add_event(Event({
-                            func = function()
-                                local _card = copy_card(context.consumeable, nil, nil, nil)
-                                if not ReduxArcanumMod.config.new_content then
-                                    _card:set_edition({ negative = true }, true)
-                                end
-                                _card:set_ability(context.consumeable.config.center) -- To handle polychrome
-                                _card:add_to_deck()
-                                G.consumeables:emplace(_card)
-                                G.GAME.consumeable_buffer = 0
-                                return true
-                            end
-                        }))
-                        card_eval_status_text(card, 'extra', nil, nil, nil,
-                            { message = "Copied", colour = G.C.SECONDARY_SET.Alchemy })
-                    end
-                    if not context.blueprint then
-                        card.ability.extra.used = true
-                    end
-                    return
-                end
-            end
-
-            -- if context.first_hand_drawn then
-            --     if card.ability.extra.used then
-            --         card.ability.extra.used = false
-            --         local eval = function() return not card.ability.extra.used end
-            --         juice_card_until(card, eval, true)
-            --     end
-            -- end
-
-            if context.first_hand_drawn then
-                card.ability.extra.used = false
-                local eval = function() return not card.ability.extra.used end
-                juice_card_until(card, eval, true)
-            end
-
-            if context.end_of_round then
-                card.ability.extra.used = true
-            end
-        end
-    }
-    if ReduxArcanumMod.config.new_content then
-        chain_reaction.loc_txt.text = {
-            "Create a {C:attention}Copy{} of",
-            "the first {C:alchemical}Alchemical{} card",
-            "used each blind",
-            "{C:inactive}(Must have room){}"
-        }
-        chain_reaction.rarity = 3
-    end
-    SMODS.Joker(chain_reaction)
-end
 
 SMODS.Joker { -- Essence of Comedy
     key = "essence_of_comedy",
@@ -468,6 +376,110 @@ SMODS.Joker { -- Breaking Bozo
         end
     end
 }
+
+-- This joker overlaps with Doodle in Bunco, so leave it out if Bunco is present
+if (not SMODS.Mods["Bunco"] or not SMODS.Mods["Bunco"].can_load) or
+    ReduxArcanumMod.config.overlapping_cards ~= 1 then
+    chain_reaction = { -- Chain Reaction
+        key = "chain_reaction",
+        loc_txt = {
+            name = "Chain Reaction",
+            text = {
+                "Create a {C:dark_edition}Negative{} {C:attention}Copy{}",
+                "of the first {C:alchemical}Alchemical{} ",
+                "card used each blind"
+            },
+            unlock = {
+                "Discover every",
+                "{E:1,C:alchemical}Alchemical{} card"
+            }
+        },
+        unlocked = false,
+        discovered = false,
+        blueprint_compat = true,
+        perishable_compat = true,
+        eternal_compat = true,
+        rarity = 2,
+        cost = 5,
+        effect = "",
+        config = {
+            extra = {
+                used = false
+            }
+        },
+        atlas = "arcanum_joker_atlas",
+        pos = { x = 2, y = 0 },
+
+        check_for_unlock = function(self, args)
+            if args.type == 'discover_amount' then
+                if G.DISCOVER_TALLIES.alchemicals.tally / G.DISCOVER_TALLIES.alchemicals.of >= 1 then -- self.unlock_condition.extra then
+                    unlock_card(self)
+                end
+            end
+        end,
+
+        calculate = function(self, card, context)
+            -- if not card.ability.extra.used then
+            --     card.ability.extra.used = false
+            -- end
+
+            if context.using_consumeable and context.consumeable.ability.set == 'Alchemical' then
+                if not card.ability.extra.used then
+                    if (not ReduxArcanumMod.config.new_content) or (#G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit) then
+                        G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                        G.E_MANAGER:add_event(Event({
+                            func = function()
+                                local _card = copy_card(context.consumeable, nil, nil, nil)
+                                if not ReduxArcanumMod.config.new_content then
+                                    _card:set_edition({ negative = true }, true)
+                                end
+                                _card:set_ability(context.consumeable.config.center) -- To handle polychrome
+                                _card:add_to_deck()
+                                G.consumeables:emplace(_card)
+                                G.GAME.consumeable_buffer = 0
+                                return true
+                            end
+                        }))
+                        card_eval_status_text(card, 'extra', nil, nil, nil,
+                            { message = "Copied", colour = G.C.SECONDARY_SET.Alchemy })
+                    end
+                    if not context.blueprint then
+                        card.ability.extra.used = true
+                    end
+                    return
+                end
+            end
+
+            -- if context.first_hand_drawn then
+            --     if card.ability.extra.used then
+            --         card.ability.extra.used = false
+            --         local eval = function() return not card.ability.extra.used end
+            --         juice_card_until(card, eval, true)
+            --     end
+            -- end
+
+            if context.first_hand_drawn then
+                card.ability.extra.used = false
+                local eval = function() return not card.ability.extra.used end
+                juice_card_until(card, eval, true)
+            end
+
+            if context.end_of_round then
+                card.ability.extra.used = true
+            end
+        end
+    }
+    if ReduxArcanumMod.config.new_content then
+        chain_reaction.loc_txt.text = {
+            "Create a {C:attention}Copy{} of",
+            "the first {C:alchemical}Alchemical{} card",
+            "used each blind",
+            "{C:inactive}(Must have room){}"
+        }
+        chain_reaction.rarity = 3
+    end
+    SMODS.Joker(chain_reaction)
+end
 
 SMODS.Joker { -- Catalyst Joker
     key = "catalyst_joker",
