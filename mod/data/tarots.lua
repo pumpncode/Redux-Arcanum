@@ -121,7 +121,7 @@ philosopher_stone = {
     soul_set = 'Alchemical',
     unlocked = true,
     discovered = false,
-    config = { extra = { alchemicals = 1 } },
+    config = { },
     cost = 4,
     pos = { x = 0, y = 1 },
 
