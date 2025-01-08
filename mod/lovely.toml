@@ -24,19 +24,10 @@ payload = '''
 },
 '''
 
-## Patch to skip polychrome alchemicals in scoring
-## This adds the start of the loop
-# G.FUNCS.evaluate_play()
-[[patches]]
-[patches.pattern]
-target = 'functions/state_events.lua'
-pattern = '''if edition_effects.jokers.x_mult_mod then'''
-position = 'at'
-match_indent = true
-times = 1
-payload = '''
-if edition_effects.jokers.x_mult_mod and _card.ability.set ~= "Alchemical" then
-'''
+
+
+
+
 
 ## Patch for classic Philo stone
 # eval_card()
@@ -57,8 +48,14 @@ if G.deck.config.ra_philo_stone_classic and G.deck.config.ra_philo_stone_classic
 end
 '''
 
-## Patch to add philo stone to score calculation - part 1
-## This adds the start of the loop
+
+
+
+
+
+## Patches to add philo stone to score calculation
+
+## Part 1 - This adds the start of the loop
 # G.FUNCS.evaluate_play()
 [[patches]]
 [patches.pattern]
@@ -71,8 +68,7 @@ payload = '''
 for ra_philo_stone_repeats=0, ((G.deck.config.ra_philo_stone or 0)) do
 '''
 
-## Patch to add philo stone to score calculation - part 2
-## This adds the end of the loop, and handling the between-loops
+## Part 2 - This adds the end of the loop, and handling the between-loops
 # G.FUNCS.evaluate_play()
 [[patches]]
 [patches.pattern]
@@ -130,6 +126,12 @@ payload = '''
 ra_reset_played_alchemicals()
 '''
 
+
+
+
+
+## Card Unlocks
+
 ## Patch for Alchemical Tycoon unlock
 # G.FUNCS.buy_from_shop()
 [[patches]]
@@ -157,6 +159,11 @@ payload = '''
 check_for_unlock({ type = 'ReduxArcanum_modify_cards', location = location })
 '''
 
+
+
+
+## Debuffed consumables
+
 ## Patch to prevent debuffed consumables from being used
 # Card:can_use_consumeable()
 [[patches]]
@@ -170,8 +177,12 @@ payload = '''
     if self.debuff then return false end
 '''
 
+
+
+
+
 ## Vanilla functionality causes booster tags created mid-blind by salt to be very funky
-## This mod tried to fix this by letting booster tags trigger immediately, which requires some patching below
+## This mod tries to fix this by letting booster tags trigger immediately, which requires some patching below
 
 ## Patch to prevent cards being returned during a blind
 # G.FUNCS.end_consumeable()
@@ -204,7 +215,13 @@ position = "at"
 payload = "if self.config.type == 'hand' and not (G.STATE == G.STATES.TAROT_PACK or G.STATE == G.STATES.SPECTRAL_PACK or G.STATE == G.STATES.PLANET_PACK or G.STATE == G.STATES.SMODS_BOOSTER_OPENED or G.STATE == G.STATES.STANDARD_PACK or G.STATE == G.STATES.BUFFOON_PACK) then"
 match_indent = true
 
-## Patches for polychrome alchemicals
+
+
+
+
+
+## Patches for polychrome alchemical UI
+## Functionality is dealt in ReduxArcanum.lua
 
 # G.UIDEF.card_h_popup()
 [[patches]]
