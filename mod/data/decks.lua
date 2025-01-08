@@ -32,21 +32,20 @@ SMODS.Back {
     apply = function(self)
     end,
     trigger_effect = function(self, context)
-        -- Reapply the alchemy card event once the boss blind is defeated
-        if context.setting_blind and context.blind.boss then
+        if context.setting_blind and context.blind.boss and ((#G.consumeables.cards + G.GAME.consumeable_buffer) < G.consumeables.config.card_limit) then
+            G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
             G.E_MANAGER:add_event(Event({
                 func = function()
-                    if not self.config.used and G.consumeables.config.card_limit > #G.consumeables.cards then
-                        play_sound('timpani')
-                        local card = create_alchemical(G.deck)
-                        card:add_to_deck()
-                        G.consumeables:emplace(card)
-                    end
+                    play_sound('timpani')
+                    local card = create_alchemical(G.deck)
+                    card:add_to_deck()
+                    G.consumeables:emplace(card)
+                    G.GAME.consumeable_buffer = 0
                     return true
                 end
             }))
         end
-		-- sendDebugMessage(tprint(G.GAME.last_blind), "ReduxArcanumDebugLogger")
+        -- sendDebugMessage(tprint(G.GAME.last_blind), "ReduxArcanumDebugLogger")
     end,
 
     pos = { x = 1, y = 0 },
@@ -63,8 +62,8 @@ SMODS.Back {
             "and a copy of {C:tarot,T:c_ReduxArcanum_seeker}The Seeker{}"
         },
         unlock = {
-            'Discover all',
-            'spectral cards'
+            'Discover every',
+            '{E:1,C:spectral}Spectral{} card'
         },
     },
 
