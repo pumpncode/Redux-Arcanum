@@ -793,7 +793,7 @@ SMODS.Consumable { -- Soap
 
     can_use = function(self, card)
         if alchemical_can_use(self, card) then
-            if #G.hand.highlighted <= card.ability.extra and #G.hand.highlighted >= 1 then return true else return false end
+            if #G.hand.highlighted <= math.ceil(card.ability.extra * alchemical_get_x_mult(card)) and #G.hand.highlighted >= 1 then return true else return false end
         else
             return false
         end
@@ -847,7 +847,7 @@ SMODS.Consumable { -- Manganese
 
     can_use = function(self, card)
         if alchemical_can_use(self, card) then
-            if #G.hand.highlighted <= card.ability.extra and #G.hand.highlighted >= 1 then return true else return false end
+            if #G.hand.highlighted <= math.ceil(card.ability.extra * alchemical_get_x_mult(card)) and #G.hand.highlighted >= 1 then return true else return false end
         else
             return false
         end
@@ -982,7 +982,7 @@ SMODS.Consumable { -- Borax
 
     can_use = function(self, card)
         if alchemical_can_use(self, card) then
-            if #G.hand.highlighted <= card.ability.extra and #G.hand.highlighted >= 1 then return true else return false end
+            if #G.hand.highlighted <= math.ceil(card.ability.extra * alchemical_get_x_mult(card)) and #G.hand.highlighted >= 1 then return true else return false end
         else
             return false
         end
@@ -1051,7 +1051,7 @@ glass = { -- Glass
 
     can_use = function(self, card)
         if alchemical_can_use(self, card) then
-            if #G.hand.highlighted <= card.ability.extra and #G.hand.highlighted >= 1 then return true else return false end
+            if #G.hand.highlighted <= math.ceil(card.ability.extra * alchemical_get_x_mult(card)) and #G.hand.highlighted >= 1 then return true else return false end
         else
             return false
         end
@@ -1165,7 +1165,7 @@ gold = { -- Gold
 
     can_use = function(self, card)
         if alchemical_can_use(self, card) then
-            if #G.hand.highlighted <= card.ability.extra and #G.hand.highlighted >= 1 then return true else return false end
+            if #G.hand.highlighted <= math.ceil(card.ability.extra * alchemical_get_x_mult(card)) and #G.hand.highlighted >= 1 then return true else return false end
         else
             return false
         end
@@ -1274,7 +1274,7 @@ SMODS.Consumable { -- Silver
 
     can_use = function(self, card)
         if alchemical_can_use(self, card) then
-            if #G.hand.highlighted <= card.ability.extra and #G.hand.highlighted >= 1 then return true else return false end
+            if #G.hand.highlighted <= math.ceil(card.ability.extra * alchemical_get_x_mult(card)) and #G.hand.highlighted >= 1 then return true else return false end
         else
             return false
         end
