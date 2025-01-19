@@ -24,7 +24,7 @@ SMODS.Consumable {
     pos = { x = 0, y = 0 },
 
     can_use = function(self)
-        if #G.consumeables.cards < G.consumeables.config.card_limit or self.area == G.consumeables then
+        if #G.consumeables.cards <= G.consumeables.config.card_limit or self.area == G.consumeables then
             return true
         else
             return false
