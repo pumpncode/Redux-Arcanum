@@ -22,44 +22,60 @@ SMODS.current_mod.config_tab = function()
     local scale = 5 / 6
     local current_overlapping = ReduxArcanumMod.config.overlapping_cards or 1
     local current_new_content = ReduxArcanumMod.config.new_content or false
+    local bunco_linked_acid = ReduxArcanumMod.config.bunco_linked_acid or true
+    t = {create_option_cycle {
+            label = "Conflicting Cards",
+            info = {
+                "How to handle known similar cards from other mods",
+                "(Requires restart)"
+            },
+            options = {
+                "Remove from this mod",
+                "Remove from the other mod",
+                "Do nothing"
+            },
+            current_option = current_overlapping,
+            w = 4.5,
+            text_scale = 0.4,
+            scale = scale,
+            ref_table = ReduxArcanumMod.config,
+            ref_value = "overlapping_cards",
+            opt_callback = 'cycle_options',
+        },
+        create_toggle {
+            label = "New Content",
+            info = {
+                "Include new content and balance changes",
+                "(Requires restart)"
+            },
+            current_option = current_new_content,
+            w = 4.5,
+            text_scale = 0.4,
+            scale = scale,
+            ref_table = ReduxArcanumMod.config,
+            ref_value = "new_content"
+        }
+    }
+    if next(SMODS.find_mod("Bunco")) then
+    table.insert(t, create_toggle {
+            label = "Acid + Bunco Linked Cards",
+            info = {
+                "When acid destroys a linked card,", 
+                "treat linked cards as destroyed by Acid",
+                "(Won't trigger jokers + returns after blind)"
+            },
+            current_option = bunco_linked_acid,
+            w = 4.5,
+            text_scale = 0.4,
+            scale = scale,
+            ref_table = ReduxArcanumMod.config,
+            ref_value = "bunco_linked_acid"
+    })
+    end
     return {
         n = G.UIT.ROOT,
         config = { align = "cm", minh = G.ROOM.T.h * 0.25, padding = 0.2, r = 0.1, colour = G.C.GREY },
-        nodes = {
-            create_option_cycle {
-                label = "Conflicting Cards",
-                info = {
-                    "How to handle known similar cards from other mods",
-                    "(Requires restart)"
-                },
-                options = {
-                    "Remove from this mod",
-                    "Remove from the other mod",
-                    "Do nothing"
-                },
-                current_option = current_overlapping,
-                w = 4.5,
-                text_scale = 0.4,
-                scale = scale,
-                ref_table = ReduxArcanumMod.config,
-                ref_value = "overlapping_cards",
-                opt_callback = 'cycle_options',
-            },
-            create_toggle {
-                label = "New Content",
-                info = {
-                    "Include new content and balance changes",
-                    "(Requires restart)"
-                },
-                current_option = current_new_content,
-                w = 4.5,
-                text_scale = 0.4,
-                scale = scale,
-                ref_table = ReduxArcanumMod.config,
-                ref_value = "new_content",
-                opt_callback = 'cycle_options',
-            }
-        }
+        nodes = t
     }
 end
 
@@ -322,6 +338,23 @@ G.FUNCS.select_alchemical = function(e, mute, nosave)
         end
     }))
 end
+
+
+-- Override for Steammodded dependencies
+-- Ensures objects dependent on 'CodexArcanum' will also load with 'ReduxArcanum'
+
+-- SMODS.GameObject.check_dependencies_ra_ref = SMODS.GameObject.check_dependencies
+-- function SMODS.GameObject:check_dependencies()
+--     if self.dependencies then
+--             if type(self.dependencies) == 'string' then self.dependencies = { self.dependencies } end
+--             for i, v in ipairs(self.dependencies) do
+--                 if v == "CodexArcanum" then self.dependencies[i] = "ReduxArcanum"
+--             end
+--         end
+--     end
+--     return self:check_dependencies_ra_ref()
+-- end
+
 
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 --            TAROTS

@@ -4,5 +4,6 @@ return {
         ["remove_other"] = 2,
         ["remove_none"] = 3
     },
-    new_content = false
+    new_content = false,
+    bunco_linked_acid = true
 }
