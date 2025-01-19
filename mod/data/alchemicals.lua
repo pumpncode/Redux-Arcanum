@@ -1432,9 +1432,42 @@ acid = { -- Acid
             trigger = 'after',
             delay = 0.1,
             func = function()
+            	local selected_rank = G.hand.highlighted[1]:get_id()
+            	local selected_suit = G.hand.highlighted[1].base.suit
+            	local acid_aplicable = function (card)
+            		return card:get_id() == selected_rank or (card.base.suit == selected_suit and ReduxArcanumMod.config.new_content)
+            	end
+            	local bunco_linked_sets_removed = {}
+            	
                 for k, v in ipairs(G.playing_cards) do
-                    if v:get_id() == G.hand.highlighted[1]:get_id() or (v.base.suit == G.hand.highlighted[1].base.suit and ReduxArcanumMod.config.new_content) then
+                    if acid_aplicable(v) then
                         table.insert(G.deck.config.ra_acid, v)
+                        
+                        -- Bunco linked card compat
+                        if ReduxArcanumMod.config.bunco_linked_acid and v.ability.group and next(SMODS.find_mod("Bunco")) then
+                        	sendDebugMessage(tprint(bunco_linked_sets_removed), "ReduxArcanumDebugLogger")
+                        	
+                        	local group_id = v.ability.group.id
+                        	
+                        	for linked_k, linked_v in ipairs(G.playing_cards) do
+                        		-- Check so cards are not added to table twice
+                        		if not bunco_linked_sets_removed[group_id] and not acid_aplicable(linked_v) then
+                        			sendDebugMessage("removinglinks" .. group_id, "ReduxArcanumDebugLogger")
+                        			if linked_v.ability.group and linked_v.ability.group.id == group_id then
+                        				table.insert(G.deck.config.ra_acid, linked_v)
+                        	
+                        				if linked_v.ability.name == 'Glass Card' then
+                            				linked_v:shatter()
+                        				else
+                            				linked_v:start_dissolve({ HEX("E3FF37") }, nil, 1.6)
+                        				end
+                        			end
+                        		end
+                        	end
+                        	
+                        	bunco_linked_sets_removed[group_id] = true
+                        end
+                        
                         if v.ability.name == 'Glass Card' then
                             v:shatter()
                         else
