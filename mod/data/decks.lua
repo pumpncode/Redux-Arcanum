@@ -35,9 +35,16 @@ SMODS.Back {
         if context.setting_blind and context.blind.boss and ((#G.consumeables.cards + G.GAME.consumeable_buffer) < G.consumeables.config.card_limit) then
             G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
             G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.1,
                 func = function()
                     play_sound('timpani')
-                    local card = create_alchemical(G.deck)
+                    local card = create_alchemical(G.deck, nil, nil, nil, nil, nil, "herb")
+
+                    -- Necessary as cards that come from decks don't bypass discovery
+                    card.params.bypass_discovery_center = true
+                    card:set_ability(card.config.center)
+
                     card:add_to_deck()
                     G.consumeables:emplace(card)
                     G.GAME.consumeable_buffer = 0
