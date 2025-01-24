@@ -107,9 +107,9 @@ NFS.load(ReduxArcanumMod.path .. "/api/alchemicalAPI.lua")()
 function poll_alchemical_edition(_key, _mod, _no_poly)
     _mod = _mod or 1
     local edition_poll = pseudorandom(pseudoseed(_key or 'edition_generic'))
-    if edition_poll > 1 - 0.03*_mod*(G.GAME.used_vouchers.v_ReduxArcanum_cauldron and 10 or 1) then
+    if edition_poll > 1 - 0.003*_mod*(G.GAME.used_vouchers.v_ReduxArcanum_cauldron and 50 or 1) then
         return {negative = true}
-    elseif edition_poll > 1 - 0.06*G.GAME.edition_rate*_mod and not _no_poly then
+    elseif edition_poll > 1 - 0.006*G.GAME.edition_rate*_mod and not _no_poly then
         return {polychrome = true}
     end
     return nil
