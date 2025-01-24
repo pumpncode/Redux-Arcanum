@@ -172,7 +172,7 @@ target = 'card.lua'
 pattern = '''function Card:can_use_consumeable(any_state, skip_check)'''
 position = 'after'
 match_indent = true
-times = 2
+times = 1
 payload = '''
     if self.debuff then return false end
 '''
