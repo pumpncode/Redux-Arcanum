@@ -32,7 +32,7 @@ SMODS.Consumable {
     end,
 
     use = function(self, used_tarot)
-        for i = 1, math.min(self.config.extra.alchemicals, G.consumeables.config.card_limit - #G.consumeables.cards) do
+        for _ = 1, math.min(self.config.extra.alchemicals, G.consumeables.config.card_limit - #G.consumeables.cards) do
             G.E_MANAGER:add_event(Event({
                 trigger = 'after',
                 delay = 0.4,
