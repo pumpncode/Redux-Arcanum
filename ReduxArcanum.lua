@@ -18,7 +18,7 @@ G.FUNCS.cycle_options = function(args)
     end
 end
 
-SMODS.current_mod.config_tab = function()
+ReduxArcanumMod.config_tab = function()
     local scale = 5 / 6
     local current_overlapping = ReduxArcanumMod.config.overlapping_cards or 1
     local current_new_content = ReduxArcanumMod.config.new_content or false
@@ -89,7 +89,7 @@ SMODS.Atlas { key = 'modicon', px = 32, py = 32, path = 'modicon.png' }
 --           LOCALIZATION
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
-function SMODS.current_mod.process_loc_text()
+function ReduxArcanumMod.process_loc_text()
     -- will crash the game if removed
     G.localization.descriptions.Alchemical = G.localization.descriptions.Alchemical or {}
 end
@@ -157,6 +157,19 @@ SMODS.Atlas { key = 'arcanum_joker_atlas', path = 'ca_joker_atlas.png', px = 71,
 SMODS.Atlas { key = 'ca_tag_elemental', path = 'tag_elemental.png', px = 34, py = 34 }
 
 SMODS.Atlas({ key = 'arcanum_others', path = 'ca_others_atlas.png', px = 71, py = 95 })
+
+-- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+--          GLOBALS
+-- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+function ReduxArcanumMod.reset_game_globals(run_start)
+    if run_start then
+        -- Globals for a whole run (like Fortune Teller)
+    else
+        -- Globals for a single blind (like Idol)
+        ra_reset_played_alchemicals()
+    end
+end
 
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 --     ALCHEMICAL CARDS

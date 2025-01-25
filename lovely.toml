@@ -112,20 +112,6 @@ end
 G.deck.config.ra_philo_stone = 0
 '''
 
-## Patch to reset all used alchemicals at end of blind
-## Made sure to add function call before stuff like idol and ancient joker
-# G.FUNCS.evaluate_play()
-[[patches]]
-[patches.pattern]
-target = 'functions/state_events.lua'
-pattern = '''reset_idol_card()'''
-position = 'before'
-match_indent = true
-times = 1
-payload = '''
-ra_reset_played_alchemicals()
-'''
-
 
 
 
