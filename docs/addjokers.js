@@ -54,8 +54,7 @@ let alchemicals = [
   {
     name: "Quicksilver",
     text: [
-      "{C:attention}+#1#{} hand size",
-      "for this blind"
+      "{C:attention}+#1#{} hand size for this blind"
     ],
     text_vars: [2],
     image_url: "img/alchemical_atlas.png",
@@ -68,7 +67,7 @@ let alchemicals = [
   {
     name: "Salt",
     text: [
-      "Increase blind by 10%", "to gain {C:attention}#1#{} tag"
+      "Increase blind by 10% to gain {C:attention}#1#{} tag"
     ],
     text_vars: [1],
     image_url: "img/alchemical_atlas.png",
@@ -81,9 +80,7 @@ let alchemicals = [
   {
     name: "Sulfur",
     text: [
-      "Reduce hands to {C:attention}1",
-      "Gain {C:attention}$#1#{} for each",
-      "hand removed"
+      "Reduce hands to {C:attention}1 Gain {C:attention}$#1#{} for each hand removed"
     ],
     text_vars: [1],
     image_url: "img/alchemical_atlas.png",
@@ -96,8 +93,7 @@ let alchemicals = [
   {
     name: "Phosphorus",
     text: [
-      "Return {C:attention}all{} discarded",
-      "cards to deck"
+      "Return {C:attention}all{} discarded cards to deck"
     ],
     image_url: "img/alchemical_atlas.png",
     image_pos: {
@@ -109,9 +105,7 @@ let alchemicals = [
   {
     name: "Bismuth",
     text: [
-      "Converts the rightmost",
-      "joker to {C:dark_edition}Polychrome{}",
-      "for one blind"
+      "Converts the rightmost joker to {C:dark_edition}Polychrome{} for one blind"
     ],
     image_url: "img/alchemical_atlas.png",
     image_pos: {
@@ -123,9 +117,7 @@ let alchemicals = [
   {
     name: "Cobalt",
     text: [
-      "Upgrade currently",
-      "selected {C:attention}poker hand",
-      "by {C:attention}#1#{} levels for one blind"
+      "Upgrade currently selected {C:attention}poker hand by {C:attention}#1#{} levels for one blind"
     ],
     text_vars: [2],
     image_url: "img/alchemical_atlas.png",
@@ -138,8 +130,7 @@ let alchemicals = [
   {
     name: "Arsenic",
     text: [
-      "{C:attention}Swap{} your current",
-      "hands and discards"
+      "{C:attention}Swap{} your current hands and discards"
     ],
     image_url: "img/alchemical_atlas.png",
     image_pos: {
@@ -163,8 +154,7 @@ let alchemicals = [
   {
     name: "Soap",
     text: [
-      "Replace up to {C:attention}#1#{}",
-      "selected cards with cards from your deck"
+      "Replace up to {C:attention}#1#{} selected cards with cards from your deck"
     ],
     text_vars: [3],
     image_url: "img/alchemical_atlas.png",
@@ -177,10 +167,7 @@ let alchemicals = [
   {
     name: "Manganese",
     text: [
-      "Enhances up to",
-      "{C:attention}#1#{} selected cards",
-      "into {C:attention}Steel Cards",
-      "for one blind"
+      "Enhances up to {C:attention}#1#{} selected cards into {C:attention}Steel Cards for one blind"
     ],
     text_vars: [4],
     image_url: "img/alchemical_atlas.png",
@@ -193,9 +180,7 @@ let alchemicals = [
   {
     name: "Wax",
     text: [
-      "Create {C:attention}#1#{} temporary",
-      "copies of selected card",
-      "for one blind",
+      "Create {C:attention}#1#{} temporary copies of selected card for one blind",
       "{C:inactive}(Does not trigger jokers){}"
     ],
     text_vars: [2],
@@ -209,10 +194,7 @@ let alchemicals = [
   {
     name: "Borax",
     text: [
-      "Converts up to",
-      "{C:attention}#1#{} selected cards",
-      "into most common {C:attention}suit",
-      "for one blind"
+      "Converts up to {C:attention}#1#{} selected cards into most common {C:attention}suit for one blind"
     ],
     text_vars: [4],
     image_url: "img/alchemical_atlas.png",
@@ -225,12 +207,8 @@ let alchemicals = [
   {
     name: "Glass",
     text: [
-      "Enhances up to",
-      "{C:attention}#1#{} selected cards",
-      "into {C:attention}Glass Cards",
-      "for one blind",
-	  "{C:inactive}Destroyed glass cards",
-	  "{C:inactive}will not return"
+      "Enhances up to {C:attention}#1#{} selected cards into {C:attention}Glass Cards for one blind",
+	    "{C:inactive}Destroyed glass cards will not return"
     ],
     text_vars: [2],
     image_url: "img/alchemical_atlas.png",
@@ -243,9 +221,7 @@ let alchemicals = [
   {
     name: "Magnet",
     text: [
-      "Draw {C:attention}#1#{} cards",
-      "of the same rank",
-      "as the selected card"
+      "Draw {C:attention}#1#{} cards of the same rank as the selected card"
     ],
     text_vars: [2],
     image_url: "img/alchemical_atlas.png",
@@ -258,9 +234,7 @@ let alchemicals = [
   {
     name: "Gold",
     text: [
-      "{C:attention}Double{} the value of",
-      "all {C:attention}gold cards{} currently",
-      "in hand for one blind"
+      "{C:attention}Double{} the value of all {C:attention}gold cards{} currently in hand for one blind"
     ],
     image_url: "img/alchemical_atlas.png",
     image_pos: {
@@ -272,10 +246,7 @@ let alchemicals = [
   {
     name: "Silver",
     text: [
-      "Enhances up to",
-      "{C:attention}#1#{} selected cards",
-      "into {C:attention}Lucky Cards",
-      "for one blind"
+      "Enhances up to {C:attention}#1#{} selected cards into {C:attention}Lucky Cards for one blind"
     ],
     text_vars: [4],
     image_url: "img/alchemical_atlas.png",
@@ -300,10 +271,8 @@ let alchemicals = [
   {
     name: "Acid",
     text: [
-      "{C:attention}Destroy{} all cards of the ",
-      "same rank or suit as selected",
-      "card. All cards {C:attention}returned",
-      "after this blind",
+      "{C:attention}Destroy{} all cards of the same rank or suit as selected card.", 
+      "All cards {C:attention}returned{} after this blind",
       "{C:inactive}(Does not trigger jokers){}"
     ],
     image_url: "img/alchemical_atlas.png",
@@ -329,8 +298,7 @@ let alchemicals = [
   {
     name: "Uranium",
     text: [
-      "Copy the selected card's {C:attention}enhancement{}, {C:attention}seal{}, and {C:attention}edition",
-      "to {C:attention}#1#{} random unenhanced cards for one blind"
+      "Copy the selected card's {C:attention}enhancement{}, {C:attention}seal{}, and {C:attention}edition to {C:attention}#1#{} random unenhanced cards for one blind"
     ],
     text_vars: [3],
     image_url: "img/alchemical_atlas.png",
@@ -457,8 +425,7 @@ let consumables_tarot = [
   {
     name: "The Seeker",
     text: [
-      "Creates up to {C:attention}#1#",
-      "random {C:alchemical}Alchemical{} cards",
+      "Creates up to {C:attention}#1# random {C:alchemical}Alchemical{} cards",
       "{C:inactive}(Must have room)",
     ],
     text_vars: [2],
@@ -577,7 +544,7 @@ let stickers = [
 
 let blinds = [
   {
-    name: "The Hex",
+    name: "The Bane",
     text: [ 'All Consumables', 'are debuffed' ],
     image_url: "img/ra_blind_atlas.png",
     rarity: "Boss Blind"
