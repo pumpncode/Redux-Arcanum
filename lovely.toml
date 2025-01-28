@@ -18,7 +18,7 @@ match_indent = true
 times = 1
 payload = '''
 {
-  label = "Alchemicals",
+  label = localize('b_stat_alchemicals'),
   tab_definition_function = create_UIBox_usage,
   tab_definition_function_args = {'consumeable_usage', 'Alchemical'},
 },
@@ -90,7 +90,7 @@ if ra_philo_stone_repeats < (G.deck.config.ra_philo_stone or 0) then
         play_sound('gong', 0.94*1.5, 0.2)
         play_sound('tarot1', 1.5)
         attention_text({
-          text = "Again!",
+          text = localize('k_again_ex'),
           scale = 1.0, 
           hold = 1.4,
           major = G.play,

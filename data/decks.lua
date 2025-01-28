@@ -4,21 +4,21 @@
 
 SMODS.Back {
     key = 'herbalist',
-    loc_txt =
-    {
-        name = "Herbalist's Deck",
-        text = {
-            "Start run with the",
-            "{C:tarot,T:v_ReduxArcanum_mortar_and_pestle}Mortar and Pestle{} voucher,",
-            "Gain an {C:alchemical}Alchemical{} card before",
-            "each boss blind"
-        },
-        unlock = {
-            'Win a run with the',
-            '{C:attention}Redux Arcanum{} mod',
-            'enabled'
-        },
-    },
+    -- loc_txt =
+    -- {
+    --     name = "Herbalist's Deck",
+    --     text = {
+    --         "Start run with the",
+    --         "{C:tarot,T:v_ReduxArcanum_mortar_and_pestle}Mortar and Pestle{} voucher,",
+    --         "Gain an {C:alchemical}Alchemical{} card before",
+    --         "each boss blind"
+    --     },
+    --     unlock = {
+    --         'Win a run with the',
+    --         '{C:attention}Redux Arcanum{} mod',
+    --         'enabled'
+    --     },
+    -- },
 
     config = { vouchers = { 'v_ReduxArcanum_mortar_and_pestle' } },
 
@@ -61,18 +61,18 @@ SMODS.Back {
 
 SMODS.Back {
     key = 'philosopher',
-    loc_txt = {
-        name = "Philosopher's Deck",
-        text = {
-            "Start run with the",
-            "{C:tarot,T:v_ReduxArcanum_alchemical_merchant}Alchemical Merchant{} voucher",
-            "and a copy of {C:tarot,T:c_ReduxArcanum_seeker}The Seeker{}"
-        },
-        unlock = {
-            'Discover every',
-            '{E:1,C:spectral}Spectral{} card'
-        },
-    },
+    -- loc_txt = {
+    --     name = "Philosopher's Deck",
+    --     text = {
+    --         "Start run with the",
+    --         "{C:tarot,T:v_ReduxArcanum_alchemical_merchant}Alchemical Merchant{} voucher",
+    --         "and a copy of {C:tarot,T:c_ReduxArcanum_seeker}The Seeker{}"
+    --     },
+    --     unlock = {
+    --         'Discover every',
+    --         '{E:1,C:spectral}Spectral{} card'
+    --     },
+    -- },
 
     config = { vouchers = { 'v_ReduxArcanum_alchemical_merchant' }, consumables = { 'c_ReduxArcanum_seeker' } },
 

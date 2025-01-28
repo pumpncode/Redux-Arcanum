@@ -6,23 +6,23 @@ SMODS.ConsumableType {
     key = 'Alchemical',
     primary_colour = HEX('FFFFFF'),
     secondary_colour = HEX('C09D75'),
-    loc_txt = {
-        name = 'Alchemical',
-        collection = 'Alchemical Cards',
-        text = {
-            "Can only be used",
-            "during a {C:attention}blind{}"
-        },
-        undiscovered = {
-            name = 'Not Discovered',
-            text = {
-                [1] = 'Purchase or use',
-                [2] = 'this card in an',
-                [3] = 'unseeded run to',
-                [4] = 'learn what it does'
-            }
-        }
-    },
+    -- loc_txt = {
+    --     name = 'Alchemical',
+    --     collection = 'Alchemical Cards',
+    --     text = {
+    --         "Can only be used",
+    --         "during a {C:attention}blind{}"
+    --     },
+    --     undiscovered = {
+    --         name = 'Not Discovered',
+    --         text = {
+    --             [1] = 'Purchase or use',
+    --             [2] = 'this card in an',
+    --             [3] = 'unseeded run to',
+    --             [4] = 'learn what it does'
+    --         }
+    --     }
+    -- },
     collection_rows = { 4, 4 },
     shop_rate = 0
 }
@@ -64,7 +64,7 @@ function alchemical_use(func)
 end
 
 function ra_reset_played_alchemicals()
-    sendDebugMessage("Resetting played alchemicals", "ReduxArcanumDebugLogger")
+    -- sendDebugMessage("Resetting played alchemicals", "ReduxArcanumDebugLogger")
     if G.deck.config.played_alchemicals then
         for _, alchemical in ipairs(G.deck.config.played_alchemicals) do
             sendDebugMessage(alchemical[1].key, "ReduxArcanumDebugLogger")
@@ -85,9 +85,13 @@ function alchemical_get_x_mult(card)
 end
 
 function alchemical_loc_vars(self, info_queue, center)
+    local vars
+
     if center.edition and center.edition.polychrome and center.ability.extra then
-        return { vars = { math.ceil(center.ability.extra * center.edition.x_mult) } }
+        vars = { math.ceil(center.ability.extra * center.edition.x_mult) }
     else
-        return { vars = { center.ability.extra } }
+        vars = { center.ability.extra }
     end
+
+    return { vars = vars }
 end

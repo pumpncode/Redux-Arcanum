@@ -11,10 +11,10 @@ SMODS.Atlas({
 if ReduxArcanumMod.config.new_content then
     SMODS.Blind { -- The Bane
         key = 'bane',
-        loc_txt = {
-            name = 'The Bane',
-            text = { 'All Consumables', 'are debuffed' },
-        },
+        -- loc_txt = {
+        --     name = 'The Bane',
+        --     text = { 'All Consumables', 'are debuffed' },
+        -- },
         boss = { min = 2 },
 
         recalc_debuff = function(self, card, from_blind)

@@ -6,14 +6,14 @@ SMODS.Consumable {
     set = "Tarot",
     atlas = "arcanum_others",
     key = "seeker",
-    loc_txt = {
-        name = 'The Seeker',
-        text = {
-            "Creates up to {C:attention}#1#",
-            "random {C:alchemical}Alchemical{} cards",
-            "{C:inactive}(Must have room)",
-        }
-    },
+    -- loc_txt = {
+    --     name = 'The Seeker',
+    --     text = {
+    --         "Creates up to {C:attention}#1#",
+    --         "random {C:alchemical}Alchemical{} cards",
+    --         "{C:inactive}(Must have room)",
+    --     }
+    -- },
     loc_vars = function(self, info_queue, center)
         return { vars = { self.config.extra.alchemicals } }
     end,
@@ -105,15 +105,17 @@ philosopher_stone = {
     set = "Spectral",
     atlas = "arcanum_others",
     key = "philosopher_stone",
-    loc_txt = {
-        name = "The Philosopher's Stone",
-        text = {
-            "{C:attention}Retrigger{} the",
-            "next {C:legendary,E:1}played hand{}"
-        }
-    },
+    -- loc_txt = {
+    --     name = "The Philosopher's Stone",
+    --     text = {
+    --         "{C:attention}Retrigger{} the",
+    --         "next {C:legendary,E:1}played hand{}"
+    --     }
+    -- },
     loc_vars = function(self, info_queue, center)
-        return { vars = { } }
+        if not ReduxArcanumMod.config.new_content then
+            return { key = self.key .. '_classic' }
+        end
     end,
 
     hidden = true,
@@ -180,10 +182,4 @@ philosopher_stone = {
         G.deck.config.ra_philo_stone_classic = 0
     end
 }
-if not ReduxArcanumMod.config.new_content then
-    philosopher_stone.loc_txt.text = {
-        "{C:attention}Retrigger{} all played",
-        "cards this blind."
-    }
-end
 SMODS.Consumable (philosopher_stone)

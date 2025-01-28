@@ -75,7 +75,7 @@ function get_most_common_suit()
     local top_count = -1;
     for suit, count in pairs(suit_to_card_counter) do
         if top_count < count then
-            top_suit = suit
+            top_suit = localize(suit, 'suits_plural')
             top_count = count
         end
     end
@@ -91,13 +91,13 @@ SMODS.Consumable { -- Ignis
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "ignis",
-    loc_txt = {
-        name = 'Ignis',
-        text = {
-            "Gain {C:attention}+#1#{} discard#2#",
-            "for this blind"
-        }
-    },
+    -- loc_txt = {
+    --     name = 'Ignis',
+    --     text = {
+    --         "Gain {C:attention}+#1#{} discard#2#",
+    --         "for this blind"
+    --     }
+    -- },
     loc_vars = function(self, info_queue, center)
         local ret = alchemical_loc_vars(self, info_queue, center)
         local extra = math.ceil(center.ability.extra * alchemical_get_x_mult(center))
@@ -127,13 +127,13 @@ SMODS.Consumable { -- Aqua
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "aqua",
-    loc_txt = {
-        name = 'Aqua',
-        text = {
-            "Gain {C:attention}+#1#{} hand#2#",
-            "for this blind"
-        }
-    },
+    -- loc_txt = {
+    --     name = 'Aqua',
+    --     text = {
+    --         "Gain {C:attention}+#1#{} hand#2#",
+    --         "for this blind"
+    --     }
+    -- },
     loc_vars = function(self, info_queue, center)
         local ret = alchemical_loc_vars(self, info_queue, center)
         local extra = math.ceil(center.ability.extra * alchemical_get_x_mult(center))
@@ -163,10 +163,10 @@ terra = { -- Terra
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "terra",
-    loc_txt = {
-        name = 'Terra',
-        text = { "Reduce blind by {C:attention}#1#%{}" }
-    },
+    -- loc_txt = {
+    --     name = 'Terra',
+    --     text = { "Reduce blind by {C:attention}#1#%{}" }
+    -- },
     loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
@@ -204,10 +204,10 @@ SMODS.Consumable { -- Aero
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "aero",
-    loc_txt = {
-        name = 'Aero',
-        text = { "Draw {C:attention}#1#{} cards" }
-    },
+    -- loc_txt = {
+    --     name = 'Aero',
+    --     text = { "Draw {C:attention}#1#{} cards" }
+    -- },
     loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
@@ -233,13 +233,13 @@ SMODS.Consumable { -- Quicksilver
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "quicksilver",
-    loc_txt = {
-        name = 'Quicksilver',
-        text = {
-            "{C:attention}+#1#{} hand size",
-            "for this blind"
-        }
-    },
+    -- loc_txt = {
+    --     name = 'Quicksilver',
+    --     text = {
+    --         "{C:attention}+#1#{} hand size",
+    --         "for this blind"
+    --     }
+    -- },
     loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
@@ -277,14 +277,19 @@ salt = { -- Salt
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "salt",
-    loc_txt = {
-        name = 'Salt',
-        text = { "Gain {C:attention}#1#{} tag#2#" }
-    },
+    -- loc_txt = {
+    --     name = 'Salt',
+    --     text = { "Gain {C:attention}#1#{} tag#2#" }
+    -- },
     loc_vars = function(self, info_queue, center)
         local ret = alchemical_loc_vars(self, info_queue, center)
         local extra = math.ceil(center.ability.extra * alchemical_get_x_mult(center))
-        return { vars = { ret.vars[1], (extra == 1 and "") or "s" } }
+        
+        if ReduxArcanumMod.config.new_content then
+            return { vars = { ret.vars[1], (extra == 1 and "") or "s" } }
+        else
+            return { key = self.key .. "_classic", vars = { ret.vars[1], (extra == 1 and "") or "s" } }
+        end
     end,
     unlocked = true,
     discovered = false,
@@ -361,23 +366,20 @@ salt = { -- Salt
         }))
     end),
 }
-if ReduxArcanumMod.config.new_content then
-    salt.loc_txt.text = { "Increase blind by 10%", "to gain {C:attention}#1#{} tag#2#" }
-end
 SMODS.Consumable(salt)
 
 SMODS.Consumable { -- Sulfur
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "sulfur",
-    loc_txt = {
-        name = 'Sulfur',
-        text = {
-            "Reduce hands to {C:attention}1",
-            "Gain {C:attention}$#1#{} for each",
-            "hand removed"
-        }
-    },
+    -- loc_txt = {
+    --     name = 'Sulfur',
+    --     text = {
+    --         "Reduce hands to {C:attention}1",
+    --         "Gain {C:attention}$#1#{} for each",
+    --         "hand removed"
+    --     }
+    -- },
     loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
@@ -407,13 +409,13 @@ SMODS.Consumable { -- Phosphorus
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "phosphorus",
-    loc_txt = {
-        name = 'Phosphorus',
-        text = {
-            "Return {C:attention}all{} discarded",
-            "cards to deck"
-        }
-    },
+    -- loc_txt = {
+    --     name = 'Phosphorus',
+    --     text = {
+    --         "Return {C:attention}all{} discarded",
+    --         "cards to deck"
+    --     }
+    -- },
     loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
@@ -452,16 +454,23 @@ bismuth = { -- Bismuth
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "bismuth",
-    loc_txt = {
-        name = 'Bismuth',
-        text = {
-            "Converts up to",
-            "{C:attention}#1#{} selected cards",
-            "to {C:dark_edition}Polychrome",
-            "for one blind"
-        }
-    },
-    loc_vars = alchemical_loc_vars,
+    -- loc_txt = {
+    --     name = 'Bismuth',
+    --     text = {
+    --         "Converts up to",
+    --         "{C:attention}#1#{} selected cards",
+    --         "to {C:dark_edition}Polychrome",
+    --         "for one blind"
+    --     }
+    -- },
+    loc_vars = function(self, info_queue, center)
+        local ret = alchemical_loc_vars(self, info_queue, center)
+        info_queue[#info_queue + 1] = G.P_CENTERS.e_polychrome
+        if not ReduxArcanumMod.config.new_content then
+            ret.key = self.key .. "_classic"
+        end
+        return ret
+    end,
     unlocked = true,
     discovered = false,
     config = { extra = 2, select = true },
@@ -510,15 +519,16 @@ bismuth = { -- Bismuth
     end,
 }
 if ReduxArcanumMod.config.new_content then
-    bismuth.loc_txt.text = {
-        "Converts the #1#",
-        "#2# to {C:dark_edition}Polychrome{}",
-        "for one blind"
-    }
+    -- bismuth.loc_txt.text = {
+    --     "Converts the #1#",
+    --     "#2# to {C:dark_edition}Polychrome{}",
+    --     "for one blind"
+    -- }
     bismuth.config = { extra = 1 }
     bismuth.loc_vars = function(self, info_queue, center)
         local ret = alchemical_loc_vars(self, info_queue, center)
         local extra = math.ceil(center.ability.extra * alchemical_get_x_mult(center))
+        info_queue[#info_queue + 1] = G.P_CENTERS.e_polychrome
         return { vars = { (extra == 1 and "rightmost") or (ret.vars[1] .. " rightmost"), (extra == 1 and "joker") or "jokers" } }
     end
     bismuth.can_use = alchemical_can_use
@@ -566,14 +576,14 @@ SMODS.Consumable { -- Cobalt
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "cobalt",
-    loc_txt = {
-        name = 'Cobalt',
-        text = {
-            "Upgrade currently",
-            "selected {C:attention}poker hand",
-            "by {C:attention}#1#{} levels for one blind"
-        }
-    },
+    -- loc_txt = {
+    --     name = 'Cobalt',
+    --     text = {
+    --         "Upgrade currently",
+    --         "selected {C:attention}poker hand",
+    --         "by {C:attention}#1#{} levels for one blind"
+    --     }
+    -- },
     loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
@@ -644,13 +654,13 @@ SMODS.Consumable { -- Arsenic
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "arsenic",
-    loc_txt = {
-        name = 'Arsenic',
-        text = {
-            "{C:attention}Swap{} your current",
-            "hands and discards"
-        }
-    },
+    -- loc_txt = {
+    --     name = 'Arsenic',
+    --     text = {
+    --         "{C:attention}Swap{} your current",
+    --         "hands and discards"
+    --     }
+    -- },
     loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
@@ -689,18 +699,22 @@ SMODS.Consumable { -- Antimony
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "antimony",
-    loc_txt = {
-        name = 'Antimony',
-        text = {
-            "Create #1# {C:dark_edition}Negative{} {C:eternal}0-cost{}",
-            "{C:attention}#2#{} of a random",
-            "joker for one blind"
-        }
-    },
+    -- loc_txt = {
+        -- name = 'Antimony',
+        -- text = {
+        --     "Create #1# {C:dark_edition}Negative{} {C:eternal}0-cost{}",
+        --     "{C:attention}#2#{} of a random",
+        --     "joker for one blind"
+        -- }
+    -- },
     loc_vars = function(self, info_queue, center)
         local ret = alchemical_loc_vars(self, info_queue, center)
         local extra = math.ceil(center.ability.extra * alchemical_get_x_mult(center))
-        return { vars = { (extra == 1 and "a") or ret.vars[1], (extra == 1 and "copy") or "copies"  } }
+        info_queue[#info_queue + 1] = G.P_CENTERS.e_negative
+        if not ReduxArcanumMod.config.new_content then
+            info_queue[#info_queue + 1] = G.P_CENTERS.eternal
+        end
+        return { vars = { (extra == 1 and "a") or ret.vars[1], (extra == 1 and "copy") or "copies" }, key = self.key .. (not ReduxArcanumMod.config.new_content and "_classic" or "") }
     end,
     unlocked = true,
     discovered = false,
@@ -722,9 +736,12 @@ SMODS.Consumable { -- Antimony
                         local card = copy_card(chosen_joker, nil, nil, nil,
                             chosen_joker.edition and chosen_joker.edition.negative)
                         card:set_edition({ negative = true }, true)
-                        card.cost = 0
-                        card.sell_cost = 0
-                        -- card:set_eternal(true)
+                        if ReduxArcanumMod.config.new_content then
+                            card.cost = 0
+                            card.sell_cost = 0
+                        else
+                            card:set_eternal(true)
+                        end
                         -- if card.ability.invis_rounds then card.ability.invis_rounds = 0 end
                         card:add_to_deck()
                         G.jokers:emplace(card)
@@ -776,14 +793,14 @@ SMODS.Consumable { -- Soap
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "soap",
-    loc_txt = {
-        name = 'Soap',
-        text = {
-            "Replace up to {C:attention}#1#{}",
-            "selected cards with",
-            "cards from your deck"
-        }
-    },
+    -- loc_txt = {
+    --     name = 'Soap',
+    --     text = {
+    --         "Replace up to {C:attention}#1#{}",
+    --         "selected cards with",
+    --         "cards from your deck"
+    --     }
+    -- },
     loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
@@ -829,16 +846,20 @@ SMODS.Consumable { -- Manganese
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "manganese",
-    loc_txt = {
-        name = 'Manganese',
-        text = {
-            "Enhances up to",
-            "{C:attention}#1#{} selected cards",
-            "into {C:attention}Steel Cards",
-            "for one blind"
-        }
-    },
-    loc_vars = alchemical_loc_vars,
+    -- loc_txt = {
+    --     name = 'Manganese',
+    --     text = {
+    --         "Enhances up to",
+    --         "{C:attention}#1#{} selected cards",
+    --         "into {C:attention}Steel Cards",
+    --         "for one blind"
+    --     }
+    -- },
+    loc_vars = function(self, info_queue, center)
+        local ret = alchemical_loc_vars(self, info_queue, center)
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_steel
+        return ret
+    end,
     unlocked = true,
     discovered = false,
     config = { extra = 4, select = true },
@@ -892,15 +913,15 @@ SMODS.Consumable { -- Wax
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "wax",
-    loc_txt = {
-        name = 'Wax',
-        text = {
-            "Create {C:attention}#1#{} temporary",
-            "copies of the selected",
-            "card for one blind",
-            "{C:inactive}(Does not trigger jokers){}"
-        }
-    },
+    -- loc_txt = {
+    --     name = 'Wax',
+    --     text = {
+    --         "Create {C:attention}#1#{} temporary",
+    --         "copies of the selected",
+    --         "card for one blind",
+    --         "{C:inactive}(Does not trigger jokers){}"
+    --     }
+    -- },
     loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
@@ -959,16 +980,16 @@ SMODS.Consumable { -- Borax
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "borax",
-    loc_txt = {
-        name = 'Borax',
-        text = {
-            "Converts up to",
-            "{C:attention}#1#{} selected cards",
-            "into the most common",
-            "{C:attention}suit for one blind",
-            "{C:inactive}Current suit: {V:1}#2#{}"
-        }
-    },
+    -- loc_txt = {
+    --     name = 'Borax',
+    --     text = {
+    --         "Converts up to",
+    --         "{C:attention}#1#{} selected cards",
+    --         "into the most common",
+    --         "{C:attention}suit for one blind",
+    --         "{C:inactive}Current suit: {V:1}#2#{}"
+    --     }
+    -- },
     loc_vars = function(self, info_queue, center)
         local top_suit = get_most_common_suit()
         local ret = alchemical_loc_vars(self, info_queue, center)
@@ -1031,18 +1052,22 @@ glass = { -- Glass
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "glass",
-    loc_txt = {
-        name = 'Glass',
-        text = {
-            "Enhances up to",
-            "{C:attention}#1#{} selected cards",
-            "into {C:attention}Glass Cards",
-            "for one blind",
-            "{C:inactive}Destroyed glass cards",
-            "{C:inactive}will not return"
-        }
-    },
-    loc_vars = alchemical_loc_vars,
+    -- loc_txt = {
+    --     name = 'Glass',
+    --     text = {
+    --         "Enhances up to",
+    --         "{C:attention}#1#{} selected cards",
+    --         "into {C:attention}Glass Cards",
+    --         "for one blind",
+    --         "{C:inactive}Destroyed glass cards",
+    --         "{C:inactive}will not return"
+    --     }
+    -- },
+    loc_vars = function(self, info_queue, center)
+        local ret = alchemical_loc_vars(self, info_queue, center)
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_glass
+        return ret
+    end,
     unlocked = true,
     discovered = false,
     config = { extra = 4 },
@@ -1100,14 +1125,14 @@ SMODS.Consumable { -- Magnet
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "magnet",
-    loc_txt = {
-        name = 'Magnet',
-        text = {
-            "Draw {C:attention}#1#{} cards",
-            "of the same rank",
-            "as the selected card"
-        }
-    },
+    -- loc_txt = {
+    --     name = 'Magnet',
+    --     text = {
+    --         "Draw {C:attention}#1#{} cards",
+    --         "of the same rank",
+    --         "as the selected card"
+    --     }
+    -- },
     loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
@@ -1147,16 +1172,21 @@ gold = { -- Gold
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "gold",
-    loc_txt = {
-        name = 'Gold',
-        text = {
-            "Enhances up to",
-            "{C:attention}#1#{} selected cards",
-            "into {C:attention}Gold Cards",
-            "for one blind"
-        }
-    },
-    loc_vars = alchemical_loc_vars,
+    -- loc_txt = {
+    --     name = 'Gold',
+    --     text = {
+    --         "Enhances up to",
+    --         "{C:attention}#1#{} selected cards",
+    --         "into {C:attention}Gold Cards",
+    --         "for one blind"
+    --     }
+    -- },
+    loc_vars = function(self, info_queue, center)
+        local ret = alchemical_loc_vars(self, info_queue, center)
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_gold
+        ret.key = self.key .. "_classic"
+        return ret
+    end,
     unlocked = true,
     discovered = false,
     config = { extra = 4, select = true },
@@ -1206,15 +1236,16 @@ gold = { -- Gold
     end,
 }
 if ReduxArcanumMod.config.new_content then
-    gold.loc_txt.text = {
-        "{C:attention}#1#{} the value of",
-        "all {C:attention}gold cards{} currently",
-        "in hand for one blind"
-    }
+    -- gold.loc_txt.text = {
+    --     "{C:attention}#1#{} the value of",
+    --     "all {C:attention}gold cards{} currently",
+    --     "in hand for one blind"
+    -- }
     gold.config = {extra = 2}
     gold.loc_vars = function(self, info_queue, center)
         local ret = alchemical_loc_vars(self, info_queue, center)
         local extra = math.ceil(center.ability.extra * alchemical_get_x_mult(center))
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_gold
         return { vars = { (extra == 2 and "Double") or (ret.vars[1].."x") } }
     end
     gold.can_use = alchemical_can_use
@@ -1256,16 +1287,20 @@ SMODS.Consumable { -- Silver
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "silver",
-    loc_txt = {
-        name = 'Silver',
-        text = {
-            "Enhances up to",
-            "{C:attention}#1#{} selected cards",
-            "into {C:attention}Lucky Cards",
-            "for one blind"
-        }
-    },
-    loc_vars = alchemical_loc_vars,
+    -- loc_txt = {
+    --     name = 'Silver',
+    --     text = {
+    --         "Enhances up to",
+    --         "{C:attention}#1#{} selected cards",
+    --         "into {C:attention}Lucky Cards",
+    --         "for one blind"
+    --     }
+    -- },
+    loc_vars = function(self, info_queue, center)
+        local ret = alchemical_loc_vars(self, info_queue, center)
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_lucky
+        return ret
+    end,
     unlocked = true,
     discovered = false,
     config = { extra = 4, select = true },
@@ -1319,14 +1354,14 @@ SMODS.Consumable { -- Oil
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "oil",
-    loc_txt = {
-        name = 'Oil',
-        text = {
-            "Removes {C:attention}debuffs{}",
-            "from all cards in",
-            "hand for this blind"
-        }
-    },
+    -- loc_txt = {
+    --     name = 'Oil',
+    --     text = {
+    --         "Removes {C:attention}debuffs{}",
+    --         "from all cards in",
+    --         "hand for this blind"
+    --     }
+    -- },
     loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
@@ -1402,16 +1437,22 @@ acid = { -- Acid
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "acid",
-    loc_txt = {
-        name = 'Acid',
-        text = {
-            "{C:attention}Destroy{} all cards of the ",
-            "same rank as selected",
-            "card. All cards {C:attention}returned",
-            "after this blind"
-        }
-    },
-    loc_vars = alchemical_loc_vars,
+    -- loc_txt = {
+    --     name = 'Acid',
+    --     text = {
+    --         "{C:attention}Destroy{} all cards of the ",
+    --         "same rank as selected",
+    --         "card. All cards {C:attention}returned",
+    --         "after this blind"
+    --     }
+    -- },
+    loc_vars = function(self, info_queue, center)
+        local ret = alchemical_loc_vars(self, info_queue, center)
+        if not ReduxArcanumMod.config.new_content then
+            ret.key = self.key .. "_classic"
+        end
+        return ret
+    end,
     unlocked = true,
     discovered = false,
     config = {},
@@ -1503,31 +1544,35 @@ acid = { -- Acid
         return true
     end,
 }
-if ReduxArcanumMod.config.new_content then
-    acid.loc_txt.text = {
-        "{C:attention}Destroy{} all cards of the ",
-        "same rank or suit as selected",
-        "card. All cards {C:attention}returned",
-        "after this blind",
-        "{C:inactive}(Does not trigger jokers){}"
-    }
-end
+-- if ReduxArcanumMod.config.new_content then
+--     acid.loc_txt.text = {
+--         "{C:attention}Destroy{} all cards of the ",
+--         "same rank or suit as selected",
+--         "card. All cards {C:attention}returned",
+--         "after this blind",
+--         "{C:inactive}(Does not trigger jokers){}"
+--     }
+-- end
 SMODS.Consumable(acid)
 
 SMODS.Consumable { -- Brimstone
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "brimstone",
-    loc_txt = {
-        name = 'Brimstone',
-        text = {
-            "{C:attention}+#1#{} hands, {C:attention}+#1#{} discards",
-            "Debuff the leftmost",
-            "non-debuffed joker",
-            "for one blind"
-        }
-    },
-    loc_vars = alchemical_loc_vars,
+    -- loc_txt = {
+    --     name = 'Brimstone',
+    --     text = {
+    --         "{C:attention}+#1#{} hands, {C:attention}+#1#{} discards",
+    --         "Debuff the leftmost",
+    --         "non-debuffed joker",
+    --         "for one blind"
+    --     }
+    -- },
+    loc_vars = function(self, info_queue, center)
+        local ret = alchemical_loc_vars(self, info_queue, center)
+        -- info_queue[#info_queue + 1] = G.P_CENTERS.m_lucky
+        return ret
+    end,
     unlocked = true,
     discovered = false,
     config = { extra = 2 },
@@ -1559,16 +1604,16 @@ SMODS.Consumable { -- Brimstone
 SMODS.Consumable { -- Uranium
     set = "Alchemical",
     atlas = "arcanum_alchemical",
-    key = "Uranium",
-    loc_txt = {
-        name = 'Uranium',
-        text = {
-            "Copy the selected card's",
-            "{C:attention}enhancement{}, {C:attention}seal{}, and {C:attention}edition",
-            "to {C:attention}#1#{} random unenhanced cards",
-            "in hand for one blind"
-        }
-    },
+    key = "uranium",
+    -- loc_txt = {
+    --     name = 'Uranium',
+    --     text = {
+    --         "Copy the selected card's",
+    --         "{C:attention}enhancement{}, {C:attention}seal{}, and {C:attention}edition",
+    --         "to {C:attention}#1#{} random unenhanced cards",
+    --         "in hand for one blind"
+    --     }
+    -- },
     loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,

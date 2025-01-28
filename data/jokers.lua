@@ -4,14 +4,14 @@
 
 studious_joker = { -- Studious Joker
     key = "studious_joker",
-    loc_txt = {
-        name = "Studious Joker",
-        text = {
-            "{C:mult}+#1#{} Mult. Sell this",
-            "joker to get one",
-            "{C:alchemical} Alchemical{} card"
-        }
-    },
+    -- loc_txt = {
+    --     name = "Studious Joker",
+    --     text = {
+    --         "{C:mult}+#1#{} Mult. Sell this",
+    --         "joker to get one",
+    --         "{C:alchemical} Alchemical{} card"
+    --     }
+    -- },
     loc_vars = function(self, info_queue, center)
         return { vars = { center.ability.mult } }
     end,
@@ -33,7 +33,7 @@ studious_joker = { -- Studious Joker
         if context.selling_self then -- and not context.blueprint then
             add_random_alchemical(card)
             card_eval_status_text(card, 'extra', nil, nil, nil,
-                { message = "Graduated!", colour = G.C.SECONDARY_SET.Alchemy })
+                { message = localize('p_plus_alchemical'), colour = G.C.SECONDARY_SET.Alchemy })
             return {
                 card = card
             }
@@ -54,14 +54,14 @@ SMODS.Joker(studious_joker)
 
 SMODS.Joker { -- Bottled Buffoon
     key = "bottled_buffoon",
-    loc_txt = {
-        name = "Bottled Buffoon",
-        text = {
-            "Create an {C:alchemical}Alchemical{} card",
-            "every {C:attention}#1#{} hands played",
-            "{C:inactive}#2#"
-        }
-    },
+    -- loc_txt = {
+    --     name = "Bottled Buffoon",
+    --     text = {
+    --         "Create an {C:alchemical}Alchemical{} card",
+    --         "every {C:attention}#1#{} hands played",
+    --         "{C:inactive}#2#"
+    --     }
+    -- },
     loc_vars = function(self, info_queue, center)
         local loyalty
         if center.ability.loyalty_remaining == 0 then
@@ -99,7 +99,7 @@ SMODS.Joker { -- Bottled Buffoon
                     add_random_alchemical(card)
                     card.ability.loyalty_remaining = card.ability.extra.every
                     return {
-                        message = "Synthesised!"
+                        message = localize('p_plus_alchemical')
                     }
                 end
             else
@@ -110,7 +110,7 @@ SMODS.Joker { -- Bottled Buffoon
                     add_random_alchemical(card)
                     card.ability.loyalty_remaining = card.ability.extra.every
                     return {
-                        message = "Synthesised!"
+                        message = localize('p_plus_alchemical')
                     }
                 end
             end
@@ -120,15 +120,15 @@ SMODS.Joker { -- Bottled Buffoon
 
 SMODS.Joker { -- Mutated Joker
     key = "mutated_joker",
-    loc_txt = {
-        name = "Mutated Joker",
-        text = {
-            "{C:chips}+#1#{} Chips for each",
-            "unique {C:alchemical}Alchemical{} card",
-            "used this run",
-            "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)"
-        }
-    },
+    -- loc_txt = {
+    --     name = "Mutated Joker",
+    --     text = {
+    --         "{C:chips}+#1#{} Chips for each",
+    --         "unique {C:alchemical}Alchemical{} card",
+    --         "used this run",
+    --         "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)"
+    --     }
+    -- },
     loc_vars = function(self, info_queue, center)
         local alchemical_tally = 1
         for k, v in pairs(G.GAME.consumeable_usage) do
@@ -207,14 +207,14 @@ SMODS.Joker { -- Mutated Joker
 
 SMODS.Joker { -- Essence of Comedy
     key = "essence_of_comedy",
-    loc_txt = {
-        name = "Essence of Comedy",
-        text = {
-            "Gains {X:mult,C:white} X#1# {} Mult",
-            "per {C:alchemical}Alchemical{} card used",
-            "{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)"
-        }
-    },
+    -- loc_txt = {
+    --     name = "Essence of Comedy",
+    --     text = {
+    --         "Gains {X:mult,C:white} X#1# {} Mult",
+    --         "per {C:alchemical}Alchemical{} card used",
+    --         "{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)"
+    --     }
+    -- },
     loc_vars = function(self, info_queue, center)
         return { vars = { center.ability.extra, center.ability.x_mult } }
     end,
@@ -249,15 +249,15 @@ SMODS.Joker { -- Essence of Comedy
 
 SMODS.Joker { -- Shock Humor
     key = "shock_humor",
-    loc_txt = {
-        name = "Shock Humor",
-        text = {
-            "{C:green}#1# in #2#{} chance to",
-            "create an {C:alchemical}Alchemical{} card",
-            "when you discard a {C:attention}Gold{},",
-            "{C:attention}Steel{} or {C:attention}Stone{} card"
-        }
-    },
+    -- loc_txt = {
+    --     name = "Shock Humor",
+    --     text = {
+    --         "{C:green}#1# in #2#{} chance to",
+    --         "create an {C:alchemical}Alchemical{} card",
+    --         "when you discard a {C:attention}Gold{},",
+    --         "{C:attention}Steel{} or {C:attention}Stone{} card"
+    --     }
+    -- },
     loc_vars = function(self, info_queue, center)
         local first_var
         if G.GAME and G.GAME.probabilities.normal then
@@ -288,7 +288,7 @@ SMODS.Joker { -- Shock Humor
                 if pseudorandom('shock_humor') < G.GAME.probabilities.normal / card.ability.extra.odds then
                     add_random_alchemical(card)
                     card_eval_status_text(card, 'extra', nil, nil, nil,
-                        { message = "+1 Alchemical", colour = G.C.SECONDARY_SET.Alchemy })
+                        { message = localize('p_plus_alchemical'), colour = G.C.SECONDARY_SET.Alchemy })
                 end
             end
         end
@@ -297,21 +297,21 @@ SMODS.Joker { -- Shock Humor
 
 SMODS.Joker { -- Breaking Bozo
     key = "breaking_bozo",
-    loc_txt = {
-        name = "Breaking Bozo",
-        text = {
-            "After you use an {C:alchemical}Alchemical{}",
-            "card, do one at random: ",
-            "- Reduce blind by {C:attention}10%{}",
-            "- Draw {C:attention}2{} cards",
-            "- Earn {C:attention}$5{}"
-        },
-        unlock = {
-            "Use {C:attention}#1#",
-            "{E:1,C:alchemical}Alchemical{} cards in",
-            "the same run"
-        }
-    },
+    -- loc_txt = {
+    --     name = "Breaking Bozo",
+    --     text = {
+    --         "After you use an {C:alchemical}Alchemical{}",
+    --         "card, do one at random: ",
+    --         "- Reduce blind by {C:attention}10%{}",
+    --         "- Draw {C:attention}2{} cards",
+    --         "- Earn {C:attention}$5{}"
+    --     },
+    --     unlock = {
+    --         "Use {C:attention}#1#",
+    --         "{E:1,C:alchemical}Alchemical{} cards in",
+    --         "the same run"
+    --     }
+    -- },
     locked_loc_vars = function(self, info_queue)
         return { vars = { self.unlock_condition.extra } }
     end,
@@ -352,11 +352,11 @@ SMODS.Joker { -- Breaking Bozo
                     if choice == 1 then
                         G.FUNCS.draw_from_deck_to_hand(2)
                         card_eval_status_text(card, 'extra', nil, nil, nil,
-                            { message = "+2 Cards", colour = G.C.SECONDARY_SET.Alchemy })
+                            { message = localize('p_alchemy_plus_card'), colour = G.C.SECONDARY_SET.Alchemy })
                     elseif choice == 2 then
                         ease_dollars(5, true)
                         card_eval_status_text(card, 'extra', nil, nil, nil,
-                            { message = "$5", colour = G.C.SECONDARY_SET.Alchemy })
+                            { message = localize('p_alchemy_plus_money'), colour = G.C.SECONDARY_SET.Alchemy })
                     else
                         G.GAME.blind.chips = math.floor(G.GAME.blind.chips * 0.90)
                         G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
@@ -368,7 +368,7 @@ SMODS.Joker { -- Breaking Bozo
 
                         if not silent then play_sound('chips2') end
                         card_eval_status_text(card, 'extra', nil, nil, nil,
-                            { message = "Reduce Blind", colour = G.C.SECONDARY_SET.Alchemy })
+                            { message = localize('p_alchemy_reduce_blind'), colour = G.C.SECONDARY_SET.Alchemy })
                     end
                     return true
                 end
@@ -382,18 +382,24 @@ if (not SMODS.Mods["Bunco"] or not SMODS.Mods["Bunco"].can_load) or
     ReduxArcanumMod.config.overlapping_cards ~= 1 then
     chain_reaction = { -- Chain Reaction
         key = "chain_reaction",
-        loc_txt = {
-            name = "Chain Reaction",
-            text = {
-                "Create a {C:dark_edition}Negative{} {C:attention}Copy{}",
-                "of the first {C:alchemical}Alchemical{} ",
-                "card used each blind"
-            },
-            unlock = {
-                "Discover every",
-                "{E:1,C:alchemical}Alchemical{} card"
-            }
-        },
+        -- loc_txt = {
+        --     name = "Chain Reaction",
+        --     text = {
+        --         "Create a {C:dark_edition}Negative{} {C:attention}Copy{}",
+        --         "of the first {C:alchemical}Alchemical{} ",
+        --         "card used each blind"
+        --     },
+        --     unlock = {
+        --         "Discover every",
+        --         "{E:1,C:alchemical}Alchemical{} card"
+        --     }
+        -- },
+        loc_vars = function(self, info_queue)
+            if not ReduxArcanumMod.config.new_content then
+                return { key = self.key .. "_classic"}
+            end
+        end,
+
         unlocked = false,
         discovered = false,
         blueprint_compat = true,
@@ -441,7 +447,7 @@ if (not SMODS.Mods["Bunco"] or not SMODS.Mods["Bunco"].can_load) or
                             end
                         }))
                         card_eval_status_text(card, 'extra', nil, nil, nil,
-                            { message = "Copied", colour = G.C.SECONDARY_SET.Alchemy })
+                            { message = localize("k_copied_ex"), colour = G.C.SECONDARY_SET.Alchemy })
                     end
                     if not context.blueprint then
                         card.ability.extra.used = true
@@ -470,12 +476,12 @@ if (not SMODS.Mods["Bunco"] or not SMODS.Mods["Bunco"].can_load) or
         end
     }
     if ReduxArcanumMod.config.new_content then
-        chain_reaction.loc_txt.text = {
-            "Create a {C:attention}Copy{} of",
-            "the first {C:alchemical}Alchemical{} card",
-            "used each blind",
-            "{C:inactive}(Must have room){}"
-        }
+        -- chain_reaction.loc_txt.text = {
+        --     "Create a {C:attention}Copy{} of",
+        --     "the first {C:alchemical}Alchemical{} card",
+        --     "used each blind",
+        --     "{C:inactive}(Must have room){}"
+        -- }
         chain_reaction.rarity = 3
     end
     SMODS.Joker(chain_reaction)
@@ -483,19 +489,19 @@ end
 
 SMODS.Joker { -- Catalyst Joker
     key = "catalyst_joker",
-    loc_txt = {
-        name = "Catalyst Joker",
-        text = {
-            "{C:attention}+1{} consumable slots.",
-            "Gains {X:mult,C:white} X#1# {} Mult for",
-            "every {C:attention}Consumable Card{} held",
-            "{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)"
-        },
-        unlock = {
-            "Hold #1# {E:1,C:attention}Consumable{}",
-            "{E:1,C:attention}Cards{} at once"
-        }
-    },
+    -- loc_txt = {
+    --     name = "Catalyst Joker",
+    --     text = {
+    --         "{C:attention}+1{} consumable slots.",
+    --         "Gains {X:mult,C:white} X#1# {} Mult for",
+    --         "every {C:attention}Consumable Card{} held",
+    --         "{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)"
+    --     },
+    --     unlock = {
+    --         "Hold #1# {E:1,C:attention}Consumable{}",
+    --         "{E:1,C:attention}Cards{} at once"
+    --     }
+    -- },
     loc_vars = function(self, info_queue, center)
         local current_value = 1
         -- Check to prevent doing calculations on nill variables
@@ -553,21 +559,21 @@ SMODS.Joker { -- Catalyst Joker
     end
 }
 
--- Changed Vanilla Jokers
+-- -- Changed Vanilla Jokers
 
-SMODS.Joker:take_ownership('ring_master', { -- Showman
-    loc_txt = {
-        name = "Showman",
-        text = {
-            "{C:attention}Joker{} and {C:attention}consumable{} cards",
-            "may appear multiple times",
-        },
-        unlock = {
-            "Reach Ante",
-            "level {E:1,C:attention}#1#",
-        },
-    }
-})
+-- SMODS.Joker:take_ownership('ring_master', { -- Showman
+--     loc_txt = {
+--         name = "Showman",
+--         text = {
+--             "{C:attention}Joker{} and {C:attention}consumable{} cards",
+--             "may appear multiple times",
+--         },
+--         unlock = {
+--             "Reach Ante",
+--             "level {E:1,C:attention}#1#",
+--         },
+--     }
+-- })
 
 
 -- Mod Compat

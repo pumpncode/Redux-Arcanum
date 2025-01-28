@@ -115,10 +115,10 @@ NFS.load(ReduxArcanumMod.path .. "/api/alchemicalAPI.lua")()
 function poll_alchemical_edition(_key, _mod, _no_poly)
     _mod = _mod or 1
     local edition_poll = pseudorandom(pseudoseed(_key or 'edition_generic'))
-    if edition_poll > 1 - 0.003*_mod*(G.GAME.used_vouchers.v_ReduxArcanum_cauldron and 50 or 1) then
-        return {negative = true}
-    elseif edition_poll > 1 - 0.006*G.GAME.edition_rate*_mod and not _no_poly then
-        return {polychrome = true}
+    if edition_poll > 1 - 0.003 * _mod * (G.GAME.used_vouchers.v_ReduxArcanum_cauldron and 50 or 1) then
+        return { negative = true }
+    elseif edition_poll > 1 - 0.006 * G.GAME.edition_rate * _mod and not _no_poly then
+        return { polychrome = true }
     end
     return nil
 end
@@ -209,7 +209,6 @@ NFS.load(ReduxArcanumMod.path .. "/data/jokers.lua")()
 
 local alias__G_UIDEF_use_and_sell_buttons = G.UIDEF.use_and_sell_buttons;
 function G.UIDEF.use_and_sell_buttons(card)
-
     if (card.ability.set == "Alchemical" or card.ability.name == "c_ReduxArcanum_philosopher_stone") and G.STATE == G.STATES.SMODS_BOOSTER_OPENED and (card.area == G.pack_cards and G.pack_cards) then
         return {
             n = G.UIT.ROOT,
@@ -415,7 +414,7 @@ SMODS.Edition:take_ownership('polychrome', {
         if context.post_joker or (context.main_scoring and context.cardarea == G.play) then
             return {
                 x_mult = card.edition.x_mult
-            }     
+            }
         end
     end
 }, true)

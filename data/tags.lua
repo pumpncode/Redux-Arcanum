@@ -4,13 +4,13 @@
 
 SMODS.Tag { -- Elemental
     key = 'elemental',
-    loc_txt = {
-        name = 'Elemental Tag',
-        text = {
-            "Gives a free",
-            "{C:alchemical}Mega Alchemy Pack"
-        }
-    },
+    -- loc_txt = {
+    --     name = 'Elemental Tag',
+    --     text = {
+    --         "Gives a free",
+    --         "{C:alchemical}Mega Alchemy Pack"
+    --     }
+    -- },
 
     config = { type = 'new_blind_choice' },
 

@@ -4,12 +4,12 @@
 
 SMODS.Voucher {
     key = 'mortar_and_pestle',
-    loc_txt = {
-        name = "Mortar and Pestle",
-        text = {
-            "{C:attention}+1{} consumable slot",
-        }
-    },
+    -- loc_txt = {
+    --     name = "Mortar and Pestle",
+    --     text = {
+    --         "{C:attention}+1{} consumable slot",
+    --     }
+    -- },
 
     unlocked = true,
 
@@ -29,20 +29,25 @@ SMODS.Voucher {
 
 cauldron = {
     key = 'cauldron',
-    loc_txt = {
-        name = "Cauldron",
-        text = {
-            "{C:alchemical}Alchemical{} cards may come with",
-            "the {C:dark_edition}Negative{} Edition"
-        },
-        unlock = {
-            "Use a total of {C:attention}25",
-            "{C:alchemical}Alchemical{} cards from any",
-            "{C:alchemical}Alchemy Pack",
-            "{C:inactive}(#1#)",
-        }
-    },
+    -- loc_txt = {
+    --     name = "Cauldron",
+    --     text = {
+    --         "{C:alchemical}Alchemical{} cards may come with",
+    --         "the {C:dark_edition}Negative{} Edition"
+    --     },
+    --     unlock = {
+    --         "Use a total of {C:attention}25",
+    --         "{C:alchemical}Alchemical{} cards from any",
+    --         "{C:alchemical}Alchemy Pack",
+    --         "{C:inactive}(#1#)",
+    --     }
+    -- },
 
+    loc_vars = function(self, info_queue)
+        if not ReduxArcanumMod.config.new_content then
+            return { key = self.key .. "_classic"}
+        end
+    end,
     locked_loc_vars = function(self, info_queue)
         return { vars = { G.PROFILES[G.SETTINGS.profile].career_stats.c_ReduxArcanum_alchemy_pack_used or 0 } }
     end,
@@ -62,23 +67,17 @@ cauldron = {
     pos = { x = 0, y = 3 },
     atlas = 'arcanum_others'
 }
-if ReduxArcanumMod.config.new_content then
-    cauldron.loc_txt.text = {
-        "{C:dark_edition}Negative{} {C:alchemical}Alchemical{} cards",
-        "appear much more often"
-    }
-end
 SMODS.Voucher(cauldron)
 
 SMODS.Voucher {
     key = 'alchemical_merchant',
-    loc_txt = {
-        name = "Alchemical Merchant",
-        text = {
-            "{C:alchemical}Alchemical{} cards can",
-            "appear in the {C:attention}shop",
-        },
-    },
+    -- loc_txt = {
+    --     name = "Alchemical Merchant",
+    --     text = {
+    --         "{C:alchemical}Alchemical{} cards can",
+    --         "appear in the {C:attention}shop",
+    --     },
+    -- },
 
     unlocked = true,
 
@@ -99,20 +98,20 @@ SMODS.Voucher {
 
 SMODS.Voucher {
     key = 'alchemical_tycoon',
-    loc_txt = {
-        name = "Alchemical Tycoon",
-        text = {
-            "{C:alchemical}Alchemical{} cards appear",
-            "{C:attention}2X{} more frequently",
-            "in the shop"
-        },
-        unlock = {
-            "Buy a total of",
-            "{C:attention}25{C:alchemical} Alchemical{} cards",
-            "from the shop",
-            "{C:inactive}(#1#)",
-        }
-    },
+    -- loc_txt = {
+    --     name = "Alchemical Tycoon",
+    --     text = {
+    --         "{C:alchemical}Alchemical{} cards appear",
+    --         "{C:attention}2X{} more frequently",
+    --         "in the shop"
+    --     },
+    --     unlock = {
+    --         "Buy a total of",
+    --         "{C:attention}25{C:alchemical} Alchemical{} cards",
+    --         "from the shop",
+    --         "{C:inactive}(#1#)",
+    --     }
+    -- },
 
     locked_loc_vars = function(self, info_queue)
         return { vars = { G.PROFILES[G.SETTINGS.profile].career_stats.c_ReduxArcanum_alchemicals_bought or 0 } }
