@@ -18,30 +18,29 @@ G.FUNCS.cycle_options = function(args)
     end
 end
 
+-- Shamelessly copying Bunco's config tab layout
 ReduxArcanumMod.config_tab = function()
-    local scale = 5 / 6
     local current_overlapping = ReduxArcanumMod.config.overlapping_cards or 1
-    local current_new_content = ReduxArcanumMod.config.new_content or false
+    local current_new_content = ReduxArcanumMod.config.new_content or true
     local bunco_linked_acid = ReduxArcanumMod.config.bunco_linked_acid or true
-    t = {create_option_cycle {
-            label = "Conflicting Cards",
-            info = {
-                "How to handle known similar cards from other mods",
-                "(Requires restart)"
-            },
-            options = {
-                "Remove from this mod",
-                "Remove from the other mod",
-                "Do nothing"
-            },
-            current_option = current_overlapping,
-            w = 4.5,
-            text_scale = 0.4,
-            scale = scale,
-            ref_table = ReduxArcanumMod.config,
-            ref_value = "overlapping_cards",
-            opt_callback = 'cycle_options',
+    t = { create_option_cycle {
+        label = "Conflicting Cards",
+        info = {
+            "How to handle known similar cards from other mods",
+            "(Requires restart)"
         },
+        options = {
+            "Remove from this mod",
+            "Remove from the other mod",
+            "Do nothing"
+        },
+        w = 5,
+        text_scale = 0.4,
+        current_option = current_overlapping,
+        ref_table = ReduxArcanumMod.config,
+        ref_value = "overlapping_cards",
+        opt_callback = 'cycle_options',
+    },
         create_toggle {
             label = "New Content",
             info = {
@@ -49,32 +48,41 @@ ReduxArcanumMod.config_tab = function()
                 "(Requires restart)"
             },
             current_option = current_new_content,
-            w = 4.5,
-            text_scale = 0.4,
-            scale = scale,
             ref_table = ReduxArcanumMod.config,
             ref_value = "new_content"
         }
     }
     if next(SMODS.find_mod("Bunco")) then
-    table.insert(t, create_toggle {
+        table.insert(t, create_toggle {
             label = "Acid + Bunco Linked Cards",
             info = {
-                "When acid destroys a linked card,", 
+                "When acid destroys a linked card,",
                 "treat linked cards as destroyed by Acid",
                 "(Won't trigger jokers + returns after blind)"
             },
             current_option = bunco_linked_acid,
-            w = 4.5,
-            text_scale = 0.4,
-            scale = scale,
             ref_table = ReduxArcanumMod.config,
             ref_value = "bunco_linked_acid"
-    })
+        })
     end
+
+    for i, _ in ipairs(t) do
+        t[i] = {
+            n = G.UIT.R,
+            config = {
+                align = "cm",
+                r = 0.1,
+                emboss = 0.1,
+                outline = 1,
+                padding = 0.14
+            },
+            nodes = { t[i] }
+        }
+    end
+
     return {
         n = G.UIT.ROOT,
-        config = { align = "cm", minh = G.ROOM.T.h * 0.25, padding = 0.2, r = 0.1, colour = G.C.GREY },
+        config = { align = "cm", minh = G.ROOM.T.h * 0.25, padding = 0.2, r = 0.1, colour = G.C.BLACK },
         nodes = t
     }
 end
