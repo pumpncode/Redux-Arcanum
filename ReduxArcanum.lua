@@ -209,7 +209,7 @@ NFS.load(ReduxArcanumMod.path .. "/data/jokers.lua")()
 
 local alias__G_UIDEF_use_and_sell_buttons = G.UIDEF.use_and_sell_buttons;
 function G.UIDEF.use_and_sell_buttons(card)
-    if (card.ability.set == "Alchemical" or card.ability.name == "c_ReduxArcanum_philosopher_stone") and G.STATE == G.STATES.SMODS_BOOSTER_OPENED and (card.area == G.pack_cards and G.pack_cards) then
+    if (card.ability.set == "Alchemical" or card.ability.name == "c_ReduxArcanum_philosopher_stone") and (G.STATE == G.STATES.SMODS_BOOSTER_OPENED or G.STATE == G.STATES.SPECTRAL_PACK) and (card.area == G.pack_cards and G.pack_cards) then
         return {
             n = G.UIT.ROOT,
             config = { padding = 0, colour = G.C.CLEAR },
