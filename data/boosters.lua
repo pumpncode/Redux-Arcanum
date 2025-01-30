@@ -15,6 +15,7 @@ function add_booster(booster)
         --     }
         -- },
 
+        group_key = "k_ReduxArcanum_alchemy_pack",
         kind = "Alchemical",
 
         loc_vars = function(self, info_queue, card)
