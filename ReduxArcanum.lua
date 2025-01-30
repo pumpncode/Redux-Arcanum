@@ -254,13 +254,15 @@ G.FUNCS.select_alchemical = function(e, mute, nosave)
     G.CONTROLLER.locks.use = true
     if G.booster_pack and not G.booster_pack.alignment.offset.py and (G.GAME.pack_choices and G.GAME.pack_choices < 2) then
         inc_career_stat('c_ReduxArcanum_alchemy_pack_used', 1)
+        check_for_unlock({type = 'career_stat', statname = 'c_ReduxArcanum_alchemy_pack_used'})
         G.booster_pack.alignment.offset.py = G.booster_pack.alignment.offset.y
         G.booster_pack.alignment.offset.y = G.ROOM.T.y + 29
     end
     if G.shop and not G.shop.alignment.offset.py then
+        inc_career_stat('c_ReduxArcanum_alchemicals_bought', 1)
+        check_for_unlock({type = 'career_stat', statname = 'c_ReduxArcanum_alchemicals_bought'})
         G.shop.alignment.offset.py = G.shop.alignment.offset.y
         G.shop.alignment.offset.y = G.ROOM.T.y + 29
-        inc_career_stat('c_ReduxArcanum_alchemicals_bought', 1)
     end
     if G.blind_select and not G.blind_select.alignment.offset.py then
         G.blind_select.alignment.offset.py = G.blind_select.alignment.offset.y
@@ -314,6 +316,8 @@ G.FUNCS.select_alchemical = function(e, mute, nosave)
                                 G.booster_pack.alignment.offset.py = nil
                             end
                             G.GAME.pack_choices = G.GAME.pack_choices - 1
+                            inc_career_stat('c_ReduxArcanum_alchemy_pack_used', 1)
+                            check_for_unlock({type = 'career_stat', statname = 'c_ReduxArcanum_alchemy_pack_used'})
                         else
                             G.CONTROLLER.interrupt.focus = true
 
@@ -321,6 +325,7 @@ G.FUNCS.select_alchemical = function(e, mute, nosave)
                         end
                     else
                         if G.shop then
+                            check_for_unlock({type = 'career_stat', statname = 'c_ReduxArcanum_alchemicals_bought'})
                             G.shop.alignment.offset.y = G.shop.alignment.offset.py
                             G.shop.alignment.offset.py = nil
                         end

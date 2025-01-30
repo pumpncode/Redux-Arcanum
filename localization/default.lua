@@ -490,10 +490,10 @@ return {
                     "appear much more often"
                 },
                 unlock = {
-                    "Use a total of {C:attention}25",
+                    "Select a total of {C:attention}#1#",
                     "{C:alchemical}Alchemical{} cards from any",
                     "{C:alchemical}Alchemy Pack",
-                    "{C:inactive}(#1#)",
+                    "{C:inactive}(#2#)",
                 }
             },
             v_ReduxArcanum_cauldron_classic = {
@@ -519,9 +519,9 @@ return {
                 },
                 unlock = {
                     "Buy a total of",
-                    "{C:attention}25{C:alchemical} Alchemical{} cards",
+                    "{C:attention}#1#{C:alchemical} Alchemical{} cards",
                     "from the shop",
-                    "{C:inactive}(#1#)",
+                    "{C:inactive}(#2#)",
                 }
             },
         }

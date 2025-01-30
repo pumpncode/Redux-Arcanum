@@ -49,20 +49,16 @@ cauldron = {
         end
     end,
     locked_loc_vars = function(self, info_queue)
-        return { vars = { G.PROFILES[G.SETTINGS.profile].career_stats.c_ReduxArcanum_alchemy_pack_used or 0 } }
+        return { vars = { self.unlock_condition.extra, G.PROFILES[G.SETTINGS.profile].career_stats.c_ReduxArcanum_alchemy_pack_used or 0 } }
     end,
 
     requires = { 'v_ReduxArcanum_mortar_and_pestle' },
 
     unlocked = false,
-    unlock_conditon = {
+    unlock_condition = {
+        type = "c_ReduxArcanum_alchemy_pack_used",
         extra = 25
     },
-    check_for_unlock = function(self, args)
-        if args.type == 'career_stat' and (G.PROFILES[G.SETTINGS.profile].career_stats.c_ReduxArcanum_alchemy_pack_used or 0) >= 25 then -- self.unlock_condition.extra then
-            unlock_card(self)
-        end
-    end,
 
     pos = { x = 0, y = 3 },
     atlas = 'arcanum_others'
@@ -114,20 +110,16 @@ SMODS.Voucher {
     -- },
 
     locked_loc_vars = function(self, info_queue)
-        return { vars = { G.PROFILES[G.SETTINGS.profile].career_stats.c_ReduxArcanum_alchemicals_bought or 0 } }
+        return { vars = { self.unlock_condition.extra, G.PROFILES[G.SETTINGS.profile].career_stats.c_ReduxArcanum_alchemicals_bought or 0 } }
     end,
 
     requires = { 'v_ReduxArcanum_alchemical_merchant' },
 
     unlocked = false,
-    unlock_conditon = {
+    unlock_condition = {
+        type = "c_ReduxArcanum_alchemicals_bought",
         extra = 25
     },
-    check_for_unlock = function(self, args)
-        if args.type == 'career_stat' and (G.PROFILES[G.SETTINGS.profile].career_stats.c_ReduxArcanum_alchemicals_bought or 0) >= 25 then -- self.unlock_condition.extra then
-            unlock_card(self)
-        end
-    end,
 
     config = { extra = 9.6 },
 
