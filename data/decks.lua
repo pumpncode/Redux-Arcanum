@@ -93,7 +93,7 @@ SMODS.Back {
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 -- https://github.com/larswijn/CardSleeves
 
-if (SMODS.Mods["CardSleeves"] and SMODS.Mods["CardSleeves"].can_load) and CardSleeves then
+if next(SMODS.find_mod("CardSleeves")) and CardSleeves then
     SMODS.Atlas({ key = 'arcanum_sleeves', path = 'ra_sleeves_atlas.png', px = 73, py = 95 })
 
     CardSleeves.Sleeve {
@@ -103,7 +103,7 @@ if (SMODS.Mods["CardSleeves"] and SMODS.Mods["CardSleeves"].can_load) and CardSl
         pos = { x = 1, y = 0 },
         -- config = { vouchers = { "v_ReduxArcanum_mortar_and_pestle" } },
         unlocked = false,
-        unlock_condition = { deck = "b_ReduxArcanum_herbalist", stake = 2 },
+        unlock_condition = { deck = "b_ReduxArcanum_herbalist", stake = "stake_red" },
 
         loc_vars = function(self)
             local key
@@ -136,7 +136,7 @@ if (SMODS.Mods["CardSleeves"] and SMODS.Mods["CardSleeves"].can_load) and CardSl
         pos = { x = 0, y = 0 },
         -- config = { vouchers = { "v_ReduxArcanum_alchemical_merchant" }, alchemical_more_options = 0 },
         unlocked = false,
-        unlock_condition = { deck = "b_ReduxArcanum_philosopher", stake = 2 },
+        unlock_condition = { deck = "b_ReduxArcanum_philosopher", stake = "stake_red" },
 
         loc_vars = function(self)
             local key
