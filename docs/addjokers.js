@@ -259,7 +259,7 @@ let alchemicals = [
   {
     name: "Oil",
     text: [
-      "Removes {C:attention}debuffs{} of all cards in hand for this blind"
+      "Prevents all cards currently in hand from being {C:attention}debuffed{} or flipped {C:attention}face down{} for this blind"
     ],
     image_url: "img/alchemical_atlas.png",
     image_pos: {
