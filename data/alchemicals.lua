@@ -222,7 +222,9 @@ SMODS.Consumable { -- Aero
             trigger = 'after',
             delay = 0.1,
             func = function()
-                G.FUNCS.draw_from_deck_to_hand(card.ability.extra)
+                for i=1, 4 do --draw cards from deckL
+                    draw_card(G.deck,G.hand, i*100/2,'up', true)
+                end
                 return true
             end
         }))
