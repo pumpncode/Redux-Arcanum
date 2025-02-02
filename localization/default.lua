@@ -301,8 +301,9 @@ return {
             j_ReduxArcanum_essence_of_comedy = {
                 name = "Essence of Comedy",
                 text = {
-                    "Gains {X:mult,C:white} X#1# {} Mult",
-                    "per {C:alchemical}Alchemical{} card used",
+                    "Gains {X:mult,C:white} X#1# {} Mult every",
+                    "time an {C:alchemical}Alchemical{}",
+                    "card is used",
                     "{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)"
                 }
             },
