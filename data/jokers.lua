@@ -334,7 +334,7 @@ SMODS.Joker { -- Breaking Bozo
         if args.type == 'used_alchemical' then
             local alchemicals_count = 0
             for k, v in pairs(G.GAME.consumeable_usage) do
-                if v.set == 'Alchemical' then alchemicals_count = alchemicals_count + 1 end
+                if v.set == 'Alchemical' then alchemicals_count = alchemicals_count + v.count end
             end
             if alchemicals_count >= self.unlock_condition.extra then -- self.unlock_condition.extra then
                 unlock_card(self)
