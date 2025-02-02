@@ -1038,8 +1038,6 @@ SMODS.Consumable { -- Borax
             for _, boraxed_card in ipairs(G.deck.config.ra_borax) do
                 for k, card in ipairs(G.playing_cards) do
                     if card.unique_val == boraxed_card.card_id then
-                        delay(0.05)
-                        card:juice_up(1, 0.5)
                         card:change_suit(boraxed_card.prev_suit)
                     end
                 end
