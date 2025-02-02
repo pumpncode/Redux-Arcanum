@@ -405,7 +405,7 @@ if (not SMODS.Mods["Bunco"] or not SMODS.Mods["Bunco"].can_load) or
         -- },
         loc_vars = function(self, info_queue)
             if not ReduxArcanumMod.config.new_content then
-                return { key = self.key .. "_classic"}
+                return { key = self.key .. "_classic" }
             end
         end,
 
