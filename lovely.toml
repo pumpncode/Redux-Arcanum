@@ -26,6 +26,21 @@ payload = '''
 
 
 
+## Patch to prevent oiled cards from flipping face down
+## Patch stolen from Bunco
+# Card:flip()
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "if self.facing == 'front' then"
+position = 'after'
+match_indent = true
+payload = '''
+if (self.area == G.hand or self.area == G.jokers or self.area == G.consumeables) and self.ability.ra_oil then
+    return
+end
+'''
+
 
 
 
