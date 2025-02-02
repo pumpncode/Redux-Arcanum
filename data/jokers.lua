@@ -82,6 +82,7 @@ SMODS.Joker { -- Bottled Buffoon
     cost = 5,
     effect = "",
     config = {
+        loyalty_remaining = 3,
         extra = {
             every = 3
         }
@@ -277,8 +278,8 @@ SMODS.Joker { -- Shock Humor
 
     calculate = function(self, card, context)
         if context.discard and not context.other_card.debuff then
-            if context.other_card.config.center == G.P_CENTERS.m_steel or context.other_card.config.center == G.P_CENTERS.m_gold or
-                context.other_card.config.center == G.P_CENTERS.m_stone then
+            local other_card_enhancement = SMODS.get_enhancements(context.other_card)
+            if other_card_enhancement["m_steel"] or other_card_enhancement["m_gold"] or other_card_enhancement["m_stone"] then
                 if pseudorandom('shock_humor') < G.GAME.probabilities.normal / card.ability.extra.odds then
                     add_random_alchemical(card)
                     return {
@@ -419,7 +420,7 @@ if (not SMODS.Mods["Bunco"] or not SMODS.Mods["Bunco"].can_load) or
         effect = "",
         config = {
             extra = {
-                used = false,
+                active = true,
                 count = 0
             }
         },
@@ -438,7 +439,7 @@ if (not SMODS.Mods["Bunco"] or not SMODS.Mods["Bunco"].can_load) or
             if context.using_consumeable and context.consumeable.ability.set == 'Alchemical' then
                 if card.ability.extra.count == count_alchemical_uses() - 1 then
                     if not context.blueprint then
-                        card.ability.extra.used = true
+                        card.ability.extra.active = false
                     end
                     if (not ReduxArcanumMod.config.new_content) or ((#G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit) or (context.consumeable.edition and context.consumeable.edition.negative)) then
                         G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
@@ -464,14 +465,14 @@ if (not SMODS.Mods["Bunco"] or not SMODS.Mods["Bunco"].can_load) or
             end
 
             if context.first_hand_drawn and not context.blueprint then
-                card.ability.extra.used = false
+                card.ability.extra.active = true
                 card.ability.extra.count = count_alchemical_uses()
-                local eval = function() return not card.ability.extra.used end
+                local eval = function() return card.ability.extra.active end
                 juice_card_until(card, eval, true)
             end
 
             if context.end_of_round and not context.blueprint then
-                card.ability.extra.used = true
+                card.ability.extra.active = false
             end
         end
     }
