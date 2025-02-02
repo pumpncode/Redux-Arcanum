@@ -185,9 +185,11 @@ return {
             c_ReduxArcanum_oil = {
                 name = 'Oil',
                 text = {
-                    "Removes {C:attention}debuffs{}",
-                    "from all cards in",
-                    "hand for this blind"
+                    "Prevents all cards",
+                    "currently in hand from",
+                    "being {C:attention}debuffed{} or",
+                    "flipped {C:attention}face down{}", 
+                    "for this blind"
                 }
             },
             c_ReduxArcanum_acid = {
