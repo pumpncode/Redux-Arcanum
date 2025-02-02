@@ -86,6 +86,7 @@ end
 
 function alchemical_loc_vars(self, info_queue, center)
     local vars
+    local key = self.key
 
     if center.edition and center.edition.polychrome and center.ability.extra then
         vars = { math.ceil(center.ability.extra * center.edition.x_mult) }
@@ -93,5 +94,11 @@ function alchemical_loc_vars(self, info_queue, center)
         vars = { center.ability.extra }
     end
 
-    return { vars = vars }
+    if G.localization.descriptions["Alchemical"][key .. "_plural"] and center.ability.extra ~= 1 then
+        key = key .. "_plural"
+    elseif not ReduxArcanumMod.config.new_content and G.localization.descriptions["Alchemical"][key .. "_classic"] then
+        key = key .. "_classic"
+    end
+
+    return { vars = vars, key = key }
 end

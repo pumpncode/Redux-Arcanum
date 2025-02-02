@@ -4,14 +4,28 @@ return {
             c_ReduxArcanum_ignis = {
                 name = 'Ignis',
                 text = {
-                    "Gain {C:attention}+#1#{} discard#2#",
+                    "Gain {C:attention}+#1#{} discard",
+                    "for this blind"
+                }
+            },
+            c_ReduxArcanum_ignis_plural = {
+                name = 'Ignis',
+                text = {
+                    "Gain {C:attention}+#1#{} discards",
                     "for this blind"
                 }
             },
             c_ReduxArcanum_aqua = {
                 name = 'Aqua',
                 text = {
-                    "Gain {C:attention}+#1#{} hand#2#",
+                    "Gain {C:attention}+#1#{} hand",
+                    "for this blind"
+                }
+            },
+            c_ReduxArcanum_aqua_plural = {
+                name = 'Aqua',
+                text = {
+                    "Gain {C:attention}+#1#{} hands",
                     "for this blind"
                 }
             },
@@ -32,11 +46,15 @@ return {
             },
             c_ReduxArcanum_salt = {
                 name = 'Salt',
-                text = { "Increase blind by 10%", "to gain {C:attention}#1#{} tag#2#" }
+                text = { "Increase blind by 10%", "to gain {C:attention}#1#{} tag" }
+            },
+            c_ReduxArcanum_salt_plural = {
+                name = 'Salt',
+                text = { "Increase blind by 10%", "to gain {C:attention}#1#{} tags" }
             },
             c_ReduxArcanum_salt_classic = {
                 name = 'Salt',
-                text = { "Gain {C:attention}#1#{} tag#2#" }
+                text = { "Gain {C:attention}#1#{} tag" }
             },
             c_ReduxArcanum_sulfur = {
                 name = 'Sulfur',
@@ -56,9 +74,17 @@ return {
             c_ReduxArcanum_bismuth = {
                 name = 'Bismuth',
                 text = {
-                    "Converts the #1#",
-                    "#2# to {C:dark_edition}Polychrome{}",
-                    "for one blind"
+                    "Converts the rightmost",
+                    "joker to {C:dark_edition}Polychrome{}",
+                    "for this blind"
+                }
+            },
+            c_ReduxArcanum_bismuth_plural = {
+                name = 'Bismuth',
+                text = {
+                    "Converts the #1# rightmost",
+                    "jokers to {C:dark_edition}Polychrome{}",
+                    "for this blind"
                 }
             },
             c_ReduxArcanum_bismuth_classic = {
@@ -67,7 +93,7 @@ return {
                     "Converts up to",
                     "{C:attention}#1#{} selected cards",
                     "to {C:dark_edition}Polychrome",
-                    "for one blind"
+                    "for this blind"
                 }
             },
             c_ReduxArcanum_cobalt = {
@@ -75,7 +101,7 @@ return {
                 text = {
                     "Upgrade currently",
                     "selected {C:attention}poker hand",
-                    "by {C:attention}#1#{} levels for one blind"
+                    "by {C:attention}#1#{} levels for this blind"
                 }
             },
             c_ReduxArcanum_arsenic = {
@@ -88,17 +114,25 @@ return {
             c_ReduxArcanum_antimony = {
                 name = 'Antimony',
                 text = {
+                    "Create a {C:dark_edition}Negative{} {C:eternal}0-cost{}",
+                    "{C:attention}copy{} of a random",
+                    "joker for this blind"
+                }
+            },
+            c_ReduxArcanum_antimony_plural = {
+                name = 'Antimony',
+                text = {
                     "Create #1# {C:dark_edition}Negative{} {C:eternal}0-cost{}",
-                    "{C:attention}#2#{} of a random",
-                    "joker for one blind"
+                    "{C:attention}copies{} of a random",
+                    "joker for this blind"
                 }
             },
             c_ReduxArcanum_antimony_classic = {
                 name = 'Antimony',
                 text = {
-                    "Create #1# {C:dark_edition}Negative{} {C:eternal}eternal{}",
-                    "{C:attention}#2#{} of a random",
-                    "joker for one blind"
+                    "Create a {C:dark_edition}Negative{} {C:eternal}eternal{}",
+                    "{C:attention}copy{} of a random",
+                    "joker for this blind"
                 }
             },
             c_ReduxArcanum_soap = {
@@ -115,7 +149,7 @@ return {
                     "Enhances up to",
                     "{C:attention}#1#{} selected cards",
                     "into {C:attention}Steel Cards",
-                    "for one blind"
+                    "for this blind"
                 }
             },
             c_ReduxArcanum_wax = {
@@ -133,7 +167,7 @@ return {
                     "Converts up to",
                     "{C:attention}#1#{} selected cards",
                     "into the most common",
-                    "{C:attention}suit for one blind",
+                    "{C:attention}suit for this blind",
                     "{C:inactive}Current suit: {V:1}#2#{}"
                 }
             },
@@ -143,7 +177,7 @@ return {
                     "Enhances up to",
                     "{C:attention}#1#{} selected cards",
                     "into {C:attention}Glass Cards",
-                    "for one blind",
+                    "for this blind",
                     "{C:inactive}Destroyed glass cards",
                     "{C:inactive}will not return"
                 }
@@ -161,7 +195,7 @@ return {
                 text = {
                     "{C:attention}#1#{} the value of",
                     "all {C:}gold cards{} currently",
-                    "in hand for one blind"
+                    "in hand for this blind"
                 }
             },
             c_ReduxArcanum_gold_classic = {
@@ -170,7 +204,7 @@ return {
                     "Enhances up to",
                     "{C:attention}#1#{} selected cards",
                     "into {C:attention}Gold Cards",
-                    "for one blind"
+                    "for this blind"
                 }
             },
             c_ReduxArcanum_silver = {
@@ -179,7 +213,7 @@ return {
                     "Enhances up to",
                     "{C:attention}#1#{} selected cards",
                     "into {C:attention}Lucky Cards",
-                    "for one blind"
+                    "for this blind"
                 }
             },
             c_ReduxArcanum_oil = {
@@ -217,7 +251,7 @@ return {
                     "{C:attention}+#1#{} hands, {C:attention}+#1#{} discards",
                     "{C:attention}Debuff{} the leftmost",
                     "non-debuffed joker",
-                    "for one blind"
+                    "for this blind"
                 }
             },
             c_ReduxArcanum_uranium = {
@@ -226,7 +260,7 @@ return {
                     "Copy the selected card's",
                     "{C:attention}enhancement{}, {C:attention}seal{}, and {C:attention}edition",
                     "to {C:attention}#1#{} random unenhanced cards",
-                    "in hand for one blind"
+                    "in hand for this blind"
                 }
             },
         },

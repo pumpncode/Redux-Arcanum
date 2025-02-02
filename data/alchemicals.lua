@@ -98,11 +98,12 @@ SMODS.Consumable { -- Ignis
     --         "for this blind"
     --     }
     -- },
-    loc_vars = function(self, info_queue, center)
-        local ret = alchemical_loc_vars(self, info_queue, center)
-        local extra = math.ceil(center.ability.extra * alchemical_get_x_mult(center))
-        return { vars = { ret.vars[1], (extra == 1 and "") or "s" } }
-    end,
+    loc_vars = alchemical_loc_vars,
+    -- loc_vars = function(self, info_queue, center)
+    --     local ret = alchemical_loc_vars(self, info_queue, center)
+    --     local extra = math.ceil(center.ability.extra * alchemical_get_x_mult(center))
+    --     return { vars = { ret.vars[1], (extra == 1 and "") or "s" } }
+    -- end,
     unlocked = true,
     discovered = false,
     config = { extra = 1 },
@@ -134,11 +135,12 @@ SMODS.Consumable { -- Aqua
     --         "for this blind"
     --     }
     -- },
-    loc_vars = function(self, info_queue, center)
-        local ret = alchemical_loc_vars(self, info_queue, center)
-        local extra = math.ceil(center.ability.extra * alchemical_get_x_mult(center))
-        return { vars = { ret.vars[1], (extra == 1 and "") or "s" } }
-    end,
+    loc_vars = alchemical_loc_vars,
+    -- loc_vars = function(self, info_queue, center)
+    --     local ret = alchemical_loc_vars(self, info_queue, center)
+    --     local extra = math.ceil(center.ability.extra * alchemical_get_x_mult(center))
+    --     return { vars = { ret.vars[1], (extra == 1 and "") or "s" } }
+    -- end,
     unlocked = true,
     discovered = false,
     config = { extra = 1 },
@@ -283,16 +285,7 @@ salt = { -- Salt
     --     name = 'Salt',
     --     text = { "Gain {C:attention}#1#{} tag#2#" }
     -- },
-    loc_vars = function(self, info_queue, center)
-        local ret = alchemical_loc_vars(self, info_queue, center)
-        local extra = math.ceil(center.ability.extra * alchemical_get_x_mult(center))
-        
-        if ReduxArcanumMod.config.new_content then
-            return { vars = { ret.vars[1], (extra == 1 and "") or "s" } }
-        else
-            return { key = self.key .. "_classic", vars = { ret.vars[1], (extra == 1 and "") or "s" } }
-        end
-    end,
+    loc_vars = alchemical_loc_vars,
     unlocked = true,
     discovered = false,
     config = { extra = 1, loss = 10 },
@@ -468,9 +461,9 @@ bismuth = { -- Bismuth
     loc_vars = function(self, info_queue, center)
         local ret = alchemical_loc_vars(self, info_queue, center)
         info_queue[#info_queue + 1] = G.P_CENTERS.e_polychrome
-        if not ReduxArcanumMod.config.new_content then
-            ret.key = self.key .. "_classic"
-        end
+        -- if not ReduxArcanumMod.config.new_content then
+        --     ret.key = self.key .. "_classic"
+        -- end
         return ret
     end,
     unlocked = true,
@@ -529,9 +522,10 @@ if ReduxArcanumMod.config.new_content then
     bismuth.config = { extra = 1 }
     bismuth.loc_vars = function(self, info_queue, center)
         local ret = alchemical_loc_vars(self, info_queue, center)
-        local extra = math.ceil(center.ability.extra * alchemical_get_x_mult(center))
+        -- local extra = math.ceil(center.ability.extra * alchemical_get_x_mult(center))
         info_queue[#info_queue + 1] = G.P_CENTERS.e_polychrome
-        return { vars = { (extra == 1 and "rightmost") or (ret.vars[1] .. " rightmost"), (extra == 1 and "joker") or "jokers" } }
+        return ret
+        -- return { vars = { (extra == 1 and "rightmost") or (ret.vars[1] .. " rightmost"), (extra == 1 and "joker") or "jokers" } }
     end
     bismuth.can_use = alchemical_can_use
     bismuth.use = alchemical_use(function(self, used_card)
@@ -709,15 +703,16 @@ SMODS.Consumable { -- Antimony
         --     "joker for one blind"
         -- }
     -- },
-    loc_vars = function(self, info_queue, center)
-        local ret = alchemical_loc_vars(self, info_queue, center)
-        local extra = math.ceil(center.ability.extra * alchemical_get_x_mult(center))
-        info_queue[#info_queue + 1] = G.P_CENTERS.e_negative
-        if not ReduxArcanumMod.config.new_content then
-            info_queue[#info_queue + 1] = G.P_CENTERS.eternal
-        end
-        return { vars = { (extra == 1 and "a") or ret.vars[1], (extra == 1 and "copy") or "copies" }, key = self.key .. (not ReduxArcanumMod.config.new_content and "_classic" or "") }
-    end,
+    loc_vars = alchemical_loc_vars,
+    -- loc_vars = function(self, info_queue, center)
+    --     local ret = alchemical_loc_vars(self, info_queue, center)
+    --     local extra = math.ceil(center.ability.extra * alchemical_get_x_mult(center))
+    --     info_queue[#info_queue + 1] = G.P_CENTERS.e_negative
+    --     if not ReduxArcanumMod.config.new_content then
+    --         info_queue[#info_queue + 1] = G.P_CENTERS.eternal
+    --     end
+    --     return { vars = { (extra == 1 and "a") or ret.vars[1], (extra == 1 and "copy") or "copies" }, key = self.key .. (not ReduxArcanumMod.config.new_content and "_classic" or "") }
+    -- end,
     unlocked = true,
     discovered = false,
     config = { extra = 1 },
@@ -1185,7 +1180,7 @@ gold = { -- Gold
     loc_vars = function(self, info_queue, center)
         local ret = alchemical_loc_vars(self, info_queue, center)
         info_queue[#info_queue + 1] = G.P_CENTERS.m_gold
-        ret.key = self.key .. "_classic"
+        -- ret.key = self.key .. "_classic"
         return ret
     end,
     unlocked = true,
@@ -1392,34 +1387,6 @@ SMODS.Consumable { -- Oil
                 return true
             end
         }))
-
-        --     -- This will keep oiled cards non-debuffed.
-        --     -- There is a "condition" trigger I found, but it doesn't seem to do anything special. Simply returning false has the same effect
-        --     G.E_MANAGER:add_event(Event({
-        --         blocking = false,
-        --         func = function()
-        --             if G.STATE == G.STATES.SELECTING_HAND or G.STATE == G.STATES.HAND_PLAYED then
-        --                 for k, card in ipairs(G.hand.cards) do
-        --                     if card.config.ra_oil then
-        --                         card:set_debuff(false)
-        --                         if card.facing == 'back' then
-        --                             card:flip()
-        --                         end
-        --                     end
-        --                 end
-        --                 return false
-        --             elseif G.STATE == G.STATES.ROUND_EVAL then
-        --                 for k, card in ipairs(G.playing_cards) do
-        --                     if card.config.ra_oil then
-        --                         card.config.ra_oil = false
-        --                     end
-        --                 end
-        --                 return true
-        --             else
-        --                 return false
-        --             end
-        --         end
-        --     }))
     end),
 
     end_blind = function(self, card)
