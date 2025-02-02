@@ -380,6 +380,15 @@ SMODS.Joker { -- Breaking Bozo
 -- This joker overlaps with Doodle in Bunco, so leave it out if Bunco is present
 if (not SMODS.Mods["Bunco"] or not SMODS.Mods["Bunco"].can_load) or
     ReduxArcanumMod.config.overlapping_cards ~= 1 then
+    count_alchemical_uses = function()
+        local alchemicals_count = 0
+        for k, v in pairs(G.GAME.consumeable_usage) do
+            if v.set == 'Alchemical' then alchemicals_count = alchemicals_count + v.count end
+        end
+
+        return alchemicals_count
+    end
+
     chain_reaction = { -- Chain Reaction
         key = "chain_reaction",
         -- loc_txt = {
@@ -410,7 +419,8 @@ if (not SMODS.Mods["Bunco"] or not SMODS.Mods["Bunco"].can_load) or
         effect = "",
         config = {
             extra = {
-                used = false
+                used = false,
+                count = 0
             }
         },
         atlas = "arcanum_joker_atlas",
@@ -430,8 +440,11 @@ if (not SMODS.Mods["Bunco"] or not SMODS.Mods["Bunco"].can_load) or
             -- end
 
             if context.using_consumeable and context.consumeable.ability.set == 'Alchemical' then
-                if not card.ability.extra.used then
-                    if (not ReduxArcanumMod.config.new_content) or (#G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit) then
+                if card.ability.extra.count == count_alchemical_uses() - 1 then
+                    if not context.blueprint then
+                        card.ability.extra.used = true
+                    end
+                    if (not ReduxArcanumMod.config.new_content) or ((#G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit) or (context.consumeable.edition and context.consumeable.edition.negative)) then
                         G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
                         G.E_MANAGER:add_event(Event({
                             func = function()
@@ -446,31 +459,22 @@ if (not SMODS.Mods["Bunco"] or not SMODS.Mods["Bunco"].can_load) or
                                 return true
                             end
                         }))
-                        card_eval_status_text(card, 'extra', nil, nil, nil,
-                            { message = localize("k_copied_ex"), colour = G.C.SECONDARY_SET.Alchemy })
-                    end
-                    if not context.blueprint then
-                        card.ability.extra.used = true
+                        return {
+                            message = localize('k_copied_ex')
+                        }
                     end
                     return
                 end
             end
 
-            -- if context.first_hand_drawn then
-            --     if card.ability.extra.used then
-            --         card.ability.extra.used = false
-            --         local eval = function() return not card.ability.extra.used end
-            --         juice_card_until(card, eval, true)
-            --     end
-            -- end
-
-            if context.first_hand_drawn then
+            if context.first_hand_drawn and not context.blueprint then
                 card.ability.extra.used = false
+                card.ability.extra.count = count_alchemical_uses()
                 local eval = function() return not card.ability.extra.used end
                 juice_card_until(card, eval, true)
             end
 
-            if context.end_of_round then
+            if context.end_of_round and not context.blueprint then
                 card.ability.extra.used = true
             end
         end
