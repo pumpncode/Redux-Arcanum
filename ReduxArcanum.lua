@@ -106,7 +106,7 @@ end
 --     ALCHEMICAL INTERFACE
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
-NFS.load(ReduxArcanumMod.path .. "/api/alchemicalAPI.lua")()
+SMODS.load_file("/api/alchemicalAPI.lua")()
 
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 --      ALCHEMICAL UTILS
@@ -189,25 +189,25 @@ end
 --     ALCHEMICAL CARDS
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
-NFS.load(ReduxArcanumMod.path .. "/data/alchemicals.lua")()
+SMODS.load_file("/data/alchemicals.lua")()
 
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 --      ALCHEMICAL BOOSTER
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
-NFS.load(ReduxArcanumMod.path .. "/data/boosters.lua")()
+SMODS.load_file("/data/boosters.lua")()
 
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 --            TAGS
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
-NFS.load(ReduxArcanumMod.path .. "/data/tags.lua")()
+SMODS.load_file("/data/tags.lua")()
 
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 --            JOKERS
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
-NFS.load(ReduxArcanumMod.path .. "/data/jokers.lua")()
+SMODS.load_file("/data/jokers.lua")()
 
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 --          OVERRIDES
@@ -388,28 +388,28 @@ end
 
 
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
---            TAROTS
+--     TAROTS (and spectral)
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
-NFS.load(ReduxArcanumMod.path .. "/data/tarots.lua")()
+SMODS.load_file("/data/tarots.lua")()
 
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 --           VOUCHERS
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
-NFS.load(ReduxArcanumMod.path .. "/data/vouchers.lua")()
+SMODS.load_file("/data/vouchers.lua")()
 
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 --     DECKS AND CARD SLEEVES
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
-NFS.load(ReduxArcanumMod.path .. "/data/decks.lua")()
+SMODS.load_file("/data/decks.lua")()
 
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 --          BOSS BLINDS
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
-NFS.load(ReduxArcanumMod.path .. "/data/blind.lua")()
+SMODS.load_file("/data/blind.lua")()
 
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 --          EDITIONS
