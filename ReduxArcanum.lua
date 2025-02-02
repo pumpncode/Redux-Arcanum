@@ -210,6 +210,14 @@ SMODS.load_file("/data/tags.lua")()
 SMODS.load_file("/data/jokers.lua")()
 
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+--     JOKER DISPLAY COMPAT
+-- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+if JokerDisplay then
+    SMODS.load_file("/data/display_definitions.lua")()
+end
+
+-- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 --          OVERRIDES
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
