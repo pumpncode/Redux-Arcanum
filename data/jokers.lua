@@ -32,17 +32,16 @@ studious_joker = { -- Studious Joker
     calculate = function(self, card, context)
         if context.selling_self then -- and not context.blueprint then
             add_random_alchemical(card)
-            card_eval_status_text(card, 'extra', nil, nil, nil,
-                { message = localize('p_plus_alchemical'), colour = G.C.SECONDARY_SET.Alchemy })
             return {
-                card = card
+                card = card,
+                message = localize('p_plus_alchemical'),
+                colour = G.C.SECONDARY_SET.Alchemy
             }
         end
 
         if context.joker_main then
             return {
-                message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.mult } },
-                mult_mod = card.ability.mult
+                mult = card.ability.mult
             }
         end
     end
@@ -99,7 +98,8 @@ SMODS.Joker { -- Bottled Buffoon
                     add_random_alchemical(card)
                     card.ability.loyalty_remaining = card.ability.extra.every
                     return {
-                        message = localize('p_plus_alchemical')
+                        message = localize('p_plus_alchemical'),
+                        colour = G.C.SECONDARY_SET.Alchemy
                     }
                 end
             else
@@ -110,7 +110,8 @@ SMODS.Joker { -- Bottled Buffoon
                     add_random_alchemical(card)
                     card.ability.loyalty_remaining = card.ability.extra.every
                     return {
-                        message = localize('p_plus_alchemical')
+                        message = localize('p_plus_alchemical'),
+                        colour = G.C.SECONDARY_SET.Alchemy
                     }
                 end
             end
@@ -179,12 +180,9 @@ SMODS.Joker { -- Mutated Joker
             if card.ability.extra.total_chips ~= expected_total_chips then
                 card.ability.extra.total_chips = expected_total_chips
 
-                G.E_MANAGER:add_event(Event({
-                    func = function()
-                        card_eval_status_text(card, 'extra', nil, nil, nil,
-                            { message = localize { type = 'variable', key = 'a_chips', vars = { expected_total_chips } } }); return true
-                    end
-                }))
+                return {
+                    message = localize { type = 'variable', key = 'a_chips', vars = { expected_total_chips } }
+                }
             end
             return
         end
@@ -236,13 +234,9 @@ SMODS.Joker { -- Essence of Comedy
     calculate = function(self, card, context)
         if context.using_consumeable and context.consumeable.ability.set == 'Alchemical' and not context.blueprint then
             card.ability.x_mult = card.ability.x_mult + card.ability.extra
-            G.E_MANAGER:add_event(Event({
-                func = function()
-                    card_eval_status_text(card, 'extra', nil, nil, nil,
-                        { message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.x_mult } } }); return true
-                end
-            }))
-            return
+            return {
+                message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.x_mult } }
+            }
         end
     end
 }
@@ -287,8 +281,10 @@ SMODS.Joker { -- Shock Humor
                 context.other_card.config.center == G.P_CENTERS.m_stone then
                 if pseudorandom('shock_humor') < G.GAME.probabilities.normal / card.ability.extra.odds then
                     add_random_alchemical(card)
-                    card_eval_status_text(card, 'extra', nil, nil, nil,
-                        { message = localize('p_plus_alchemical'), colour = G.C.SECONDARY_SET.Alchemy })
+                    return {
+                        message = localize('p_plus_alchemical'),
+                        colour = G.C.SECONDARY_SET.Alchemy
+                    }
                 end
             end
         end
@@ -344,20 +340,22 @@ SMODS.Joker { -- Breaking Bozo
 
     calculate = function(self, card, context)
         if context.using_consumeable and context.consumeable.ability.set == 'Alchemical' then
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.1,
-                func = function()
-                    local choice = math.random(1, 3)
-                    if choice == 1 then
-                        G.FUNCS.draw_from_deck_to_hand(2)
-                        card_eval_status_text(card, 'extra', nil, nil, nil,
-                            { message = localize('p_alchemy_plus_card'), colour = G.C.SECONDARY_SET.Alchemy })
-                    elseif choice == 2 then
-                        ease_dollars(5, true)
-                        card_eval_status_text(card, 'extra', nil, nil, nil,
-                            { message = localize('p_alchemy_plus_money'), colour = G.C.SECONDARY_SET.Alchemy })
-                    else
+            local choice = math.random(1, 3)
+            if choice == 1 then
+                for i=1, 2 do --draw cards from deckL
+                    draw_card(G.deck,G.hand, i*100/2,'up', true)
+                end
+                return {
+                    message = localize('p_alchemy_plus_card'),
+                    colour = G.C.SECONDARY_SET.Alchemy
+                }
+            elseif choice == 2 then
+                return {
+                    dollars = 5
+                }
+            else
+                G.E_MANAGER:add_event(Event({
+                    func = function()
                         G.GAME.blind.chips = math.floor(G.GAME.blind.chips * 0.90)
                         G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
 
@@ -367,12 +365,14 @@ SMODS.Joker { -- Breaking Bozo
                         chips_UI:juice_up()
 
                         if not silent then play_sound('chips2') end
-                        card_eval_status_text(card, 'extra', nil, nil, nil,
-                            { message = localize('p_alchemy_reduce_blind'), colour = G.C.SECONDARY_SET.Alchemy })
+                        return true
                     end
-                    return true
-                end
-            }))
+                }))
+                return {
+                    message = localize('p_alchemy_reduce_blind'),
+                    colour = G.C.SECONDARY_SET.Alchemy
+                }
+            end
         end
     end
 }
@@ -435,10 +435,6 @@ if (not SMODS.Mods["Bunco"] or not SMODS.Mods["Bunco"].can_load) or
         end,
 
         calculate = function(self, card, context)
-            -- if not card.ability.extra.used then
-            --     card.ability.extra.used = false
-            -- end
-
             if context.using_consumeable and context.consumeable.ability.set == 'Alchemical' then
                 if card.ability.extra.count == count_alchemical_uses() - 1 then
                     if not context.blueprint then
