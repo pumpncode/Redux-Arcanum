@@ -1027,6 +1027,7 @@ SMODS.Consumable { -- Borax
                     card:change_suit(top_suit)
                     table.insert(G.deck.config.ra_borax, { card_id = card.unique_val, prev_suit = prev_suit })
                 end
+                G.hand:parse_highlighted() -- Updates poker hand if turned into a flush
                 return true
             end
         }))
