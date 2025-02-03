@@ -577,8 +577,7 @@ let shop_items = [
   {
     name: "Cauldron",
     text: [
-      "{C:dark_edition}Negative{} {C:alchemical}Alchemical{} cards",
-      "appear much more often"
+      "{C:dark_edition}Negative{} {C:alchemical}Alchemical{} cards appear much more often"
     ],
     image_url: "img/ca_others_atlas.png",
     image_pos: {
