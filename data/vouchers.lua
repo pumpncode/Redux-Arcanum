@@ -135,3 +135,18 @@ SMODS.Voucher {
     pos = { x = 1, y = 3 },
     atlas = 'arcanum_others'
 }
+
+SMODS.Voucher:take_ownership('observatory', {
+    calculate = function(self, card, context)
+        if 
+            context.other_consumeable and
+            not context.other_consumeable.debuff and
+            context.other_consumeable.ability.set == 'Planet' and
+            context.other_consumeable.ability.consumeable.hand_type == context.scoring_name
+        then
+            return {
+                x_mult = card.ability.extra
+            }
+        end
+    end,
+}, false)
