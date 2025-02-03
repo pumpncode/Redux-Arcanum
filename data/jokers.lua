@@ -416,7 +416,7 @@ if (not SMODS.Mods["Bunco"] or not SMODS.Mods["Bunco"].can_load) or
         perishable_compat = true,
         eternal_compat = true,
         rarity = 2,
-        cost = 5,
+        cost = 8,
         effect = "",
         config = {
             extra = {
