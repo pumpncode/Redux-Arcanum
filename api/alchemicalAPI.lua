@@ -23,6 +23,7 @@ SMODS.ConsumableType {
     --         }
     --     }
     -- },
+    default = "c_ReduxArcanum_ignis",
     collection_rows = { 4, 4 },
     shop_rate = 0
 }
