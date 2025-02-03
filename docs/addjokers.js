@@ -82,7 +82,7 @@ let alchemicals = [
     text: [
       "Reduce hands to {C:attention}1 Gain {C:attention}$#1#{} for each hand removed"
     ],
-    text_vars: [1],
+    text_vars: [4],
     image_url: "img/alchemical_atlas.png",
     image_pos: {
       x: 0,
@@ -169,7 +169,7 @@ let alchemicals = [
     text: [
       "Enhances up to {C:attention}#1#{} selected cards into {C:attention}Steel Cards for one blind"
     ],
-    text_vars: [4],
+    text_vars: [3],
     image_url: "img/alchemical_atlas.png",
     image_pos: {
       x: 1,
@@ -183,7 +183,7 @@ let alchemicals = [
       "Create {C:attention}#1#{} temporary copies of selected card for one blind",
       "{C:inactive}(Does not trigger jokers){}"
     ],
-    text_vars: [2],
+    text_vars: [1],
     image_url: "img/alchemical_atlas.png",
     image_pos: {
       x: 2,
@@ -196,7 +196,7 @@ let alchemicals = [
     text: [
       "Converts up to {C:attention}#1#{} selected cards into most common {C:attention}suit for one blind"
     ],
-    text_vars: [4],
+    text_vars: [3],
     image_url: "img/alchemical_atlas.png",
     image_pos: {
       x: 3,
@@ -248,7 +248,7 @@ let alchemicals = [
     text: [
       "Enhances up to {C:attention}#1#{} selected cards into {C:attention}Lucky Cards for one blind"
     ],
-    text_vars: [4],
+    text_vars: [3],
     image_url: "img/alchemical_atlas.png",
     image_pos: {
       x: 1,
