@@ -839,7 +839,7 @@ SMODS.Consumable { -- Soap
     end),
 }
 
-SMODS.Consumable { -- Manganese
+manganese = { -- Manganese
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "manganese",
@@ -905,8 +905,12 @@ SMODS.Consumable { -- Manganese
         return true
     end,
 }
+if ReduxArcanumMod.config.new_content then
+    manganese.config = { extra = 3 }
+end
+SMODS.Consumable(manganese)
 
-SMODS.Consumable { -- Wax
+wax = { -- Wax
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "wax",
@@ -972,8 +976,12 @@ SMODS.Consumable { -- Wax
         return true
     end,
 }
+if ReduxArcanumMod.config.new_content then
+    wax.config = { extra = 1 }
+end
+SMODS.Consumable(wax)
 
-SMODS.Consumable { -- Borax
+borax = { -- Borax
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "borax",
@@ -1043,6 +1051,10 @@ SMODS.Consumable { -- Borax
         return true
     end,
 }
+if ReduxArcanumMod.config.new_content then
+    borax.config = { extra = 3 }
+end
+SMODS.Consumable(borax)
 
 glass = { -- Glass
     set = "Alchemical",
@@ -1238,6 +1250,7 @@ if ReduxArcanumMod.config.new_content then
     --     "in hand for one blind"
     -- }
     gold.config = {extra = 2}
+    gold.enhancement_gate = 'm_gold'
     gold.loc_vars = function(self, info_queue, center)
         local ret = alchemical_loc_vars(self, info_queue, center)
         local extra = math.ceil(center.ability.extra * alchemical_get_x_mult(center))
@@ -1252,8 +1265,9 @@ if ReduxArcanumMod.config.new_content then
             delay = 0.1,
             func = function()
                 play_sound('tarot1')
-                for k, card in ipairs(G.hand.cards) do
-                    if card.config.center == G.P_CENTERS.m_gold then
+                for _, card in ipairs(G.hand.cards) do
+                    local card_enhancement = SMODS.get_enhancements(card)
+                    if card_enhancement["m_gold"] then
                         card:juice_up(1, 0.5)
                         table.insert(G.deck.config.ra_gold, { card_id = card.unique_val, original_value = card.ability.h_dollars })
                         card.ability.h_dollars = card.ability.h_dollars * used_card.ability.extra
@@ -1279,7 +1293,7 @@ if ReduxArcanumMod.config.new_content then
 end
 SMODS.Consumable(gold)
 
-SMODS.Consumable { -- Silver
+silver = { -- Silver
     set = "Alchemical",
     atlas = "arcanum_alchemical",
     key = "silver",
@@ -1345,6 +1359,10 @@ SMODS.Consumable { -- Silver
         return true
     end,
 }
+if ReduxArcanumMod.config.new_content then
+    silver.config = { extra = 3 }
+end
+SMODS.Consumable(silver)
 
 SMODS.Consumable { -- Oil
     set = "Alchemical",

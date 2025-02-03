@@ -156,8 +156,17 @@ return {
                 name = 'Wax',
                 text = {
                     "Create {C:attention}#1#{} temporary",
+                    "copy of the selected",
+                    "card for this blind",
+                    "{C:inactive}(Does not trigger jokers){}"
+                }
+            },
+            c_ReduxArcanum_wax_plural = {
+                name = 'Wax',
+                text = {
+                    "Create {C:attention}#1#{} temporary",
                     "copies of the selected",
-                    "card for one blind",
+                    "card for this blind",
                     "{C:inactive}(Does not trigger jokers){}"
                 }
             },

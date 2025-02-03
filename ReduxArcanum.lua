@@ -223,22 +223,6 @@ end
 
 SMODS.load_file("/data/overrides.lua")()
 
--- Override for Steammodded dependencies
--- Ensures objects dependent on 'CodexArcanum' will also load with 'ReduxArcanum'
-
--- SMODS.GameObject.check_dependencies_ra_ref = SMODS.GameObject.check_dependencies
--- function SMODS.GameObject:check_dependencies()
---     if self.dependencies then
---             if type(self.dependencies) == 'string' then self.dependencies = { self.dependencies } end
---             for i, v in ipairs(self.dependencies) do
---                 if v == "CodexArcanum" then self.dependencies[i] = "ReduxArcanum"
---             end
---         end
---     end
---     return self:check_dependencies_ra_ref()
--- end
-
-
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 --     TAROTS (and spectral)
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
