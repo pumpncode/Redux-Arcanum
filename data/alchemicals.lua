@@ -224,8 +224,8 @@ SMODS.Consumable { -- Aero
             trigger = 'after',
             delay = 0.1,
             func = function()
-                for i=1, 4 do --draw cards from deckL
-                    draw_card(G.deck,G.hand, i*100/2,'up', true)
+                for i = 1, card.ability.extra do --draw cards from deckL
+                    draw_card(G.deck, G.hand, i * 100 / 2, 'up', true)
                 end
                 return true
             end
@@ -1162,7 +1162,7 @@ SMODS.Consumable { -- Magnet
             delay = 0.1,
             func = function()
                 local cur_rank = G.hand.highlighted[1].base.id
-                local count = 2
+                local count = used_card.ability.extra
                 for _, v in pairs(G.deck.cards) do
                     if v.base.id == cur_rank and count > 0 then
                         delay(0.05)
