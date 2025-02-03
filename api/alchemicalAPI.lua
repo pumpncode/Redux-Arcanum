@@ -100,7 +100,7 @@ end
 function ra_reset_played_alchemicals()
     if G.deck.config.played_alchemicals then
         for _, alchemical in ipairs(G.deck.config.played_alchemicals) do
-            sendDebugMessage(alchemical[1].key, "ReduxArcanumDebugLogger")
+            -- sendDebugMessage(alchemical[1].key, "ReduxArcanumDebugLogger")
             if alchemical[1].end_blind then
                 alchemical[1].end_blind(alchemical[1], alchemical[2])
             end

@@ -130,8 +130,6 @@ philosopher_stone = {
     can_use = alchemical_can_use,
 
     use = function(self, card)
-        sendDebugMessage("Philod", "ReduxArcanumDebugLogger")
-
         G.deck.config.played_alchemicals = G.deck.config.played_alchemicals or {}
         table.insert(G.deck.config.played_alchemicals, {self, card})
         G.deck.config.ra_philo_stone = G.deck.config.ra_philo_stone or 0

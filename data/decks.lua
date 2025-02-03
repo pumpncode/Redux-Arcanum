@@ -108,11 +108,9 @@ if next(SMODS.find_mod("CardSleeves")) and CardSleeves then
         loc_vars = function(self)
             local key
             if self.get_current_deck_key() ~= "b_ReduxArcanum_herbalist" then
-                sendDebugMessage("Setting mortar and pestle", "ReduxArcanumDebugLogger")
                 key = self.key
                 self.config = { vouchers = { "v_ReduxArcanum_mortar_and_pestle" } }
             else
-                sendDebugMessage("Setting cauldron", "ReduxArcanumDebugLogger")
                 key = self.key .. "_alt"
                 self.config = { vouchers = { "v_ReduxArcanum_cauldron" } }
             end
@@ -142,10 +140,8 @@ if next(SMODS.find_mod("CardSleeves")) and CardSleeves then
             local key
             local vars = {}
             if self.get_current_deck_key() ~= "b_ReduxArcanum_philosopher" then
-                sendDebugMessage("Setting merchant voucher", "ReduxArcanumDebugLogger")
                 self.config = { vouchers = { "v_ReduxArcanum_alchemical_merchant" }, alchemical_more_options = 0 }
             else
-                sendDebugMessage("Setting tycoon voucher", "ReduxArcanumDebugLogger")
                 key = self.key .. "_alt"
                 self.config = { vouchers = { "v_ReduxArcanum_alchemical_tycoon" }, alchemical_more_options = 2 }
                 vars[#vars + 1] = self.config.alchemical_more_options

@@ -3,7 +3,7 @@
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
 function check_alchemical_prev_enhancement(given_card)
-    sendDebugMessage(given_card.config.center.name, "ReduxArcanumDebugLogger")
+    -- sendDebugMessage(given_card.config.center.name, "ReduxArcanumDebugLogger")
     if G.deck.config.ra_manganese then
         for _, manganesed_card in ipairs(G.deck.config.ra_manganese) do
             if given_card.unique_val == manganesed_card.card_id and given_card.config.center == G.P_CENTERS.m_steel then
@@ -272,7 +272,7 @@ SMODS.Consumable { -- Quicksilver
     end,
 
     end_blind = function(self, card)
-        sendDebugMessage("Resetting quicksilver", "ReduxArcanumDebugLogger")
+        -- sendDebugMessage("Resetting quicksilver", "ReduxArcanumDebugLogger")
         G.hand:change_size(-card.ability.extra)
         if G.deck.config.quicksilver then
             G.deck.config.quicksilver = G.deck.config.quicksilver - card.ability.extra
@@ -1434,7 +1434,7 @@ SMODS.Consumable { -- Oil
     end,
 
     end_blind = function(self, card)
-        sendDebugMessage("Resetting Oil", "ReduxArcanumDebugLogger")
+        -- sendDebugMessage("Resetting Oil", "ReduxArcanumDebugLogger")
         for k, card in ipairs(G.playing_cards) do
             if card.ability and card.ability.ra_oil then
                 card.ability.debuff_sources[card.ability.ra_oil] = false -- steammodded thing
@@ -1496,14 +1496,14 @@ acid = { -- Acid
 
                         -- Bunco linked card compat
                         if ReduxArcanumMod.config.bunco_linked_acid and v.ability.group and next(SMODS.find_mod("Bunco")) then
-                            sendDebugMessage(tprint(bunco_linked_sets_removed), "ReduxArcanumDebugLogger")
+                            -- sendDebugMessage(tprint(bunco_linked_sets_removed), "ReduxArcanumDebugLogger")
 
                             local group_id = v.ability.group.id
 
                             for linked_k, linked_v in ipairs(G.playing_cards) do
                                 -- Check so cards are not added to table twice
                                 if not bunco_linked_sets_removed[group_id] and not acid_aplicable(linked_v) then
-                                    sendDebugMessage("removinglinks" .. group_id, "ReduxArcanumDebugLogger")
+                                    -- sendDebugMessage("removinglinks" .. group_id, "ReduxArcanumDebugLogger")
                                     if linked_v.ability.group and linked_v.ability.group.id == group_id then
                                         table.insert(G.deck.config.ra_acid, linked_v)
 
