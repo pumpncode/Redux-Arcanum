@@ -12,8 +12,8 @@ studious_joker = { -- Studious Joker
     --         "{C:alchemical} Alchemical{} card"
     --     }
     -- },
-    loc_vars = function(self, info_queue, center)
-        return { vars = { center.ability.mult } }
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.mult } }
     end,
     unlocked = true,
     discovered = false,
@@ -61,17 +61,17 @@ SMODS.Joker { -- Bottled Buffoon
     --         "{C:inactive}#2#"
     --     }
     -- },
-    loc_vars = function(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
         local loyalty
-        if center.ability.loyalty_remaining == 0 then
+        if card.ability.loyalty_remaining == 0 then
             loyalty = 'loyalty_active'
         else
             loyalty = 'loyalty_inactive'
-            if not center.ability.loyalty_remaining then
-                center.ability.loyalty_remaining = 3
+            if not card.ability.loyalty_remaining then
+                card.ability.loyalty_remaining = 3
             end
         end
-        return { vars = { center.ability.extra.every + 1, localize { type = 'variable', key = loyalty, vars = { center.ability.loyalty_remaining } } } }
+        return { vars = { card.ability.extra.every + 1, localize { type = 'variable', key = loyalty, vars = { card.ability.loyalty_remaining } } } }
     end,
     unlocked = true,
     discovered = false,
@@ -131,15 +131,15 @@ SMODS.Joker { -- Mutated Joker
     --         "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)"
     --     }
     -- },
-    loc_vars = function(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
         local alchemical_tally = 1
         for k, v in pairs(G.GAME.consumeable_usage) do
             if v.set == 'Alchemical' then alchemical_tally = alchemical_tally + 1 end
         end
 
-        local expected_total_chips = alchemical_tally * center.ability.extra.chips
+        local expected_total_chips = alchemical_tally * card.ability.extra.chips
 
-        return { vars = { center.ability.extra.chips, expected_total_chips } }
+        return { vars = { card.ability.extra.chips, expected_total_chips } }
     end,
     unlocked = true,
     discovered = false,
@@ -214,8 +214,8 @@ SMODS.Joker { -- Essence of Comedy
     --         "{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)"
     --     }
     -- },
-    loc_vars = function(self, info_queue, center)
-        return { vars = { center.ability.extra, center.ability.x_mult } }
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra, card.ability.x_mult } }
     end,
     unlocked = true,
     discovered = false,
@@ -253,14 +253,14 @@ SMODS.Joker { -- Shock Humor
     --         "{C:attention}Steel{} or {C:attention}Stone{} card"
     --     }
     -- },
-    loc_vars = function(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
         local first_var
         if G.GAME and G.GAME.probabilities.normal then
             first_var = G.GAME.probabilities.normal
         else
             first_var = 1
         end
-        return { vars = { '' .. (first_var), center.ability.extra.odds } }
+        return { vars = { '' .. (first_var), card.ability.extra.odds } }
     end,
     unlocked = true,
     discovered = false,
@@ -503,13 +503,13 @@ SMODS.Joker { -- Catalyst Joker
     --         "{E:1,C:attention}Cards{} at once"
     --     }
     -- },
-    loc_vars = function(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
         local current_value = 1
         -- Check to prevent doing calculations on nill variables
         if G.consumeables then
-            current_value = center.ability.extra.slots + center.ability.extra.bonus * (#G.consumeables.cards or 0)
+            current_value = card.ability.extra.slots + card.ability.extra.bonus * (#G.consumeables.cards or 0)
         end
-        return { vars = { center.ability.extra.bonus, current_value } }
+        return { vars = { card.ability.extra.bonus, current_value } }
     end,
     locked_loc_vars = function(self, info_queue)
         return { vars = { self.unlock_condition.extra } }

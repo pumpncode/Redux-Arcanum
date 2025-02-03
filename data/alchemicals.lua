@@ -98,8 +98,11 @@ SMODS.Consumable { -- Ignis
     --         "for this blind"
     --     }
     -- },
-    loc_vars = alchemical_loc_vars,
-    -- loc_vars = function(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
+        local vars = { get_modified_extra_value(card) }
+        return { vars = vars }
+    end,
+    -- loc_vars = function(self, info_queue, card)
     --     local ret = alchemical_loc_vars(self, info_queue, center)
     --     local extra = math.ceil(center.ability.extra * alchemical_get_x_mult(center))
     --     return { vars = { ret.vars[1], (extra == 1 and "") or "s" } }
@@ -110,9 +113,7 @@ SMODS.Consumable { -- Ignis
     cost = 3,
     pos = { x = 0, y = 0 },
 
-    can_use = alchemical_can_use,
-
-    use = alchemical_use(function(self, card)
+    use = function(self, card)
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.1,
@@ -121,7 +122,7 @@ SMODS.Consumable { -- Ignis
                 return true
             end
         }))
-    end),
+    end,
 }
 
 SMODS.Consumable { -- Aqua
@@ -135,8 +136,11 @@ SMODS.Consumable { -- Aqua
     --         "for this blind"
     --     }
     -- },
-    loc_vars = alchemical_loc_vars,
-    -- loc_vars = function(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
+        local vars = { get_modified_extra_value(card) }
+        return { vars = vars }
+    end,
+    -- loc_vars = function(self, info_queue, card)
     --     local ret = alchemical_loc_vars(self, info_queue, center)
     --     local extra = math.ceil(center.ability.extra * alchemical_get_x_mult(center))
     --     return { vars = { ret.vars[1], (extra == 1 and "") or "s" } }
@@ -147,9 +151,7 @@ SMODS.Consumable { -- Aqua
     cost = 3,
     pos = { x = 1, y = 0 },
 
-    can_use = alchemical_can_use,
-
-    use = alchemical_use(function(self, card)
+    use = function(self, card)
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.1,
@@ -158,7 +160,7 @@ SMODS.Consumable { -- Aqua
                 return true
             end
         }))
-    end),
+    end,
 }
 
 terra = { -- Terra
@@ -169,16 +171,17 @@ terra = { -- Terra
     --     name = 'Terra',
     --     text = { "Reduce blind by {C:attention}#1#%{}" }
     -- },
-    loc_vars = alchemical_loc_vars,
+    loc_vars = function(self, info_queue, card)
+        local vars = { get_modified_extra_value(card) }
+        return { vars = vars }
+    end,
     unlocked = true,
     discovered = false,
     config = { extra = 15 },
     cost = 3,
     pos = { x = 2, y = 0 },
 
-    can_use = alchemical_can_use,
-
-    use = alchemical_use(function(self, card)
+    use = function(self, card)
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.2,
@@ -195,7 +198,7 @@ terra = { -- Terra
                 return true
             end
         }))
-    end),
+    end,
 }
 if ReduxArcanumMod.config.new_content then
     terra.config.extra = 20
@@ -210,16 +213,17 @@ SMODS.Consumable { -- Aero
     --     name = 'Aero',
     --     text = { "Draw {C:attention}#1#{} cards" }
     -- },
-    loc_vars = alchemical_loc_vars,
+    loc_vars = function(self, info_queue, card)
+        local vars = { get_modified_extra_value(card) }
+        return { vars = vars }
+    end,
     unlocked = true,
     discovered = false,
     config = { extra = 4 },
     cost = 3,
     pos = { x = 3, y = 0 },
 
-    can_use = alchemical_can_use,
-
-    use = alchemical_use(function(self, card)
+    use = function(self, card)
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.1,
@@ -230,7 +234,7 @@ SMODS.Consumable { -- Aero
                 return true
             end
         }))
-    end),
+    end,
 }
 
 SMODS.Consumable { -- Quicksilver
@@ -244,16 +248,17 @@ SMODS.Consumable { -- Quicksilver
     --         "for this blind"
     --     }
     -- },
-    loc_vars = alchemical_loc_vars,
+    loc_vars = function(self, info_queue, card)
+        local vars = { get_modified_extra_value(card) }
+        return { vars = vars }
+    end,
     unlocked = true,
     discovered = false,
     config = { extra = 2 },
     cost = 3,
     pos = { x = 4, y = 0 },
 
-    can_use = alchemical_can_use,
-
-    use = alchemical_use(function(self, card)
+    use = function(self, card)
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.1,
@@ -264,7 +269,7 @@ SMODS.Consumable { -- Quicksilver
                 return true
             end
         }))
-    end),
+    end,
 
     end_blind = function(self, card)
         sendDebugMessage("Resetting quicksilver", "ReduxArcanumDebugLogger")
@@ -285,16 +290,17 @@ salt = { -- Salt
     --     name = 'Salt',
     --     text = { "Gain {C:attention}#1#{} tag#2#" }
     -- },
-    loc_vars = alchemical_loc_vars,
+    loc_vars = function(self, info_queue, card)
+        local vars = { get_modified_extra_value(card) }
+        return { vars = vars }
+    end,
     unlocked = true,
     discovered = false,
     config = { extra = 1, loss = 10 },
     cost = 3,
     pos = { x = 5, y = 0 },
 
-    can_use = alchemical_can_use,
-
-    use = alchemical_use(function(self, card)
+    use = function(self, card)
         if ReduxArcanumMod.config.new_content then
             G.E_MANAGER:add_event(Event({
                 trigger = 'after',
@@ -359,7 +365,7 @@ salt = { -- Salt
                 return true
             end
         }))
-    end),
+    end,
 }
 SMODS.Consumable(salt)
 
@@ -375,16 +381,17 @@ SMODS.Consumable { -- Sulfur
     --         "hand removed"
     --     }
     -- },
-    loc_vars = alchemical_loc_vars,
+    loc_vars = function(self, info_queue, card)
+        local vars = { get_modified_extra_value(card) }
+        return { vars = vars }
+    end,
     unlocked = true,
     discovered = false,
     config = { extra = 4 },
     cost = 3,
     pos = { x = 0, y = 1 },
 
-    can_use = alchemical_can_use,
-
-    use = alchemical_use(function(self, card)
+    use = function(self, card)
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.5,
@@ -397,7 +404,7 @@ SMODS.Consumable { -- Sulfur
                 return true
             end
         }))
-    end),
+    end,
 }
 
 SMODS.Consumable { -- Phosphorus
@@ -411,16 +418,17 @@ SMODS.Consumable { -- Phosphorus
     --         "cards to deck"
     --     }
     -- },
-    loc_vars = alchemical_loc_vars,
+    loc_vars = function(self, info_queue, card)
+        local vars = { get_modified_extra_value(card) }
+        return { vars = vars }
+    end,
     unlocked = true,
     discovered = false,
-    config = { },
+    config = {},
     cost = 3,
     pos = { x = 1, y = 1 },
 
-    can_use = alchemical_can_use,
-
-    use = alchemical_use(function(self, card)
+    use = function(self, card)
         local take_cards_from_discard = function(count)
             G.E_MANAGER:add_event(Event({
                 trigger = 'immediate',
@@ -442,7 +450,7 @@ SMODS.Consumable { -- Phosphorus
                 return true
             end
         }))
-    end),
+    end,
 }
 
 bismuth = { -- Bismuth
@@ -458,13 +466,13 @@ bismuth = { -- Bismuth
     --         "for one blind"
     --     }
     -- },
-    loc_vars = function(self, info_queue, center)
-        local ret = alchemical_loc_vars(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
+        local vars = { get_modified_extra_value(card) }
         info_queue[#info_queue + 1] = G.P_CENTERS.e_polychrome
         -- if not ReduxArcanumMod.config.new_content then
         --     ret.key = self.key .. "_classic"
         -- end
-        return ret
+        return { vars = vars }
     end,
     unlocked = true,
     discovered = false,
@@ -480,7 +488,7 @@ bismuth = { -- Bismuth
         end
     end,
 
-    use = alchemical_use(function(self, used_card)
+    use = function(self, used_card)
         G.deck.config.ra_bismuth = G.deck.config.ra_bismuth or {}
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
@@ -497,7 +505,7 @@ bismuth = { -- Bismuth
                 return true
             end
         }))
-    end),
+    end,
 
     end_blind = function(self, card)
         if G.deck.config.ra_bismuth then
@@ -520,15 +528,15 @@ if ReduxArcanumMod.config.new_content then
     --     "for one blind"
     -- }
     bismuth.config = { extra = 1 }
-    bismuth.loc_vars = function(self, info_queue, center)
-        local ret = alchemical_loc_vars(self, info_queue, center)
+    bismuth.loc_vars = function(self, info_queue, card)
+        local vars = { get_modified_extra_value(card) }
         -- local extra = math.ceil(center.ability.extra * alchemical_get_x_mult(center))
         info_queue[#info_queue + 1] = G.P_CENTERS.e_polychrome
-        return ret
+        return { vars = vars }
         -- return { vars = { (extra == 1 and "rightmost") or (ret.vars[1] .. " rightmost"), (extra == 1 and "joker") or "jokers" } }
     end
     bismuth.can_use = alchemical_can_use
-    bismuth.use = alchemical_use(function(self, used_card)
+    bismuth.use = function(self, used_card)
         G.deck.config.ra_bismuth = G.deck.config.ra_bismuth or {}
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
@@ -543,13 +551,14 @@ if ReduxArcanumMod.config.new_content then
                     right_joker:set_edition({ polychrome = true }, true, true)
                     right_joker:juice_up(0.3, 0.5)
                     used_card:juice_up(0.3, 0.5)
-                    table.insert(G.deck.config.ra_bismuth, { card_id = right_joker.unique_val, prev_edition = prev_edition })
+                    table.insert(G.deck.config.ra_bismuth,
+                        { card_id = right_joker.unique_val, prev_edition = prev_edition })
                 end
 
                 return true
             end
         }))
-    end)
+    end
     bismuth.end_blind = function(self, card)
         if G.deck.config.ra_bismuth then
             play_sound('tarot1')
@@ -580,7 +589,10 @@ SMODS.Consumable { -- Cobalt
     --         "by {C:attention}#1#{} levels for one blind"
     --     }
     -- },
-    loc_vars = alchemical_loc_vars,
+    loc_vars = function(self, info_queue, card)
+        local vars = { get_modified_extra_value(card) }
+        return { vars = vars }
+    end,
     unlocked = true,
     discovered = false,
     config = { extra = 2 },
@@ -595,7 +607,7 @@ SMODS.Consumable { -- Cobalt
         end
     end,
 
-    use = alchemical_use(function(self, card)
+    use = function(self, card)
         G.deck.config.cobalt = G.deck.config.cobalt or {}
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
@@ -618,7 +630,7 @@ SMODS.Consumable { -- Cobalt
                 return true
             end
         }))
-    end),
+    end,
 
     end_blind = function(self, card)
         for _, text in ipairs(G.deck.config.cobalt) do
@@ -657,10 +669,13 @@ SMODS.Consumable { -- Arsenic
     --         "hands and discards"
     --     }
     -- },
-    loc_vars = alchemical_loc_vars,
+    loc_vars = function(self, info_queue, card)
+        local vars = { get_modified_extra_value(card) }
+        return { vars = vars }
+    end,
     unlocked = true,
     discovered = false,
-    config = { },
+    config = {},
     cost = 3,
     pos = { x = 4, y = 1 },
 
@@ -672,7 +687,7 @@ SMODS.Consumable { -- Arsenic
         end
     end,
 
-    use = alchemical_use(function(self, card)
+    use = function(self, card)
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.1,
@@ -688,7 +703,7 @@ SMODS.Consumable { -- Arsenic
                 return true
             end
         }))
-    end),
+    end,
 }
 
 SMODS.Consumable { -- Antimony
@@ -696,15 +711,18 @@ SMODS.Consumable { -- Antimony
     atlas = "arcanum_alchemical",
     key = "antimony",
     -- loc_txt = {
-        -- name = 'Antimony',
-        -- text = {
-        --     "Create #1# {C:dark_edition}Negative{} {C:eternal}0-cost{}",
-        --     "{C:attention}#2#{} of a random",
-        --     "joker for one blind"
-        -- }
+    -- name = 'Antimony',
+    -- text = {
+    --     "Create #1# {C:dark_edition}Negative{} {C:eternal}0-cost{}",
+    --     "{C:attention}#2#{} of a random",
+    --     "joker for one blind"
+    -- }
     -- },
-    loc_vars = alchemical_loc_vars,
-    -- loc_vars = function(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
+        local vars = { get_modified_extra_value(card) }
+        return { vars = vars }
+    end,
+    -- loc_vars = function(self, info_queue, card)
     --     local ret = alchemical_loc_vars(self, info_queue, center)
     --     local extra = math.ceil(center.ability.extra * alchemical_get_x_mult(center))
     --     info_queue[#info_queue + 1] = G.P_CENTERS.e_negative
@@ -719,9 +737,7 @@ SMODS.Consumable { -- Antimony
     cost = 3,
     pos = { x = 5, y = 1 },
 
-    can_use = alchemical_can_use,
-
-    use = alchemical_use(function(self, card)
+    use = function(self, card)
         G.jokers.config.antimony = G.jokers.config.antimony or {}
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
@@ -748,7 +764,7 @@ SMODS.Consumable { -- Antimony
                 end
             end
         }))
-    end),
+    end,
 
     end_blind = function(self, card)
         for _, poly_id in ipairs(G.jokers.config.antimony) do
@@ -798,7 +814,10 @@ SMODS.Consumable { -- Soap
     --         "cards from your deck"
     --     }
     -- },
-    loc_vars = alchemical_loc_vars,
+    loc_vars = function(self, info_queue, card)
+        local vars = { get_modified_extra_value(card) }
+        return { vars = vars }
+    end,
     unlocked = true,
     discovered = false,
     config = { extra = 3 },
@@ -807,13 +826,13 @@ SMODS.Consumable { -- Soap
 
     can_use = function(self, card)
         if alchemical_can_use(self, card) then
-            if #G.hand.highlighted <= math.ceil(card.ability.extra * alchemical_get_x_mult(card)) and #G.hand.highlighted >= 1 then return true else return false end
+            if #G.hand.highlighted <= get_modified_extra_value(card) and #G.hand.highlighted >= 1 then return true else return false end
         else
             return false
         end
     end,
 
-    use = alchemical_use(function(self, card)
+    use = function(self, card)
         local return_to_deck = function(card)
             if not (G.STATE == G.STATES.TAROT_PACK or G.STATE == G.STATES.SPECTRAL_PACK) and
                 G.hand.config.card_limit <= 0 and #G.hand.cards == 0 then
@@ -836,7 +855,7 @@ SMODS.Consumable { -- Soap
                 return true
             end
         }))
-    end),
+    end,
 }
 
 manganese = { -- Manganese
@@ -852,10 +871,10 @@ manganese = { -- Manganese
     --         "for one blind"
     --     }
     -- },
-    loc_vars = function(self, info_queue, center)
-        local ret = alchemical_loc_vars(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
+        local vars = { get_modified_extra_value(card) }
         info_queue[#info_queue + 1] = G.P_CENTERS.m_steel
-        return ret
+        return { vars = vars }
     end,
     unlocked = true,
     discovered = false,
@@ -865,13 +884,13 @@ manganese = { -- Manganese
 
     can_use = function(self, card)
         if alchemical_can_use(self, card) then
-            if #G.hand.highlighted <= math.ceil(card.ability.extra * alchemical_get_x_mult(card)) and #G.hand.highlighted >= 1 then return true else return false end
+            if #G.hand.highlighted <= get_modified_extra_value(card) and #G.hand.highlighted >= 1 then return true else return false end
         else
             return false
         end
     end,
 
-    use = alchemical_use(function(self, used_card)
+    use = function(self, used_card)
         G.deck.config.ra_manganese = G.deck.config.ra_manganese or {}
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
@@ -889,7 +908,7 @@ manganese = { -- Manganese
                 return true
             end
         }))
-    end),
+    end,
 
     end_blind = function(self, card)
         if G.deck.config.ra_manganese then
@@ -923,7 +942,10 @@ wax = { -- Wax
     --         "{C:inactive}(Does not trigger jokers){}"
     --     }
     -- },
-    loc_vars = alchemical_loc_vars,
+    loc_vars = function(self, info_queue, card)
+        local vars = { get_modified_extra_value(card) }
+        return { vars = vars }
+    end,
     unlocked = true,
     discovered = false,
     config = { extra = 2, select = true },
@@ -938,7 +960,7 @@ wax = { -- Wax
         end
     end,
 
-    use = alchemical_use(function(self, used_card)
+    use = function(self, used_card)
         G.deck.config.ra_wax = G.deck.config.ra_wax or {}
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
@@ -958,7 +980,7 @@ wax = { -- Wax
                 return true
             end
         }))
-    end),
+    end,
 
     end_blind = function(self, card)
         if G.deck.config.ra_wax then
@@ -995,10 +1017,10 @@ borax = { -- Borax
     --         "{C:inactive}Current suit: {V:1}#2#{}"
     --     }
     -- },
-    loc_vars = function(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
         local top_suit = get_most_common_suit()
-        local ret = alchemical_loc_vars(self, info_queue, center)
-        return { vars = { ret.vars[1], top_suit, colours = { G.C.SUITS[top_suit] } } }
+        local vars = { get_modified_extra_value(card), top_suit, colours = { G.C.SUITS[top_suit] } }
+        return { vars = vars }
     end,
     unlocked = true,
     discovered = false,
@@ -1008,13 +1030,13 @@ borax = { -- Borax
 
     can_use = function(self, card)
         if alchemical_can_use(self, card) then
-            if #G.hand.highlighted <= math.ceil(card.ability.extra * alchemical_get_x_mult(card)) and #G.hand.highlighted >= 1 then return true else return false end
+            if #G.hand.highlighted <= get_modified_extra_value(card) and #G.hand.highlighted >= 1 then return true else return false end
         else
             return false
         end
     end,
 
-    use = alchemical_use(function(self, used_card)
+    use = function(self, used_card)
         G.deck.config.ra_borax = G.deck.config.ra_borax or {}
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
@@ -1034,7 +1056,7 @@ borax = { -- Borax
                 return true
             end
         }))
-    end),
+    end,
 
     end_blind = function(self, card)
         if G.deck.config.ra_borax then
@@ -1071,10 +1093,10 @@ glass = { -- Glass
     --         "{C:inactive}will not return"
     --     }
     -- },
-    loc_vars = function(self, info_queue, center)
-        local ret = alchemical_loc_vars(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
+        local vars = { get_modified_extra_value(card) }
         info_queue[#info_queue + 1] = G.P_CENTERS.m_glass
-        return ret
+        return { vars = vars }
     end,
     unlocked = true,
     discovered = false,
@@ -1084,13 +1106,13 @@ glass = { -- Glass
 
     can_use = function(self, card)
         if alchemical_can_use(self, card) then
-            if #G.hand.highlighted <= math.ceil(card.ability.extra * alchemical_get_x_mult(card)) and #G.hand.highlighted >= 1 then return true else return false end
+            if #G.hand.highlighted <= get_modified_extra_value(card) and #G.hand.highlighted >= 1 then return true else return false end
         else
             return false
         end
     end,
 
-    use = alchemical_use(function(self, used_card)
+    use = function(self, used_card)
         G.deck.config.ra_glass = G.deck.config.ra_glass or {}
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
@@ -1108,7 +1130,7 @@ glass = { -- Glass
                 return true
             end
         }))
-    end),
+    end,
 
     end_blind = function(self, card)
         if G.deck.config.ra_glass then
@@ -1141,7 +1163,10 @@ SMODS.Consumable { -- Magnet
     --         "as the selected card"
     --     }
     -- },
-    loc_vars = alchemical_loc_vars,
+    loc_vars = function(self, info_queue, card)
+        local vars = { get_modified_extra_value(card) }
+        return { vars = vars }
+    end,
     unlocked = true,
     discovered = false,
     config = { extra = 2 },
@@ -1156,7 +1181,7 @@ SMODS.Consumable { -- Magnet
         end
     end,
 
-    use = alchemical_use(function(self, used_card)
+    use = function(self, used_card)
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.1,
@@ -1173,7 +1198,7 @@ SMODS.Consumable { -- Magnet
                 return true
             end
         }))
-    end),
+    end,
 }
 
 gold = { -- Gold
@@ -1189,11 +1214,11 @@ gold = { -- Gold
     --         "for one blind"
     --     }
     -- },
-    loc_vars = function(self, info_queue, center)
-        local ret = alchemical_loc_vars(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
+        local vars = { get_modified_extra_value(card) }
         info_queue[#info_queue + 1] = G.P_CENTERS.m_gold
         -- ret.key = self.key .. "_classic"
-        return ret
+        return { vars = vars }
     end,
     unlocked = true,
     discovered = false,
@@ -1203,13 +1228,13 @@ gold = { -- Gold
 
     can_use = function(self, card)
         if alchemical_can_use(self, card) then
-            if #G.hand.highlighted <= math.ceil(card.ability.extra * alchemical_get_x_mult(card)) and #G.hand.highlighted >= 1 then return true else return false end
+            if #G.hand.highlighted <= get_modified_extra_value(card) and #G.hand.highlighted >= 1 then return true else return false end
         else
             return false
         end
     end,
 
-    use = alchemical_use(function(self, used_card)
+    use = function(self, used_card)
         G.deck.config.ra_gold = G.deck.config.ra_gold or {}
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
@@ -1227,7 +1252,7 @@ gold = { -- Gold
                 return true
             end
         }))
-    end),
+    end,
 
     end_blind = function(self, card)
         if G.deck.config.ra_gold then
@@ -1249,16 +1274,15 @@ if ReduxArcanumMod.config.new_content then
     --     "all {C:attention}gold cards{} currently",
     --     "in hand for one blind"
     -- }
-    gold.config = {extra = 2}
+    gold.config = { extra = 2 }
     gold.enhancement_gate = 'm_gold'
-    gold.loc_vars = function(self, info_queue, center)
-        local ret = alchemical_loc_vars(self, info_queue, center)
-        local extra = math.ceil(center.ability.extra * alchemical_get_x_mult(center))
+    gold.loc_vars = function(self, info_queue, card)
+        local extra = get_modified_extra_value(card)
         info_queue[#info_queue + 1] = G.P_CENTERS.m_gold
-        return { vars = { (extra == 2 and "Double") or (ret.vars[1].."x") } }
+        return { vars = { (extra == 2 and "Double") or (extra .. "x") } }
     end
     gold.can_use = alchemical_can_use
-    gold.use = alchemical_use(function(self, used_card)
+    gold.use = function(self, used_card)
         G.deck.config.ra_gold = G.deck.config.ra_gold or {}
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
@@ -1269,14 +1293,15 @@ if ReduxArcanumMod.config.new_content then
                     local card_enhancement = SMODS.get_enhancements(card)
                     if card_enhancement["m_gold"] then
                         card:juice_up(1, 0.5)
-                        table.insert(G.deck.config.ra_gold, { card_id = card.unique_val, original_value = card.ability.h_dollars })
+                        table.insert(G.deck.config.ra_gold,
+                            { card_id = card.unique_val, original_value = card.ability.h_dollars })
                         card.ability.h_dollars = card.ability.h_dollars * used_card.ability.extra
                     end
                 end
                 return true
             end
         }))
-    end)
+    end
     gold.end_blind = function(self, card)
         if G.deck.config.ra_gold then
             for _, golded_card in ipairs(G.deck.config.ra_gold) do
@@ -1306,10 +1331,10 @@ silver = { -- Silver
     --         "for one blind"
     --     }
     -- },
-    loc_vars = function(self, info_queue, center)
-        local ret = alchemical_loc_vars(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
+        local vars = { get_modified_extra_value(card) }
         info_queue[#info_queue + 1] = G.P_CENTERS.m_lucky
-        return ret
+        return { vars = vars }
     end,
     unlocked = true,
     discovered = false,
@@ -1319,13 +1344,13 @@ silver = { -- Silver
 
     can_use = function(self, card)
         if alchemical_can_use(self, card) then
-            if #G.hand.highlighted <= math.ceil(card.ability.extra * alchemical_get_x_mult(card)) and #G.hand.highlighted >= 1 then return true else return false end
+            if #G.hand.highlighted <= get_modified_extra_value(card) and #G.hand.highlighted >= 1 then return true else return false end
         else
             return false
         end
     end,
 
-    use = alchemical_use(function(self, used_card)
+    use = function(self, used_card)
         G.deck.config.ra_silver = G.deck.config.ra_silver or {}
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
@@ -1343,7 +1368,7 @@ silver = { -- Silver
                 return true
             end
         }))
-    end),
+    end,
 
     end_blind = function(self, card)
         if G.deck.config.ra_silver then
@@ -1376,16 +1401,17 @@ SMODS.Consumable { -- Oil
     --         "hand for this blind"
     --     }
     -- },
-    loc_vars = alchemical_loc_vars,
+    loc_vars = function(self, info_queue, card)
+        local vars = { get_modified_extra_value(card) }
+        return { vars = vars }
+    end,
     unlocked = true,
     discovered = false,
     config = {},
     cost = 3,
     pos = { x = 2, y = 3 },
 
-    can_use = alchemical_can_use,
-
-    use = alchemical_use(function(self, used_card)
+    use = function(self, used_card)
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.1,
@@ -1405,7 +1431,7 @@ SMODS.Consumable { -- Oil
                 return true
             end
         }))
-    end),
+    end,
 
     end_blind = function(self, card)
         sendDebugMessage("Resetting Oil", "ReduxArcanumDebugLogger")
@@ -1432,12 +1458,9 @@ acid = { -- Acid
     --         "after this blind"
     --     }
     -- },
-    loc_vars = function(self, info_queue, center)
-        local ret = alchemical_loc_vars(self, info_queue, center)
-        if not ReduxArcanumMod.config.new_content then
-            ret.key = self.key .. "_classic"
-        end
-        return ret
+    loc_vars = function(self, info_queue, card)
+        local vars = { get_modified_extra_value(card) }
+        return { vars = vars }
     end,
     unlocked = true,
     discovered = false,
@@ -1453,48 +1476,49 @@ acid = { -- Acid
         end
     end,
 
-    use = alchemical_use(function(self, used_card)
+    use = function(self, used_card)
         G.deck.config.ra_acid = G.deck.config.ra_acid or {}
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.1,
             func = function()
-            	local selected_rank = G.hand.highlighted[1]:get_id()
-            	local selected_suit = G.hand.highlighted[1].base.suit
-            	local acid_aplicable = function (card)
-            		return card:get_id() == selected_rank or (card.base.suit == selected_suit and ReduxArcanumMod.config.new_content)
-            	end
-            	local bunco_linked_sets_removed = {}
-            	
+                local selected_rank = G.hand.highlighted[1]:get_id()
+                local selected_suit = G.hand.highlighted[1].base.suit
+                local acid_aplicable = function(card)
+                    return card:get_id() == selected_rank or
+                        (card.base.suit == selected_suit and ReduxArcanumMod.config.new_content)
+                end
+                local bunco_linked_sets_removed = {}
+
                 for k, v in ipairs(G.playing_cards) do
                     if acid_aplicable(v) then
                         table.insert(G.deck.config.ra_acid, v)
-                        
+
                         -- Bunco linked card compat
                         if ReduxArcanumMod.config.bunco_linked_acid and v.ability.group and next(SMODS.find_mod("Bunco")) then
-                        	sendDebugMessage(tprint(bunco_linked_sets_removed), "ReduxArcanumDebugLogger")
-                        	
-                        	local group_id = v.ability.group.id
-                        	
-                        	for linked_k, linked_v in ipairs(G.playing_cards) do
-                        		-- Check so cards are not added to table twice
-                        		if not bunco_linked_sets_removed[group_id] and not acid_aplicable(linked_v) then
-                        			sendDebugMessage("removinglinks" .. group_id, "ReduxArcanumDebugLogger")
-                        			if linked_v.ability.group and linked_v.ability.group.id == group_id then
-                        				table.insert(G.deck.config.ra_acid, linked_v)
-                        	
-                        				if linked_v.ability.name == 'Glass Card' then
-                            				linked_v:shatter()
-                        				else
-                            				linked_v:start_dissolve({ HEX("E3FF37") }, nil, 1.6)
-                        				end
-                        			end
-                        		end
-                        	end
-                        	
-                        	bunco_linked_sets_removed[group_id] = true
+                            sendDebugMessage(tprint(bunco_linked_sets_removed), "ReduxArcanumDebugLogger")
+
+                            local group_id = v.ability.group.id
+
+                            for linked_k, linked_v in ipairs(G.playing_cards) do
+                                -- Check so cards are not added to table twice
+                                if not bunco_linked_sets_removed[group_id] and not acid_aplicable(linked_v) then
+                                    sendDebugMessage("removinglinks" .. group_id, "ReduxArcanumDebugLogger")
+                                    if linked_v.ability.group and linked_v.ability.group.id == group_id then
+                                        table.insert(G.deck.config.ra_acid, linked_v)
+
+                                        if linked_v.ability.name == 'Glass Card' then
+                                            linked_v:shatter()
+                                        else
+                                            linked_v:start_dissolve({ HEX("E3FF37") }, nil, 1.6)
+                                        end
+                                    end
+                                end
+                            end
+
+                            bunco_linked_sets_removed[group_id] = true
                         end
-                        
+
                         if v.ability.name == 'Glass Card' then
                             v:shatter()
                         else
@@ -1511,7 +1535,7 @@ acid = { -- Acid
                 return true
             end
         }))
-    end),
+    end,
 
     end_blind = function(self, card)
         if G.deck.config.ra_acid then
@@ -1554,10 +1578,10 @@ SMODS.Consumable { -- Brimstone
     --         "for one blind"
     --     }
     -- },
-    loc_vars = function(self, info_queue, center)
-        local ret = alchemical_loc_vars(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
+        local vars = { get_modified_extra_value(card) }
         -- info_queue[#info_queue + 1] = G.P_CENTERS.m_lucky
-        return ret
+        return { vars = vars }
     end,
     unlocked = true,
     discovered = false,
@@ -1565,9 +1589,7 @@ SMODS.Consumable { -- Brimstone
     cost = 3,
     pos = { x = 4, y = 3 },
 
-    can_use = alchemical_can_use,
-
-    use = alchemical_use(function(self, used_card)
+    use = function(self, used_card)
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.1,
@@ -1584,7 +1606,7 @@ SMODS.Consumable { -- Brimstone
                 return true
             end
         }))
-    end),
+    end,
 }
 
 SMODS.Consumable { -- Uranium
@@ -1600,7 +1622,10 @@ SMODS.Consumable { -- Uranium
     --         "in hand for one blind"
     --     }
     -- },
-    loc_vars = alchemical_loc_vars,
+    loc_vars = function(self, info_queue, card)
+        local vars = { get_modified_extra_value(card) }
+        return { vars = vars }
+    end,
     unlocked = true,
     discovered = false,
     config = { extra = 3 },
@@ -1615,7 +1640,7 @@ SMODS.Consumable { -- Uranium
         end
     end,
 
-    use = alchemical_use(function(self, used_card)
+    use = function(self, used_card)
         G.deck.config.ra_uranium = G.deck.config.ra_uranium or {}
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
@@ -1677,7 +1702,7 @@ SMODS.Consumable { -- Uranium
                 return true
             end
         }))
-    end),
+    end,
 
     end_blind = function(self, card)
         if G.deck.config.ra_uranium then
