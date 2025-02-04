@@ -1175,7 +1175,7 @@ SMODS.Consumable { -- Magnet
 
     can_use = function(self, card)
         if alchemical_can_use(self, card) then
-            if #G.hand.highlighted == 1 then return true else return false end
+            if #G.hand.highlighted == 1 and not SMODS.has_no_rank(G.hand.highlighted[1]) then return true else return false end
         else
             return false
         end

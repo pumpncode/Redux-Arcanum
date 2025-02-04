@@ -1,4 +1,4 @@
-local jd_def = JokerDisplay.Definitions     -- You can assign it to a variable to use as shorthand
+local jd_def = JokerDisplay.Definitions
 
 jd_def["j_ReduxArcanum_studious_joker"] = { -- Studious Joker
     text = {
