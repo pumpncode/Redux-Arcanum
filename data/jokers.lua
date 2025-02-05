@@ -550,7 +550,7 @@ SMODS.Joker { -- Catalyst Joker
     end,
 
     calculate = function(self, card, context)
-        if context.joker_main then
+        if context.joker_main and #G.consumeables.cards > 0 then
             return {
                 message = localize { type = 'variable', key = 'a_xmult', vars = { 1 + card.ability.extra.bonus * (#G.consumeables.cards or 0) } },
                 Xmult_mod = 1 + card.ability.extra.bonus * (#G.consumeables.cards or 0),
