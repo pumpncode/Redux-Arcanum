@@ -31,8 +31,8 @@ SMODS.Back {
 
     apply = function(self)
     end,
-    trigger_effect = function(self, context)
-        if context.setting_blind and context.blind.boss and ((#G.consumeables.cards + G.GAME.consumeable_buffer) < G.consumeables.config.card_limit) then
+    trigger_effect = function(self, args)
+        if args.context == "setting_blind" and G.GAME.blind:get_type() == 'Boss' and ((#G.consumeables.cards + G.GAME.consumeable_buffer) < G.consumeables.config.card_limit) then
             G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
             G.E_MANAGER:add_event(Event({
                 trigger = 'after',
