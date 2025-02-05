@@ -4,13 +4,6 @@
 
 SMODS.Tag { -- Elemental
     key = 'elemental',
-    -- loc_txt = {
-    --     name = 'Elemental Tag',
-    --     text = {
-    --         "Gives a free",
-    --         "{C:alchemical}Mega Alchemy Pack"
-    --     }
-    -- },
 
     config = { type = 'new_blind_choice' },
 
@@ -46,17 +39,9 @@ if (not SMODS.Mods["Bunco"] or not SMODS.Mods["Bunco"].can_load) then
         config = {},
         apply = function(self, tag, context)
             if context.type == 'new_blind_choice' and G.STATE == G.STATES.BLIND_SELECT then
-                -- local lock = self.ID
-                -- G.CONTROLLER.locks[lock] = true
                 tag:yep('+', G.C.GREEN,function() 
                     G.from_boss_tag = true
                     G.FUNCS.reroll_boss()
-                    
-                    -- G.E_MANAGER:add_event(Event({func = function()
-                    --     G.E_MANAGER:add_event(Event({func = function()
-                    --         G.CONTROLLER.locks[lock] = nil
-                    --     return true; end}))
-                    -- return true; end}))
 
                     return true
                 end)

@@ -583,26 +583,6 @@ return {
             b_stat_alchemicals = "Alchemicals",
             b_alchemical_cards = "Alchemical Cards",
             k_alchemical = "Alchemical",
-
-            -- k_alchemical = {
-            --     loc_txt = {
-            --         name = 'Alchemical',
-            --         collection = 'Alchemical Cards',
-            --         text = {
-            --             "Can only be used",
-            --             "during a {C:attention}blind{}"
-            --         },
-            --         undiscovered = {
-            --             name = 'Not Discovered',
-            --             text = {
-            --                 [1] = 'Purchase or use',
-            --                 [2] = 'this card in an',
-            --                 [3] = 'unseeded run to',
-            --                 [4] = 'learn what it does'
-            --             }
-            --         }
-            --     },
-            -- },
         }
     }
 }

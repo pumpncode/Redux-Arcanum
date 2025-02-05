@@ -4,21 +4,6 @@
 
 SMODS.Back {
     key = 'herbalist',
-    -- loc_txt =
-    -- {
-    --     name = "Herbalist's Deck",
-    --     text = {
-    --         "Start run with the",
-    --         "{C:tarot,T:v_ReduxArcanum_mortar_and_pestle}Mortar and Pestle{} voucher,",
-    --         "Gain an {C:alchemical}Alchemical{} card before",
-    --         "each boss blind"
-    --     },
-    --     unlock = {
-    --         'Win a run with the',
-    --         '{C:attention}Redux Arcanum{} mod',
-    --         'enabled'
-    --     },
-    -- },
 
     config = { vouchers = { 'v_ReduxArcanum_mortar_and_pestle' } },
 
@@ -52,7 +37,6 @@ SMODS.Back {
                 end
             }))
         end
-        -- sendDebugMessage(tprint(G.GAME.last_blind), "ReduxArcanumDebugLogger")
     end,
 
     pos = { x = 1, y = 0 },
@@ -61,18 +45,6 @@ SMODS.Back {
 
 SMODS.Back {
     key = 'philosopher',
-    -- loc_txt = {
-    --     name = "Philosopher's Deck",
-    --     text = {
-    --         "Start run with the",
-    --         "{C:tarot,T:v_ReduxArcanum_alchemical_merchant}Alchemical Merchant{} voucher",
-    --         "and a copy of {C:tarot,T:c_ReduxArcanum_seeker}The Seeker{}"
-    --     },
-    --     unlock = {
-    --         'Discover every',
-    --         '{E:1,C:spectral}Spectral{} card'
-    --     },
-    -- },
 
     config = { vouchers = { 'v_ReduxArcanum_alchemical_merchant' }, consumables = { 'c_ReduxArcanum_seeker' } },
 
@@ -98,10 +70,8 @@ if next(SMODS.find_mod("CardSleeves")) and CardSleeves then
 
     CardSleeves.Sleeve {
         key = "herbalist",
-        -- loc text in localization/default.lua
         atlas = "arcanum_sleeves",
         pos = { x = 1, y = 0 },
-        -- config = { vouchers = { "v_ReduxArcanum_mortar_and_pestle" } },
         unlocked = false,
         unlock_condition = { deck = "b_ReduxArcanum_herbalist", stake = "stake_red" },
 
@@ -129,10 +99,8 @@ if next(SMODS.find_mod("CardSleeves")) and CardSleeves then
     }
     CardSleeves.Sleeve {
         key = "philosopher",
-        -- loc text in localization/default.lua
         atlas = "arcanum_sleeves",
         pos = { x = 0, y = 0 },
-        -- config = { vouchers = { "v_ReduxArcanum_alchemical_merchant" }, alchemical_more_options = 0 },
         unlocked = false,
         unlock_condition = { deck = "b_ReduxArcanum_philosopher", stake = "stake_red" },
 

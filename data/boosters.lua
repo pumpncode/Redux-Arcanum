@@ -5,15 +5,6 @@
 function add_booster(booster)
     SMODS.Booster {
         key = booster.key,
-        -- loc_txt = {
-        --     group_name = 'Alchemy Pack',
-        --     name = booster.name,
-        --     text = {
-        --         'Choose {C:attention}#1#{} of up to',
-        --         "{C:attention}#2#{C:alchemical} Alchemical{} cards to",
-        --         "add to your consumeables"
-        --     }
-        -- },
 
         group_key = "k_ReduxArcanum_alchemy_pack",
         kind = "Alchemical",

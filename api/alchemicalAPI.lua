@@ -6,23 +6,6 @@ SMODS.ConsumableType {
     key = 'Alchemical',
     primary_colour = HEX('FFFFFF'),
     secondary_colour = HEX('C09D75'),
-    -- loc_txt = {
-    --     name = 'Alchemical',
-    --     collection = 'Alchemical Cards',
-    --     text = {
-    --         "Can only be used",
-    --         "during a {C:attention}blind{}"
-    --     },
-    --     undiscovered = {
-    --         name = 'Not Discovered',
-    --         text = {
-    --             [1] = 'Purchase or use',
-    --             [2] = 'this card in an',
-    --             [3] = 'unseeded run to',
-    --             [4] = 'learn what it does'
-    --         }
-    --     }
-    -- },
     inject_card = function (self, center)
         -- Default can_use (alchemicals may define their own)
         if not center.can_use then
@@ -100,7 +83,6 @@ end
 function ra_reset_played_alchemicals()
     if G.deck.config.played_alchemicals then
         for _, alchemical in ipairs(G.deck.config.played_alchemicals) do
-            -- sendDebugMessage(alchemical[1].key, "ReduxArcanumDebugLogger")
             if alchemical[1].end_blind then
                 alchemical[1].end_blind(alchemical[1], alchemical[2])
             end
