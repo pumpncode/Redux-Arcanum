@@ -36,6 +36,7 @@ SMODS.Tag { -- Elemental
     end,
 
     pos = { x = 0, y = 0 },
+    min_ante = 2,
     atlas = 'ca_tag_elemental'
 }
 
