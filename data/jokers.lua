@@ -32,16 +32,16 @@ studious_joker = { -- Studious Joker
     calculate = function(self, card, context)
         if context.selling_self then -- and not context.blueprint then
             add_random_alchemical(card)
-            return {
-                card = card,
+            card_eval_status_text(card, 'extra', nil, nil, nil, {
                 message = localize('p_plus_alchemical'),
                 colour = G.C.SECONDARY_SET.Alchemy
-            }
+            })
         end
 
         if context.joker_main then
             return {
-                mult = card.ability.mult
+                message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.mult } },
+                mult_mod = card.ability.mult
             }
         end
     end
@@ -98,10 +98,10 @@ SMODS.Joker { -- Bottled Buffoon
                 if card.ability.loyalty_remaining == card.ability.extra.every then
                     add_random_alchemical(card)
                     card.ability.loyalty_remaining = card.ability.extra.every
-                    return {
+                    card_eval_status_text(card, 'extra', nil, nil, nil, {
                         message = localize('p_plus_alchemical'),
                         colour = G.C.SECONDARY_SET.Alchemy
-                    }
+                    })
                 end
             else
                 if card.ability.loyalty_remaining == 0 then
@@ -110,10 +110,10 @@ SMODS.Joker { -- Bottled Buffoon
                 elseif card.ability.loyalty_remaining == card.ability.extra.every then
                     add_random_alchemical(card)
                     card.ability.loyalty_remaining = card.ability.extra.every
-                    return {
+                    card_eval_status_text(card, 'extra', nil, nil, nil, {
                         message = localize('p_plus_alchemical'),
                         colour = G.C.SECONDARY_SET.Alchemy
-                    }
+                    })
                 end
             end
         end
@@ -180,10 +180,9 @@ SMODS.Joker { -- Mutated Joker
 
             if card.ability.extra.total_chips ~= expected_total_chips then
                 card.ability.extra.total_chips = expected_total_chips
-
-                return {
-                    message = localize { type = 'variable', key = 'a_chips', vars = { expected_total_chips } }
-                }
+                card_eval_status_text(card, 'extra', nil, nil, nil, {
+                    message = localize { type = 'variable', key = 'a_chips', vars = { expected_total_chips } },
+                })
             end
             return
         end
@@ -235,9 +234,9 @@ SMODS.Joker { -- Essence of Comedy
     calculate = function(self, card, context)
         if context.using_consumeable and context.consumeable.ability.set == 'Alchemical' and not context.blueprint then
             card.ability.x_mult = card.ability.x_mult + card.ability.extra
-            return {
-                message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.x_mult } }
-            }
+            card_eval_status_text(card, 'extra', nil, nil, nil, {
+                message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.x_mult } },
+            })
         end
     end
 }
@@ -343,20 +342,35 @@ SMODS.Joker { -- Breaking Bozo
         if context.using_consumeable and context.consumeable.ability.set == 'Alchemical' then
             local choice = math.random(1, 3)
             if choice == 1 then
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        card_eval_status_text(card, 'extra', nil, nil, nil, {
+                            message = localize('p_alchemy_plus_card'),
+                            colour = G.C.SECONDARY_SET.Alchemy,
+                            instant = true
+                        })
+                        return true
+                    end
+                }))
                 for i=1, 2 do --draw cards from deckL
                     draw_card(G.deck,G.hand, i*100/2,'up', true)
                 end
-                return {
-                    message = localize('p_alchemy_plus_card'),
-                    colour = G.C.SECONDARY_SET.Alchemy
-                }
+                delay(0.75 * 1.25 - 0.2)
             elseif choice == 2 then
-                return {
-                    dollars = 5
-                }
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        ease_dollars(5, true)
+                        return true
+                    end
+                }))
+                card_eval_status_text(card, 'extra', nil, nil, nil, {
+                    message = localize('$')..'5',
+                    colour = G.C.MONEY
+                })
             else
                 G.E_MANAGER:add_event(Event({
                     func = function()
+
                         G.GAME.blind.chips = math.floor(G.GAME.blind.chips * 0.90)
                         G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
 
@@ -365,14 +379,14 @@ SMODS.Joker { -- Breaking Bozo
                         G.HUD_blind:recalculate()
                         chips_UI:juice_up()
 
-                        if not silent then play_sound('chips2') end
+                        play_sound('chips2')
                         return true
                     end
                 }))
-                return {
+                card_eval_status_text(card, 'extra', nil, nil, nil, {
                     message = localize('p_alchemy_reduce_blind'),
-                    colour = G.C.SECONDARY_SET.Alchemy
-                }
+                    colour = G.C.SECONDARY_SET.Alchemytrue
+                })
             end
         end
     end
@@ -456,9 +470,9 @@ if (not SMODS.Mods["Bunco"] or not SMODS.Mods["Bunco"].can_load) or
                                 return true
                             end
                         }))
-                        return {
-                            message = localize('k_copied_ex')
-                        }
+                        card_eval_status_text(card, 'extra', nil, nil, nil, {
+                            message = localize('k_copied_ex'),
+                        })
                     end
                     return
                 end
