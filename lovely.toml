@@ -145,6 +145,7 @@ times = 1
 payload = '''
 elseif c1.config.center.set == 'Alchemical' then
   inc_career_stat('c_ReduxArcanum_alchemicals_bought', 1)
+  check_for_unlock({type = 'career_stat', statname = 'c_ReduxArcanum_alchemicals_bought'})
 '''
 
 ## Patch for Catalyst unlock
@@ -256,4 +257,63 @@ position = "after"
 payload = """
 elseif self.edition.type == 'polychrome' and (self.ability.set == 'Alchemical') then
     badges[#badges + 1] = 'polychrome_alchemical'"""
+match_indent = true
+
+
+
+## Patches to cause selected alchemical cards in boosters to be added to the Consumable area instead of used
+## Blatantly copied from Reverie's patches
+
+# G.FUNCS.use_card()
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = '''elseif card.ability.set == 'Enhanced' or card.ability.set == 'Default'*'''
+position = "before"
+payload = '''
+::arcanum_use_card_consumable_skip::'''
+match_indent = true
+
+# G.FUNCS.use_card()
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = '''if card:check_use() then '''
+position = "before"
+payload = '''
+local is_alchemy_pack_card = (card.ability.set == "Alchemical" or card.ability.name == "c_ReduxArcanum_philosopher_stone") and card.area and card.area == G.pack_cards'''
+match_indent = true
+
+# G.FUNCS.use_card()
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = '''*G.STATE == G.STATES.TAROT_PACK or G.STATE == G.STATES.PLANET_PACK or G.STATE == G.STATES.SPECTRAL_PACK or G.STATE == G.STATES.SMODS_BOOSTER_OPENED*'''
+position = "before"
+payload = '''
+if is_alchemy_pack_card then
+    if card.ability.set == "Alchemical" then
+      inc_career_stat('c_ReduxArcanum_alchemy_pack_used', 1)
+      check_for_unlock({type = 'career_stat', statname = 'c_ReduxArcanum_alchemy_pack_used'})
+    end
+    G.consumeables:emplace(card)
+    card:add_to_deck()
+    play_sound('card1', 0.8, 0.6)
+    play_sound('generic1')
+    dont_dissolve = true
+    delay_fac = 0.2
+
+    goto arcanum_use_card_consumable_skip
+end'''
+match_indent = true
+
+# G.FUNCS.use_card()
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = '''if G.booster_pack and not G.booster_pack.alignment.offset.py and (card.ability.consumeable or not (G.GAME.pack_choices and G.GAME.pack_choices > 1)) then'''
+position = "at"
+payload = '''
+if G.booster_pack and not G.booster_pack.alignment.offset.py and ((card.ability.consumeable and not is_alchemy_pack_card) or not (G.GAME.pack_choices and G.GAME.pack_choices > 1)) then
+'''
 match_indent = true
