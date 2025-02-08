@@ -4,21 +4,6 @@
 
 SMODS.Back {
     key = 'herbalist',
-    -- loc_txt =
-    -- {
-    --     name = "Herbalist's Deck",
-    --     text = {
-    --         "Start run with the",
-    --         "{C:tarot,T:v_ReduxArcanum_mortar_and_pestle}Mortar and Pestle{} voucher,",
-    --         "Gain an {C:alchemical}Alchemical{} card before",
-    --         "each boss blind"
-    --     },
-    --     unlock = {
-    --         'Win a run with the',
-    --         '{C:attention}Redux Arcanum{} mod',
-    --         'enabled'
-    --     },
-    -- },
 
     config = { vouchers = { 'v_ReduxArcanum_mortar_and_pestle' } },
 
@@ -31,7 +16,7 @@ SMODS.Back {
 
     apply = function(self)
     end,
-    trigger_effect = function(self, context)
+    calculate = function(self, back, context)
         if context.setting_blind and context.blind.boss and ((#G.consumeables.cards + G.GAME.consumeable_buffer) < G.consumeables.config.card_limit) then
             G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
             G.E_MANAGER:add_event(Event({
@@ -52,7 +37,6 @@ SMODS.Back {
                 end
             }))
         end
-        -- sendDebugMessage(tprint(G.GAME.last_blind), "ReduxArcanumDebugLogger")
     end,
 
     pos = { x = 1, y = 0 },
@@ -61,18 +45,6 @@ SMODS.Back {
 
 SMODS.Back {
     key = 'philosopher',
-    -- loc_txt = {
-    --     name = "Philosopher's Deck",
-    --     text = {
-    --         "Start run with the",
-    --         "{C:tarot,T:v_ReduxArcanum_alchemical_merchant}Alchemical Merchant{} voucher",
-    --         "and a copy of {C:tarot,T:c_ReduxArcanum_seeker}The Seeker{}"
-    --     },
-    --     unlock = {
-    --         'Discover every',
-    --         '{E:1,C:spectral}Spectral{} card'
-    --     },
-    -- },
 
     config = { vouchers = { 'v_ReduxArcanum_alchemical_merchant' }, consumables = { 'c_ReduxArcanum_seeker' } },
 
@@ -98,10 +70,8 @@ if next(SMODS.find_mod("CardSleeves")) and CardSleeves then
 
     CardSleeves.Sleeve {
         key = "herbalist",
-        -- loc text in localization/default.lua
         atlas = "arcanum_sleeves",
         pos = { x = 1, y = 0 },
-        -- config = { vouchers = { "v_ReduxArcanum_mortar_and_pestle" } },
         unlocked = false,
         unlock_condition = { deck = "b_ReduxArcanum_herbalist", stake = "stake_red" },
 
@@ -125,14 +95,12 @@ if next(SMODS.find_mod("CardSleeves")) and CardSleeves then
             end
             CardSleeves.Sleeve.apply(self)
         end,
-        trigger_effect = SMODS.Back.obj_table["b_ReduxArcanum_herbalist"].trigger_effect,
+        calculate = SMODS.Back.obj_table["b_ReduxArcanum_herbalist"].calculate,
     }
     CardSleeves.Sleeve {
         key = "philosopher",
-        -- loc text in localization/default.lua
         atlas = "arcanum_sleeves",
         pos = { x = 0, y = 0 },
-        -- config = { vouchers = { "v_ReduxArcanum_alchemical_merchant" }, alchemical_more_options = 0 },
         unlocked = false,
         unlock_condition = { deck = "b_ReduxArcanum_philosopher", stake = "stake_red" },
 
@@ -140,7 +108,8 @@ if next(SMODS.find_mod("CardSleeves")) and CardSleeves then
             local key
             local vars = {}
             if self.get_current_deck_key() ~= "b_ReduxArcanum_philosopher" then
-                self.config = { vouchers = { "v_ReduxArcanum_alchemical_merchant" }, alchemical_more_options = 0 }
+                self.config = SMODS.Back.obj_table["b_ReduxArcanum_philosopher"].config
+                self.config.alchemical_more_options = 0
             else
                 key = self.key .. "_alt"
                 self.config = { vouchers = { "v_ReduxArcanum_alchemical_tycoon" }, alchemical_more_options = 2 }
@@ -151,18 +120,19 @@ if next(SMODS.find_mod("CardSleeves")) and CardSleeves then
 
         apply = function(self, args)
             if self.get_current_deck_key() ~= "b_ReduxArcanum_philosopher" then
-                self.config = { vouchers = { "v_ReduxArcanum_alchemical_merchant" }, alchemical_more_options = 0 }
+                self.config = SMODS.Back.obj_table["b_ReduxArcanum_philosopher"].config
+                self.config.alchemical_more_options = 0
             else
                 self.config = { vouchers = { "v_ReduxArcanum_alchemical_tycoon" }, alchemical_more_options = 2 }
             end
             CardSleeves.Sleeve.apply(self)
         end,
 
-        trigger_effect = function(self, args)
-            if args.context.create_card and args.context.card then
-                local card = args.context.card
+        calculate = function(self, back, context)
+            if context.create_card and context.card then
+                local card = context.card
                 local is_booster_pack = card.ability.set == "Booster"
-                local is_alchemical_pack = is_booster_pack and card.ability.name:find("Alchemical")
+                local is_alchemical_pack = is_booster_pack and card.config.center.kind == "Alchemical"
                 if is_alchemical_pack and self.config.alchemical_more_options then
                     card.ability.extra = card.ability.extra + self.config.alchemical_more_options
                 end
