@@ -14,7 +14,8 @@
 	],
 	"conflicts": [
 		"CardSleeves (<<1.6.0)",
-		"CodexArcanum"
+		"CodexArcanum",
+		"Lovely (==0.7.0)"
 	],
 	"provides": [
 		"CodexArcanum"
