@@ -335,6 +335,7 @@ salt = { -- Salt
                         while _tag_name == 'UNAVAILABLE' or
                             _tag_name == "tag_double" or
                             _tag_name == "tag_orbital" or
+                            _tag_name == "tag_ortalab_constellation" or
                             _tag_name == "tag_bunc_arcade" -- Bunco compat for now, otherwise draws entire deck
                         do
                             it = it + 1
