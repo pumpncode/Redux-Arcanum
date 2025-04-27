@@ -471,21 +471,33 @@ chain_reaction = { -- Chain Reaction
                 end
                 if (not ReduxArcanumMod.config.new_content) or ((#G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit) or (context.consumeable.edition and context.consumeable.edition.negative)) then
                     G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                    local _card
                     G.E_MANAGER:add_event(Event({
                         func = function()
-                            local _card = copy_card(context.consumeable, nil, nil, nil)
+                            _card = copy_card(context.consumeable, nil, nil, nil)
                             if not ReduxArcanumMod.config.new_content then
                                 _card:set_edition({ negative = true }, true)
                             end
                             _card:set_ability(context.consumeable.config.center) -- To handle polychrome
                             _card:add_to_deck()
-                            G.consumeables:emplace(_card)
+                            G.play:emplace(_card)
                             G.GAME.consumeable_buffer = 0
                             return true
                         end
                     }))
                     return {
-                        message = localize('k_copied_ex')
+                        message = localize('k_copied_ex'),
+                        func = function ()
+                            -- delay(0.5)
+                            G.E_MANAGER:add_event(Event({
+                                func = function()
+                                    G.play:remove_card(_card)
+                                    G.consumeables:emplace(_card)
+                                    return true
+                                end
+                            }))
+                            delay(0.15)
+                        end
                     }
                 end
                 return
