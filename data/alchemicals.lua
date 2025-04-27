@@ -845,6 +845,7 @@ SMODS.Consumable { -- Soap
             draw_card(G.hand, G.deck, 100, 'up', false, card)
         end
 
+        local count = #G.hand.highlighted
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.1,
@@ -852,7 +853,7 @@ SMODS.Consumable { -- Soap
                 for k, _card in ipairs(G.hand.highlighted) do
                     return_to_deck(_card)
                 end
-                G.FUNCS.draw_from_deck_to_hand(card.ability.extra)
+                G.FUNCS.draw_from_deck_to_hand(count)
                 return true
             end
         }))
