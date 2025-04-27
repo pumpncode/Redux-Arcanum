@@ -131,7 +131,7 @@ philosopher_stone = {
 
     use = function(self, card)
         G.deck.config.played_alchemicals = G.deck.config.played_alchemicals or {}
-        table.insert(G.deck.config.played_alchemicals, {self, card})
+        table.insert(G.deck.config.played_alchemicals, self.key)
         G.deck.config.ra_philo_stone = G.deck.config.ra_philo_stone or 0
         G.deck.config.ra_philo_stone_classic = G.deck.config.ra_philo_stone_classic or 0
         if ReduxArcanumMod.config.new_content then
