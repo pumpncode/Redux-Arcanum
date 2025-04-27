@@ -536,7 +536,13 @@ if ReduxArcanumMod.config.new_content then
         return { vars = vars }
         -- return { vars = { (extra == 1 and "rightmost") or (ret.vars[1] .. " rightmost"), (extra == 1 and "joker") or "jokers" } }
     end
-    bismuth.can_use = alchemical_can_use
+    bismuth.can_use = function(self, card)
+        if alchemical_can_use(self, card) then
+            return #G.jokers.cards > 0
+        else
+            return false
+        end
+    end
     bismuth.use = function(self, used_card)
         G.deck.config.ra_bismuth = G.deck.config.ra_bismuth or {}
         G.E_MANAGER:add_event(Event({
