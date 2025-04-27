@@ -1,7 +1,7 @@
 [manifest]
 version = "1.0.0"
 dump_lua = true
-priority = 1 # Go after steammodded
+priority = 1      # Go after steammodded
 
 ## Patch to add Alchemical tab to stats screen
 # G.UIDEF.usage_tabs()
@@ -25,7 +25,6 @@ payload = '''
 '''
 
 
-
 ## Patch to prevent oiled cards from flipping face down
 ## Patch stolen from Bunco
 # Card:flip()
@@ -40,8 +39,6 @@ if (self.area == G.hand or self.area == G.jokers or self.area == G.consumeables)
     return
 end
 '''
-
-
 
 
 ## Patch for classic Philo stone
@@ -62,10 +59,6 @@ if G.deck.config.ra_philo_stone_classic and G.deck.config.ra_philo_stone_classic
     }
 end
 '''
-
-
-
-
 
 
 ## Patches to add philo stone to score calculation
@@ -128,9 +121,6 @@ G.deck.config.ra_philo_stone = 0
 '''
 
 
-
-
-
 ## Card Unlocks
 
 ## Patch for Alchemical Tycoon unlock
@@ -162,8 +152,6 @@ if self == G.consumeables then check_for_unlock({ type = 'ReduxArcanum_modify_ca
 '''
 
 
-
-
 ## Debuffed consumables
 
 ## Patch to prevent debuffed consumables from being used
@@ -178,9 +166,6 @@ times = 1
 payload = '''
     if self.debuff then return false end
 '''
-
-
-
 
 
 ## Vanilla functionality causes booster tags created mid-blind by salt to be very funky
@@ -365,9 +350,6 @@ payload = '''
 if G.booster_pack and not G.booster_pack.alignment.offset.py and ((card.ability.consumeable and not is_alchemy_pack_card) or not (G.GAME.pack_choices and G.GAME.pack_choices > 1)) then
 '''
 match_indent = true
-
-
-
 
 
 ## Let's alchemical cards be selected from booster packs (rather than used)

@@ -374,8 +374,8 @@ SMODS.Joker { -- Breaking Bozo
         if context.using_consumeable and context.consumeable.ability.set == 'Alchemical' then
             local choice = math.random(1, 3)
             if choice == 1 then
-                for i=1, 2 do --draw cards from deckL
-                    draw_card(G.deck,G.hand, i*100/2,'up', true)
+                for i = 1, 2 do --draw cards from deckL
+                    draw_card(G.deck, G.hand, i * 100 / 2, 'up', true)
                 end
                 return {
                     message = localize('p_alchemy_plus_card'),
