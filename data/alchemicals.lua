@@ -483,7 +483,7 @@ bismuth = { -- Bismuth
 
     can_use = function(self, card)
         if alchemical_can_use(self, card) then
-            if #G.hand.highlighted <= card.ability.extra and #G.hand.highlighted >= 1 then return true else return false end
+            return #G.hand.highlighted <= card.ability.extra and #G.hand.highlighted >= 1
         else
             return false
         end
