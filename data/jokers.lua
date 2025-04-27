@@ -132,7 +132,7 @@ SMODS.Joker { -- Mutated Joker
     --     }
     -- },
     loc_vars = function(self, info_queue, card)
-        local alchemical_tally = 1
+        local alchemical_tally = 0
         for k, v in pairs(G.GAME.consumeable_usage) do
             if v.set == 'Alchemical' then alchemical_tally = alchemical_tally + 1 end
         end
@@ -152,7 +152,7 @@ SMODS.Joker { -- Mutated Joker
     config = {
         extra = {
             chips = 10,
-            total_chips = 10
+            total_chips = 0
         }
     },
     atlas = "arcanum_joker_atlas",
@@ -173,7 +173,7 @@ SMODS.Joker { -- Mutated Joker
     end,
 
     add_to_deck = function(self, card, context)
-        local alchemical_tally = 1
+        local alchemical_tally = 0
         for k, v in pairs(G.GAME.consumeable_usage) do
             if v.set == 'Alchemical' then alchemical_tally = alchemical_tally + 1 end
         end
@@ -191,7 +191,7 @@ SMODS.Joker { -- Mutated Joker
 
     calculate = function(self, card, context)
         if context.using_consumeable and context.consumeable.ability.set == 'Alchemical' and not context.blueprint then
-            local alchemical_tally = 1
+            local alchemical_tally = 0
             for k, v in pairs(G.GAME.consumeable_usage) do
                 if v.set == 'Alchemical' then alchemical_tally = alchemical_tally + 1 end
             end
