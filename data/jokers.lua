@@ -165,6 +165,11 @@ SMODS.Joker { -- Mutated Joker
         end
 
         local expected_total_chips = alchemical_tally * card.ability.extra.chips
+        
+        if expected_total_chips == 24 * card.ability.extra.chips then
+            check_for_unlock({type = 'ReduxArcanum_mutated_joker_max'})
+
+        end
 
         card.ability.extra.total_chips = expected_total_chips
     end,
@@ -179,6 +184,9 @@ SMODS.Joker { -- Mutated Joker
             local expected_total_chips = alchemical_tally * card.ability.extra.chips
 
             if card.ability.extra.total_chips ~= expected_total_chips then
+                if expected_total_chips == 24 * card.ability.extra.chips then
+                    check_for_unlock({type = 'ReduxArcanum_mutated_joker_max'})
+                end
                 card.ability.extra.total_chips = expected_total_chips
 
                 return {

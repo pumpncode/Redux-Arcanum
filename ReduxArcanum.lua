@@ -243,6 +243,12 @@ SMODS.load_file("/data/decks.lua")()
 SMODS.load_file("/data/blind.lua")()
 
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+--         ACHIEVEMENTS
+-- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+SMODS.load_file("/data/achievements.lua")()
+
+-- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 --          EDITIONS
 -- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 

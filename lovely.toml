@@ -382,3 +382,19 @@ if (card.ability.set == "Alchemical" or card.ability.name == "c_ReduxArcanum_phi
     }
 end
 '''
+
+
+# For the mid-blind booster achievement
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''if self.ability.set == "Booster" then'''
+position = 'after'
+match_indent = true
+payload = '''
+
+    if G.GAME.blind and G.GAME.blind:get_type() ~= nil then
+        check_for_unlock({type = 'ReduxArcanum_midblind_pack'})
+    end
+
+'''
