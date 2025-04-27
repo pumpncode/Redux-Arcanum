@@ -1647,20 +1647,25 @@ SMODS.Consumable { -- Uranium
             trigger = 'after',
             delay = 0.1,
             func = function()
+                local eligible_cards = {}
+                for _, v in ipairs(G.hand.cards) do
+                    if v.config.center == G.P_CENTERS.c_base and v ~= G.hand.highlighted[1] and not (v.edition) and not (v.seal) then
+                        table.insert(eligible_cards, v)
+                    end
+                end
                 for i = 1, used_card.ability.extra do
                     G.E_MANAGER:add_event(Event({
                         trigger = 'after',
                         delay = 0.5,
                         func = function()
-                            local eligible_cards = {}
-                            for _, v in ipairs(G.hand.cards) do
-                                if v.config.center == G.P_CENTERS.c_base and not (v.edition) and not (v.seal) then
-                                    table.insert(eligible_cards, v)
-                                end
-                            end
-
                             if #eligible_cards > 0 then
                                 local conv_card = pseudorandom_element(eligible_cards, pseudoseed(used_card.ability.name))
+                                for j, v in ipairs(eligible_cards) do
+                                    if v == conv_card then
+                                        table.remove(eligible_cards, j)
+                                        break
+                                    end
+                                end
 
                                 conv_card:juice_up(1, 0.5)
 
