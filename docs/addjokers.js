@@ -342,26 +342,13 @@ let jokers = [
     text: [
       "{C:chips}+#1#{} Chips for each unique {C:alchemical}Alchemical{} card used this run",
     ],
-    text_vars: [10],
+    text_vars: [0],
     image_url: "img/ca_joker_atlas.png",
     image_pos: {
-      x: 1,
+      x: Math.random() < 0.001 ? 2 : 1,
       y: 2
     },
     rarity: "Common"
-  },
-  {
-    name: "Chain Reaction",
-    text: [
-      "Create a {C:attention}Copy{} of the first {C:alchemical}Alchemical{} card used each blind",
-      "{C:inactive}(Must have room){}"
-    ],
-    image_url: "img/ca_joker_atlas.png",
-    image_pos: {
-      x: 2,
-      y: 0
-    },
-    rarity: "Rare"
   },
   {
     name: "Essence of Comedy",
@@ -403,6 +390,19 @@ let jokers = [
       y: 1
     },
     rarity: "Uncommon"
+  },
+  {
+    name: "Chain Reaction",
+    text: [
+      "Create a {C:attention}Copy{} of the first {C:alchemical}Alchemical{} card used each blind",
+      "{C:inactive}(Must have room){}"
+    ],
+    image_url: "img/ca_joker_atlas.png",
+    image_pos: {
+      x: 2,
+      y: 0
+    },
+    rarity: "Rare"
   },
   {
     name: "Catalyst Joker",
