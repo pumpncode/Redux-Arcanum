@@ -977,7 +977,6 @@ wax = { -- Wax
                     _card:start_materialize(nil, _first_dissolve)
                     table.insert(G.deck.config.ra_wax, { card_id = _card.unique_val })
                 end
-                playing_card_joker_effects(new_cards)
                 return true
             end
         }))
@@ -1547,7 +1546,7 @@ acid = { -- Acid
                 G.deck.config.card_limit = G.deck.config.card_limit + 1
                 table.insert(G.playing_cards, _card)
                 if not ReduxArcanumMod.config.new_content then
-                    playing_card_joker_effects({ true })
+                    SMODS.calculate_context({ card_added = true, card = _card })
                 end
             end
             G.deck.config.ra_acid = {}
