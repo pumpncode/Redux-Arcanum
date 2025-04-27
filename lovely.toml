@@ -221,6 +221,22 @@ match_indent = true
 
 
 
+## Stops the bg colour of the "small blind" "big blind" heading on the top left turning to the pack colour
+## (This can lead to white text on white bg which isn't great)
+# ease_colour_()
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''function ease_colour(*'''
+position = 'after'
+payload = '''
+    if G.GAME.ReduxArcanum_salt_in_use then 
+        G.GAME.ReduxArcanum_salt_in_use = false
+    return end
+'''
+match_indent = true
+
+
 
 
 

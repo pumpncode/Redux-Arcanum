@@ -357,7 +357,10 @@ salt = { -- Salt
                         for i = 1, #G.GAME.tags do
                             if G.GAME.tags[i].key == "tag_boss" then
                             else
-                                if G.GAME.tags[i]:apply_to_run({ type = 'new_blind_choice' }) then break end
+                                if G.GAME.tags[i]:apply_to_run({ type = 'new_blind_choice' }) then
+                                    G.GAME.ReduxArcanum_salt_in_use = true
+                                    break
+                                end
                             end
                         end
                         return true
