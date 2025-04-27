@@ -266,3 +266,16 @@ SMODS.Edition:take_ownership('polychrome', {
         end
     end
 }, true)
+
+-- Only for collection
+SMODS.Edition {
+    key = "e_polychrome_alchemical",
+    shader = 'polychrome',
+    atlas = "arcanum_alchemical",
+    pos = { x = 0, y = 0 },
+    -- no_collection = true,
+    prefix_config = { key = false, shader = false },
+    loc_vars = function()
+        return { vars = { 1.5 } }
+    end
+}

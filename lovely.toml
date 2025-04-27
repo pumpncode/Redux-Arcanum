@@ -255,17 +255,17 @@ payload = '''
 if v == 'polychrome_alchemical' then v = 'polychrome' end
 '''
 
-# generate_card_ui()
-[[patches]]
-[patches.pattern]
-target = 'functions/common_events.lua'
-pattern = '''v = (v == 'holographic' and 'holo' or v)'''
-position = 'after'
-match_indent = true
-times = 1
-payload = '''
-if v == 'polychrome_alchemical' then info_queue[#info_queue+1] = {key = 'e_polychrome_alchemical', set = 'Edition', config = {extra = 1.5}} end
-'''
+# # generate_card_ui()
+# [[patches]]
+# [patches.pattern]
+# target = 'functions/common_events.lua'
+# pattern = '''v = (v == 'holographic' and 'holo' or v)'''
+# position = 'after'
+# match_indent = true
+# times = 1
+# payload = '''
+# if v == 'polychrome_alchemical' then info_queue[#info_queue+1] = {key = 'e_polychrome_alchemical', set = 'Edition', config = {extra = 1.5}} end
+# '''
 
 [[patches]]
 [patches.pattern]
@@ -277,6 +277,36 @@ elseif self.edition.type == 'polychrome' and (self.ability.set == 'Alchemical') 
     badges[#badges + 1] = 'polychrome_alchemical'"""
 match_indent = true
 
+# Card:add_to_deck()
+# Makes polychrome alchemical discover polychrome alchemicals in the collection instead of regular polychrome
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "discover_card(G.P_CENTERS['e_'..(self.edition.type)])"
+position = 'at'
+match_indent = true
+payload = '''
+if self.ability.set == 'Alchemical' then
+    discover_card(G.P_CENTERS['e_'..(self.edition.type)..'_alchemical'])
+else
+    discover_card(G.P_CENTERS['e_'..(self.edition.type)])
+end
+'''
+
+# Remove polychrome alchemical from debug
+
+# G.FUNCS.use_card()
+[[patches]]
+[patches.pattern]
+target = "engine/controller.lua"
+pattern = '''if found_index > #G.P_CENTER_POOLS.Edition then found_index = found_index - #G.P_CENTER_POOLS.Edition end'''
+position = "before"
+payload = '''
+if G.P_CENTER_POOLS.Edition[found_index] and G.P_CENTER_POOLS.Edition[found_index].key == "e_polychrome_alchemical" then
+  found_index = found_index + 1
+end
+'''
+match_indent = true
 
 
 ## Patches to cause selected alchemical cards in boosters to be added to the Consumable area instead of used
