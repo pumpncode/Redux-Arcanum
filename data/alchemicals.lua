@@ -738,6 +738,14 @@ SMODS.Consumable { -- Antimony
     cost = 3,
     pos = { x = 5, y = 1 },
 
+    can_use = function(self, card)
+        if alchemical_can_use(self, card) then
+            return #G.jokers.cards > 0
+        else
+            return false
+        end
+    end,
+
     use = function(self, card)
         G.jokers.config.antimony = G.jokers.config.antimony or {}
         G.E_MANAGER:add_event(Event({
