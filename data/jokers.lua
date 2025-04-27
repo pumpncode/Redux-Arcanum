@@ -158,6 +158,20 @@ SMODS.Joker { -- Mutated Joker
     atlas = "arcanum_joker_atlas",
     pos = { x = 1, y = 2 },
 
+    set_sprites = function(self, card, front)
+        if self.discovered or card.bypass_discovery_center then
+            local alchemical_tally = 0
+            for k, v in pairs(G.GAME.consumeable_usage) do
+                if v.set == 'Alchemical' then alchemical_tally = alchemical_tally + 1 end
+            end
+
+            if alchemical_tally >= 24 then
+                local center = card.children.center
+                center:set_sprite_pos({ x = 2, y = 2 })
+            end
+        end
+    end,
+
     add_to_deck = function(self, card, context)
         local alchemical_tally = 1
         for k, v in pairs(G.GAME.consumeable_usage) do
@@ -168,7 +182,8 @@ SMODS.Joker { -- Mutated Joker
         
         if expected_total_chips == 24 * card.ability.extra.chips then
             check_for_unlock({type = 'ReduxArcanum_mutated_joker_max'})
-
+            local center = card.children.center
+            center:set_sprite_pos({ x = 2, y = 2 })
         end
 
         card.ability.extra.total_chips = expected_total_chips
@@ -186,6 +201,14 @@ SMODS.Joker { -- Mutated Joker
             if card.ability.extra.total_chips ~= expected_total_chips then
                 if expected_total_chips == 24 * card.ability.extra.chips then
                     check_for_unlock({type = 'ReduxArcanum_mutated_joker_max'})
+                    G.E_MANAGER:add_event(Event({
+                        trigger = 'immediate',
+                        func = function()
+                            local center = card.children.center
+                            center:set_sprite_pos({ x = 2, y = 2 })
+                            return true
+                        end
+                    }))
                 end
                 card.ability.extra.total_chips = expected_total_chips
 
