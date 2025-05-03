@@ -643,7 +643,7 @@ SMODS.Consumable { -- Cobalt
     end,
 
     end_blind = function(self)
-        for text, value in ipairs(G.deck.config.cobalt) do
+        for text, value in pairs(G.deck.config.cobalt) do
             G.E_MANAGER:add_event(Event({
                 trigger = 'after',
                 delay = 0.1,
@@ -663,7 +663,12 @@ SMODS.Consumable { -- Cobalt
                 end
             }))
         end
-        G.deck.config.cobalt = {}
+        G.E_MANAGER:add_event(Event({
+            func = function()
+                G.deck.config.cobalt = {}
+                return true
+            end
+        }))
         return true
     end,
 }
