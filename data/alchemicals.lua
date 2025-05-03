@@ -652,23 +652,18 @@ SMODS.Consumable { -- Cobalt
                         {
                             handname = localize(text, 'poker_hands'),
                             chips = G.GAME.hands[text].chips,
-                            mult = G
-                                .GAME.hands[text].mult,
+                            mult = G.GAME.hands[text].mult,
                             level = G.GAME.hands[text].level
                         })
                     level_up_hand(nil, text, nil, -value)
                     update_hand_text({ sound = 'button', volume = 0.7, pitch = 1.1, delay = 0 },
                         { mult = 0, chips = 0, handname = '', level = '' })
+                    G.deck.config.cobalt[text] = 0
                     return true
                 end
             }))
         end
-        G.E_MANAGER:add_event(Event({
-            func = function()
-                G.deck.config.cobalt = {}
-                return true
-            end
-        }))
+        G.deck.config.cobalt = {}
         return true
     end,
 }
