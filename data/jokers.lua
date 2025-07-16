@@ -285,13 +285,7 @@ SMODS.Joker { -- Shock Humor
     --     }
     -- },
     loc_vars = function(self, info_queue, card)
-        local first_var
-        if G.GAME and G.GAME.probabilities.normal then
-            first_var = G.GAME.probabilities.normal
-        else
-            first_var = 1
-        end
-        return { vars = { '' .. (first_var), card.ability.extra.odds } }
+                return { vars = {SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'ReduxArcanum_shock_humor')} }
     end,
     unlocked = true,
     discovered = false,
@@ -311,7 +305,7 @@ SMODS.Joker { -- Shock Humor
         if context.discard and not context.other_card.debuff then
             local other_card_enhancement = SMODS.get_enhancements(context.other_card)
             if other_card_enhancement["m_steel"] or other_card_enhancement["m_gold"] or other_card_enhancement["m_stone"] then
-                if pseudorandom('shock_humor') < G.GAME.probabilities.normal / card.ability.extra.odds then
+                if SMODS.pseudorandom_probability(card, 'shock_humor', 1, card.ability.extra.odds, 'ReduxArcanum_shock_humor') then
                     add_random_alchemical(card)
                     return {
                         message = localize('p_plus_alchemical'),
