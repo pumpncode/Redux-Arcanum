@@ -555,7 +555,7 @@ SMODS.Joker { -- Catalyst Joker
     perishable_compat = true,
     eternal_compat = false,
     rarity = 3,
-    cost = 5,
+    cost = 8,
     effect = "",
     config = {
         extra = {
