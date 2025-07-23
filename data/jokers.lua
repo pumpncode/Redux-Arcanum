@@ -512,29 +512,3 @@ SMODS.Joker { -- Catalyst Joker
         end
     end
 }
-
--- -- Changed Vanilla Jokers
-
--- SMODS.Joker:take_ownership('ring_master', { -- Showman
---     loc_txt = {
---         name = "Showman",
---         text = {
---             "{C:attention}Joker{} and {C:attention}consumable{} cards",
---             "may appear multiple times",
---         },
---         unlock = {
---             "Reach Ante",
---             "level {E:1,C:attention}#1#",
---         },
---     }
--- })
-
-
--- Mod Compat
-
--- Bunco
-
-if SMODS.Mods["Bunco"] and SMODS.Mods["Bunco"].can_load and
-    ReduxArcanumMod.config.overlapping_cards == 2 then
-    SMODS.Joker:take_ownership('bunc_doodle', {})
-end
